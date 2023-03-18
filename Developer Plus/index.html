@@ -1,33 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css" />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Welcome to Developer Plus</title>
   </head>
   <body>
-    <header class="welcome-header">
-        <h1 class="welcome-header__title">Welcome to Developer Plus</h1>
-        <p class="welcome-header__text">
-            If you have a Developer Plus Account,
-            login with your Email.
-        </p>
-    </header>
-    <form action="/home.html" method="POST" id="login-form">
-        <input type="email" placeholder="Email" required>
-        <input type="password" placeholder="Password" required>
-        <input type="submit" value="Sign In">
-        <button type="button" onClick="location.href='/signup.html'">Sign Up</button>
-        <a href="#">Find Kako Account or Password</a>
-    </form>
-
-
-      <script
-        src="http://kit.fontawesome.com/6478f529f2.js"
-        crossorigin="anonymous"
-      ></script>
+    <div class="screen-header">
+      <span calss="logo">Developer Plus</span>
+      <div class="screen-header__main_menu">
+        <ul>
+          <li>개발자보기</li>
+          <li>개발자모집</li>
+          <li>정보</li>
+          <li>검색</li>
+        </ul>
+      </div>
+      <div class="screen-header__sub_menu">
+        <span>로그인/회원가입</span>
     </div>
   </body>
 </html>

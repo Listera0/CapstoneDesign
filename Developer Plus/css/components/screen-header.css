@@ -1,0 +1,18 @@
+.screen-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px;
+}
+.screen-header > span{
+    font-size: 30px;
+    font-weight: 600;
+}
+.screen-header__main_menu ul{
+    display: flex;
+    font-size: 20px;
+    padding-left: 400px;
+}
+.screen-header__main_menu li{
+    padding-left: 10px;
+}
