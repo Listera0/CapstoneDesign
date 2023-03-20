@@ -1,31 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <link rel="stylesheet" href="css/style.css" />
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Developer Plus</title>
   </head>
   <body>
-    <div class="screen-header">
-      <span calss="logo">Developer Plus</span>
-      <div class="screen-header__main_menu">
+    <div class="header">
+      <nav>
+        <div class="title"><a href="/index.html">Developer Plus</a></div>
         <ul>
-          <li>개발자보기</li>
-          <li>개발자모집</li>
-          <li>스토리</li>
-          <li><i class="fas fa-search"></i>검색</li>
+          <li class="dropdown">
+            <div class="dropdown-menu">개발자 보기</div>
+          </li>
+          <li class="dropdown">
+            <div class="dropdown-menu">개발자 모집</div>
+          </li>
+          <li class="dropdown">
+            <div class="dropdown-menu">스토리</div>
+          </li>
+          <li class="dropdown">
+            <div class="dropdown-menu"><i class="fas fa-search"></i>검색</div>
+          </li>
+          <li class="profile">
+            <div>
+              <span>
+                <a href="/proflie.html"
+                  ><i class="far fa-user-circle fa-lg"></i
+                ></a>
+              </span>
+            </div>
+          </li>
+          <li class="home">
+            <div>
+              <span><a href="/login.html">로그인/회원가입</a></span>
+            </div>
+          </li>
         </ul>
-      </div>
-      <div class="screen-header__sub_menu">
-        <span><i class="far fa-user-circle fa-lg"></i></span>
-        <span>|</span>
-        <span>로그인/회원가입</span>
+      </nav>
     </div>
     <script
-    src="http://kit.fontawesome.com/6478f529f2.js"
-    crossorigin="anonymous"
-  ></script>
+      src="http://kit.fontawesome.com/6478f529f2.js"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
