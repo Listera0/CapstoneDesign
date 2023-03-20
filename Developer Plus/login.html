@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Developer Plus</title>
+  </head>
+  <body>
+    <div class="status-bar">
+      <div class="status-bar__column">
+        <span onClick="location.href='/index.html'">Developer Plus</span>
+        <br>
+        </div>
+    </div>
+    <header class="welcome-header">
+        <h1 class="welcome-header__title">Welcome to Developer Plus</h1>
+        <p class="welcome-header__text">
+            If you have a Developer Plus Account,
+            login with your Email.
+        </p>
+    </header>
+    <form action="/home.html" method="POST" id="login-form">
+        <input type="email" placeholder="Email" required>
+        <input type="password" placeholder="Password" required>
+        <input type="submit" value="Sign In">
+        <button type="button" onClick="location.href='/signup.html'"><i class="fas fa-comment fa-1x"></i>카카오계정으로 로그인</button>
+        <a href="/signup.html">Developer Plus Sign Up</a>
+    </form>
+
+
+      <script
+        src="http://kit.fontawesome.com/6478f529f2.js"
+        crossorigin="anonymous"
+      ></script>
+    </div>
+  </body>
+</html>

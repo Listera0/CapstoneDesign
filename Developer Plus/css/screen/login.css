@@ -1,6 +1,6 @@
 
 .welcome-header{
-    margin: 90px 0px;
+    margin: 70px 0px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -49,7 +49,7 @@
     font-size: 14px;
 }
 #login-form button[type="button"]{
-    background-color: rgb(148, 178, 239);
+    background-color: #fae100;;
     cursor:pointer;
     padding:20px 0px;
     border-radius: 5px;
@@ -61,3 +61,10 @@
     margin-bottom: 25px ;
     
 }
+#login-form a:hover{
+    color:rgb(148, 178, 239);
+}
+#login-form i{
+    margin: 0px 20px;
+}
+
