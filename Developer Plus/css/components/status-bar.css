@@ -10,6 +10,7 @@
     padding:25px;
     font-size: 30px;
     font-weight: 600;
+
 }
 .status-bar  span:hover{
     cursor:pointer;
@@ -21,3 +22,4 @@
     justify-content: space-between;
     align-items: center;
 }
+
