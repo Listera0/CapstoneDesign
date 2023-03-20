@@ -3,16 +3,31 @@
     justify-content: space-between;
     align-items: center;
     padding: 25px;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
 }
 .screen-header > span{
     font-size: 30px;
     font-weight: 600;
 }
 .screen-header__main_menu ul{
+    width: 100%;
+    background-color: rgb(148, 178, 239);
+    list-style-type: none;
+    margin: 0;
     display: flex;
     font-size: 20px;
     padding-left: 400px;
 }
 .screen-header__main_menu li{
+    padding-left: 20px;
+}
+.screen-header__main_menu li:last-child{
+    padding-left: 40px;
+}
+.screen-header__sub_menu span{
     padding-left: 10px;
+}
+.screen-header__main_menu li:hover{
+    background-color:rgb(148, 178, 239);
+    
 }
