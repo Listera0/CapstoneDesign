@@ -24,16 +24,28 @@
     <form action="/home.html" method="POST" id="login-form">
         <input type="email" placeholder="Email" required>
         <input type="password" placeholder="Password" required>
-        <input type="submit" value="Sign In">
-        <button type="button" onClick="location.href='/signup.html'"><i class="fas fa-comment fa-1x"></i>카카오계정으로 로그인</button>
-        <a href="/signup.html">Developer Plus Sign Up</a>
+        <input type="submit" onClick="location.href='/index.html'" value="Sign In">
+        <button type="button" onClick="location.href='/kakao.html'"><i class="fas fa-comment fa-1x"></i>카카오계정으로 로그인</button>
     </form>
-
-
+    <input type="checkbox" id="popup">
+        <label for="popup">Developer Plus Sign Up</label>
+        <div>
+          <div>
+            <form action="/index.html" method="post"id="signup">
+              <span>회원가입</span>
+              <input type="email" placeholder="Email" required>
+              <input type="password" placeholder="Password" required>
+              <input type="password" placeholder = "비밀번호를 다시 입력해 주세요." required><br>
+          <button type="button" >Sign Up</button>
+            </form>   
+          </div>
+          <label for="popup"></label>
+        </div>
       <script
         src="http://kit.fontawesome.com/6478f529f2.js"
         crossorigin="anonymous"
-      ></script>
+      >
+    </script>
     </div>
   </body>
 </html>
