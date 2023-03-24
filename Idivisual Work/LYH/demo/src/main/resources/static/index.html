@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/style.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <div id="chat-outer">
+        <div class="chat-box chat-div10" id="topview"></div>
+        <div class="chat-box chat-div90 chat-divrow">
+            <div class="chat-box chat-div40 chat-divcol">
+                <div class="chat-box chat-div20"> 여기에 공지사항 </div>
+                <div class="chat-box chat-div80 chat-divrow">
+                    <div class="chat-box chat-div10"> 선택바 </div>
+                    <div class="chat-box chat-div90"> 여기에 카톡방 </div>
+                </div>
+            </div>
+            <div class="chat-box chat-div60"> 여기에 세부사항 (캘린더, 세부공지) </div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchHtmlAsText(url) {
+            return await (await fetch(url)).text();
+        }
+        
+        async function importPage(target) {
+            document.querySelector('#' + target).innerHTML = await fetchHtmlAsText(target + '.html');
+        }
+
+        importPage('topview');
+    </script>
+
+
+</body>
+</html>
