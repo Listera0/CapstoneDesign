@@ -1,0 +1,52 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#chat-outer {
+    display: flex;
+    flex-direction: column;
+    width: 100vw; height: 100vh;
+}
+
+.chat-divcol {
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-divrow {
+    display: flex;
+    flex-direction: row;
+}
+
+.chat-div10 {
+    flex: 10 1 auto;
+}
+
+.chat-div20 {
+    flex: 20 1 auto;
+}
+
+.chat-div40 {
+    flex: 40 1 auto;
+}
+
+.chat-div60 {
+    flex: 60 1 auto;
+}
+
+.chat-div80 {
+    flex: 80 1 auto;
+}
+
+.chat-div90 {
+    flex: 90 1 auto;
+}
+
+.chat-box {
+    border: 1px solid black;
+}

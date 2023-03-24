@@ -1,0 +1,22 @@
+.status-bar{
+    
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-start;
+    padding:25px;
+    font-size: 30px;
+    font-weight: 600;
+
+}
+.status-bar  span:hover{
+    cursor:pointer;
+}
+
+.status-bar__ul {
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
