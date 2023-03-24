@@ -1,71 +1,71 @@
 .header {
-    padding:25px;
-    position: fixed;
-  }
-  nav ul {
-    margin-left:700px;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  nav ul li {
-    display: inline-block;
-    font-weight:bold;
-  }
-  
-  .home {
-    text-align: center;
-    font-weight: bold;
-    float: right;
-  }
-  .title{
-    display:flex;
-    align-items:center;
-    font-size:30px;
-    text-align: center;
-    font-weight: bold;
-    float: left;
-    padding:0px;
-  }
-  .home div {
-    display: block;
-    color: black;
-    padding: 16px 16px;
-  }
-  
+  padding: 15px;
+  position: fixed;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  width: 100%;
+  box-sizing: border-box;
+}
 
-  .dropdown-menu {
-    background-color: white;
-    color: black;
-    padding: 16px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  /* dropdown-menu 에는 hover 적용이 안됨 */
-  
-  .dropdown:hover .dropdown-content {
-    display: block;
-  }
-  
-  .dropdown-menu:hover {
-    color: rgb(148, 178, 239);
+ul {
+  padding-left: 50%;
+}
 
-  }
-  .dropdown i{
-    padding : 0px 5px 0px 0px;
-  }
-  .home:hover{
-    color:rgb(148, 178, 239);
-  }
-  .profile{
-    background-color: white;
-    text-align: center;
-    font-weight: bold;
-  }
-  .profile div {
-    display: block;
-    text-decoration: none;
-    color: black;
-    padding-left :30px ;
-  }
+nav ul li {
+  display: inline-block;
+  font-weight: bold;
+}
+.home {
+  text-align: center;
+  font-weight: bold;
+  float: right;
+}
+.title {
+  display: flex;
+  align-items: center;
+  font-size: 30px;
+  text-align: center;
+  font-weight: bold;
+  float: left;
+  padding: 0px;
+  margin-top: -10px;
+}
+.home div {
+  padding: 0px;
+}
+.home:hover {
+  color: rgb(148, 178, 239);
+}
+.dropdown-menu {
+  background-color: white;
+  color: black;
+  padding: 0px;
+  padding-left: 25px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-menu:hover {
+  color: rgb(148, 178, 239);
+}
+.dropdown i {
+  padding: 0px 5px 0px 0px;
+}
+.profile {
+  background-color: white;
+  text-align: center;
+  font-weight: bold;
+  padding-left: 70%;
+}
+.profile div {
+  display: block;
+  text-decoration: none;
+  color: black;
+  padding-left: 30px;
+}
+img {
+  width: 70px;
+  height: auto;
+}
