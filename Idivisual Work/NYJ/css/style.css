@@ -1,6 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-@import 'reset.css';
-/*screens*/
-@import 'screen/chatstyle.css';
-@import 'screen/font.css';
-@import 'screen/board.css';
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,600;1,400&display=swap");
+@import "reset.css";
+/*Components*/
+@import "components/status-bar.css";
+@import "components/screen-header.css";
+
+/*Screens*/
+@import "screen/login.css";
+@import "screen/signup.css";
+@import "screen/board.css";

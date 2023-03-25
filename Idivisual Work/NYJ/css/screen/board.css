@@ -1,0 +1,39 @@
+.header {
+  position: fixed;
+}
+
+.filter {
+  padding-top: 75px;
+}
+
+.filter {
+  position: relative;
+}
+.filter .hidden {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  padding: 0;
+  margin: 0;
+  background-color: #fff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+.filter:hover .hidden {
+  display: block;
+}
+
+.filter .hidden li {
+  list-style: none;
+}
+
+.filter .hidden li a {
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  color: #333;
+}
+
+.filter .hidden li a:hover {
+  background-color: #eee;
+}
