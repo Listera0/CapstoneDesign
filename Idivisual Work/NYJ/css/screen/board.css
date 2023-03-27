@@ -4,10 +4,13 @@
 
 .filter {
   padding-top: 75px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .filter {
   position: relative;
+  display: flex;
+  margin-left: auto;
 }
 .filter .hidden {
   display: none;
@@ -16,7 +19,6 @@
   left: 0;
   padding: 0;
   margin: 0;
-  background-color: #fff;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
 .filter:hover .hidden {
@@ -36,4 +38,8 @@
 
 .filter .hidden li a:hover {
   background-color: #eee;
+}
+.filter > span{
+  font-weight: bold;
+  font-size: 18px;
 }
