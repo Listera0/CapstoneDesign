@@ -1,45 +1,39 @@
 .header {
   position: fixed;
+  display: inline-block;
 }
-
 .filter {
-  padding-top: 75px;
+  padding-top: 70px;
+  padding-bottom: 10px;
+  display: flex;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
-
-.filter {
-  position: relative;
-  display: flex;
-  margin-left: auto;
+.filter span {
+  display: inline-block;
+  width: 110px;
+  height: 40px;
+  margin-right: 10px;
+  background-color: #fff;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
 }
-.filter .hidden {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  padding: 0;
-  margin: 0;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-}
-.filter:hover .hidden {
-  display: block;
-}
-
-.filter .hidden li {
+.ft_selectbox ul {
   list-style: none;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  position: absolute;
+  z-index: 1;
+  display: none;
 }
-
-.filter .hidden li a {
-  display: block;
-  padding: 8px;
-  text-decoration: none;
-  color: #333;
+.ft_selectbox ul li {
+  padding: 10px;
+  cursor: pointer;
 }
-
-.filter .hidden li a:hover {
-  background-color: #eee;
-}
-.filter > span{
-  font-weight: bold;
-  font-size: 18px;
+.filter span:hover .ft_selectbox ul {
+  display: flex;
+  flex-wrap: wrap;
+  width: 33.33%;
 }
