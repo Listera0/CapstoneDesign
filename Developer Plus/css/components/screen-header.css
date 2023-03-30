@@ -5,9 +5,15 @@
   width: 100%;
   box-sizing: border-box;
 }
+@media (max-width: 850px) {
+  .dropdown {
+    display: none;
+  }
+}
 
 ul {
-  padding-left: 50%;
+  float: right;
+  padding-right: 1rem;
 }
 
 nav ul li {
@@ -18,6 +24,7 @@ nav ul li {
   text-align: center;
   font-weight: bold;
   float: right;
+  padding-left: 10px;
 }
 .title {
   display: flex;
@@ -30,7 +37,7 @@ nav ul li {
   margin-top: -10px;
 }
 .home div {
-  padding: 0px;
+  padding: px;
 }
 .home:hover {
   color: rgb(148, 178, 239);
@@ -57,7 +64,7 @@ nav ul li {
   background-color: white;
   text-align: center;
   font-weight: bold;
-  padding-left: 70%;
+  padding-left: 70px;
 }
 .profile div {
   display: block;
