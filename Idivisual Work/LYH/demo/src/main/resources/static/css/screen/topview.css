@@ -1,0 +1,42 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.topview-background {
+    width: 100vw; height: 10vh;
+    position: relative; top: 50%; left: 50%; transform: translate(-50%, 0%);
+    background-color: white;
+    align-items: center;
+}
+
+.topview-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.topview-reverserow {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.topview-title {
+    background-color: white;
+    color: black;
+    font-size: 30px;
+    font-weight: bold;
+    margin-left: 2%;
+}
+
+.topview-dropdown-menu {
+    background-color: white;
+    font-weight: bold;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 2%;
+  }

@@ -4,62 +4,44 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="css/style.css" rel="stylesheet" />
-    <title>Document</title>
+    <link href="css/screen/chat.css" rel="stylesheet" />
+    <title>chat</title>
   </head>
   <body>
-    <div class="header">
-      <nav>
-        <div class="title"><a href="/index.html">Developer Plus</a></div>
-        <ul>
-          <li class="dropdown">
-            <div class="dropdown-menu">개발자 보기</div>
-          </li>
-          <li class="dropdown">
-            <div class="dropdown-menu">개발자 모집</div>
-          </li>
-          <li class="dropdown">
-            <div class="dropdown-menu">스토리</div>
-          </li>
-          <li class="dropdown">
-            <div class="dropdown-menu"><i class="fas fa-search"></i>검색</div>
-          </li>
-          <li class="profile">
-            <div>
-              <span>
-                <a href="/proflie.html"
-                  ><i class="far fa-user-circle fa-lg"></i
-                ></a>
-              </span>
+    <div id="topview"></div>
+    <div class="chat-background linebox-top">
+      <div class="chat-mainpanel" class="chat-divrow">
+        <div class="chat-div60 linebox-right"><p class="placeholder sort-center">여기에 캘린더</p></div>
+        <div class="chat-div40 chat-divcol">
+          <div class="chat-div20 linebox-bottom"><p class="placeholder sort-center">여기에 공지 배너</p></div>
+          <div class="chat-div80 chat-divrow">
+            <div class="chat-div85 linebox-right"><p class="placeholder sort-center">여기에 채팅</p></div>
+            <div class="chat-div15 chat-divcol" style="flex: 1 0 auto;">
+              <input type="image" src="images/sample1.png" class="img-btn" style="margin-top: 10%;">
+              <input type="image" src="images/sample2.png" class="img-btn" style="margin-top: 10%;">
+              <input type="image" src="images/sample3.png" class="img-btn" style="margin-top: 10%;">
+              <div style="height: 10%; margin-top: 10%;"></div>
+              <div style="height: 10%; margin-top: 10%;"></div>
+              <div style="height: 10%; margin-top: 10%;"></div>
+              <div style="height: 6%; margin-top: 10%;"></div>
+              <input type="image" src="images/sample4.png" class="img-btn" style="margin-top: 10%;">
+              <input type="image" src="images/sample5.png" class="img-btn" style="margin-top: 10%;">
             </div>
-          </li>
-          <li class="home">
-            <div>
-              <span><a href="/login.html">로그인/회원가입</a></span>
-            </div>
-          </li>
-        </ul>
-      </nav>
-    </div>
-    <div id="chat-outer">
-      <div class="chat-box chat-div10" id="topview"></div>
-      <div class="chat-box chat-div90 chat-divrow">
-        <div class="chat-box chat-div40 chat-divcol">
-          <div class="chat-box chat-div20">여기에 공지사항</div>
-          <div class="chat-box chat-div80 chat-divrow">
-            <div class="chat-box chat-div10">선택바</div>
-            <div class="chat-box chat-div90">여기에 카톡방</div>
           </div>
-        </div>
-        <div class="chat-box chat-div60">
-          여기에 세부사항 (캘린더, 세부공지)
         </div>
       </div>
     </div>
 
     <script>
-      src = 'http://kit.fontawesome.com/6478f529f2.js';
-      crossorigin = 'anonymous';
+      async function fetchHtmlAsText(url) {
+          return await (await fetch(url)).text();
+        }
+    
+        async function importPage(target) {
+          document.querySelector('#' + target).innerHTML = await fetchHtmlAsText(target + '.html');
+        }
+
+        importPage("topview");
     </script>
   </body>
 </html>
