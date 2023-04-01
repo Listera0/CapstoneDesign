@@ -1,19 +1,14 @@
 .header {
-  padding: 15px;
+  padding: 1.5%;
   position: fixed;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  width: 100%;
+  width: 100vw;
+  height: 10vh;
   box-sizing: border-box;
-}
-@media (max-width: 850px) {
-  .dropdown {
-    display: none;
-  }
 }
 
 ul {
-  float: right;
-  padding-right: 1rem;
+  padding-left: 50%;
 }
 
 nav ul li {
@@ -21,10 +16,11 @@ nav ul li {
   font-weight: bold;
 }
 .home {
+  flex: none;
   text-align: center;
   font-weight: bold;
   float: right;
-  padding-left: 10px;
+  margin-left: auto;
 }
 .title {
   display: flex;
@@ -34,45 +30,44 @@ nav ul li {
   font-weight: bold;
   float: left;
   padding: 0px;
-  margin-top: -10px;
+  margin-top: -1%;
 }
 .home div {
-  padding: px;
+  padding: 0px;
 }
 .home:hover {
   color: rgb(148, 178, 239);
 }
 .dropdown-menu {
+  flex: none;
   background-color: white;
   color: black;
   padding: 0px;
-  padding-left: 25px;
+  /* padding-left: 10px; */
   font-size: 16px;
   cursor: pointer;
+  margin-left: auto;
 }
-.dropdown:hover .dropdown-content {
+
+/* .dropdown:hover .dropdown-content {
   display: block;
-}
+} */
 
 .dropdown-menu:hover {
   color: rgb(148, 178, 239);
 }
-.dropdown i {
+/* .dropdown i {
   padding: 0px 5px 0px 0px;
-}
+} */
 .profile {
   background-color: white;
   text-align: center;
   font-weight: bold;
-  padding-left: 70px;
+  padding-left: 70%;
 }
 .profile div {
   display: block;
   text-decoration: none;
   color: black;
   padding-left: 30px;
-}
-img {
-  width: 70px;
-  height: auto;
 }

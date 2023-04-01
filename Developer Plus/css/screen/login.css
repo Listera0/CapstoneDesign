@@ -71,11 +71,11 @@ body {
 #signup {
   display: flex;
   flex-direction: column;
-  margin: 20px 30px;
+  margin: 30px 30px;
 }
 #signup input {
   border: none;
-  padding: 15px 0px;
+  padding: 10px 0px;
   font-size: 10px;
   margin-bottom: 15px;
 }
@@ -87,6 +87,7 @@ body {
   cursor: pointer;
   padding: 10px;
   border-radius: 5px;
+  margin-top: -10px;
 }
 #signup button {
   border: none;

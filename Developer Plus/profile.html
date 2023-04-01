@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/screen/common.css"  rel="stylesheet">
+    <link href="css/screen/profile.css" rel="stylesheet" />
+    <title>profile</title>
+</head>
+<body>
+    <header>
+        <div id="topview"></div>
+    </header>
+  
+    <section>
+        <div class="profile-background">
+            <div class="profile-mainpanel common-divrow">
+                <div class="common-div25"></div>
+                <div class="common-div50">
+                    <div class="profile-centerpanel">
+                        <div class="common-div25">
+                            <div class="profile-img">이미지없음</div>
+                        </div>
+                        <div class="common-div50">
+                            <div class="profile-placeholder">이름</div>
+                            <div class="profile-placeholder">Email</div><br>
+                            <div class="profile-placeholder">직무 1</div>
+                            <div class="profile-placeholder">직무 2</div>
+                        </div>
+                        <div class="common-div25">
+                            <div class="profile-placeholder">포트폴리오 첨부파일</div>
+                            <div class="profile-placeholder">포트폴리오 파일 링크</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="common-div25">
+                    <div class="profile-sidepanel">
+                        <a class="profile-chatcontent" href="chat.html">Base</a>
+                        <a class="profile-chatcontent" href="chat.html">Add</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+  
+    <footer>
+        <div id="footer"></div>
+    </footer>
+      
+    <script>
+        async function fetchHtmlAsText(url) {
+            return await (await fetch(url)).text();
+        }
+    
+        async function importPage(target) {
+            document.querySelector('#' + target).innerHTML = await fetchHtmlAsText(target + '.html');
+        }
+
+        importPage("topview");
+        importPage("footer");
+    </script>
+</body>
+</html>
