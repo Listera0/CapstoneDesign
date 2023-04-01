@@ -1,0 +1,6 @@
+.main-panel {
+    width: 100vw; height: 90vh;
+    position: relative; top: 50%; left: 50%; transform: translate(-50%, 0%);
+    background-image: url(../../images/StarMap.png);
+    background-size: cover;
+}

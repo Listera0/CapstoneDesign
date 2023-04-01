@@ -1,44 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link href="css/screen/common.css" rel="stylesheet" />
+    <link href="css/screen/main.css" rel="stylesheet" />
     <title>Developer Plus</title>
   </head>
   <body>
-    <div class="header">
-      <nav>
-        <div class="title"><a href="/index.html">Developer Plus</a></div>
-        <ul>
-          <li class="dropdown">
-            <div class="dropdown-menu">개발자 보기</div>
-          </li>
-          <li class="dropdown">
-            <div class="dropdown-menu">개발자 모집</div>
-          </li>
-          <li class="dropdown">
-            <div class="dropdown-menu">스토리</div>
-          </li>
-          <li class="dropdown">
-            <div class="dropdown-menu"><i class="fas fa-search"></i>검색</div>
-          </li>
-          <li class="dropdown">
-            <div class="dropdown-menu">
-              <a href="/proflie.html"
-                ><i class="far fa-user-circle fa-lg"></i
-              ></a>
-            </div>
-          </li>
-          <li class="home">
-            <div>
-              <span><a href="/login.html">로그인/회원가입</a></span>
-            </div>
-          </li>
-        </ul>
-      </nav>
-    </div>
-    <script
-      src="http://kit.fontawesome.com/6478f529f2.js"
-      crossorigin="anonymous"
-    ></script>
+    <header>
+      <div id="topview"></div>
+    </header>
+    <section>
+      <div class="main-panel">
+        <!-- 여기에 버튼 -->
+      </div>
+    </section>
+    <footer>
+      <div id="footer"></div>
+    </footer>
+
+    <script>
+      async function fetchHtmlAsText(url) {
+        return await (await fetch(url)).text();
+      }
+
+      async function importPage(target) {
+        document.querySelector('#' + target).innerHTML = await fetchHtmlAsText(
+          target + '.html'
+        );
+      }
+
+      importPage('topview');
+      importPage('footer');
+    </script>
   </body>
 </html>

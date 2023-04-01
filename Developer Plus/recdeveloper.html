@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/screen/common.css"  rel="stylesheet">
+    <link href="css/screen/recdeveloper.css" rel="stylesheet" />
+    <title>recruit developer</title>
+</head>
+<body>
+    <header>
+        <div id="topview"></div>
+        <div id="topbar"></div>
+    </header>
+  
+    <section>
+        <div class="rec-background">
+            <div class="rec-mainpanel">
+                <div class="rec-content common-divcol">
+                    <div class="common-div30">
+                        <div class="rec-contentimg">이미지 없음</div>
+                    </div>
+                    <div class="common-div20 common-divrow">
+                        <div class="common-div80">
+                            <div class="rec-placeholder"><a href="recdeveloperinner.html">프로젝트명</a></div>
+                            <div class="rec-placeholder">작성자</div>
+                        </div>
+                        <div class="common-div20">
+                            <div class="rec-placeholder">조회수</div>
+                        </div>
+                    </div>
+                    <div class="common-div50">
+                        <div class="rec-placeholder">프로젝트 설명</div>
+                    </div>
+                </div>
+                <div class="rec-content"></div>
+                <div class="rec-content"></div>
+                <div class="rec-content"></div>
+                <div class="rec-content"></div>
+                <div class="rec-content"></div>
+            </div>
+        </div>
+    </section>
+  
+    <footer>
+        <div id="footer"></div>
+    </footer>
+
+    <script>
+        async function fetchHtmlAsText(url) {
+            return await (await fetch(url)).text();
+        }
+    
+        async function importPage(target) {
+            document.querySelector('#' + target).innerHTML = await fetchHtmlAsText(target + '.html');
+        }
+
+        importPage("topview");
+        importPage("topbar");
+        importPage("footer");
+    </script>
+</body>
+</html>
