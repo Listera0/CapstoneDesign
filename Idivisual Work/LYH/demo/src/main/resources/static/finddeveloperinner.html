@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/screen/common.css"  rel="stylesheet">
+    <link href="css/screen/finddeveloperinner.css" rel="stylesheet" />
+    <title>Find Developer</title>
+</head>
+<body>
+    <header>
+        <div id="topview"></div>
+    </header>
+  
+    <section>
+        <div class="findinner-background">
+            <div class="findinner-mainpanel common-divrow">
+                <div class="common-div25"></div>
+                <div class="common-div50">
+                    <div class="findinner-centerpanel">
+                        <div class="common-div25">
+                            <div class="findinner-img">이미지없음</div>
+                        </div>
+                        <div class="common-div50">
+                            <div class="findinner-placeholder">이름</div>
+                            <div class="findinner-placeholder">Email</div><br>
+                            <div class="findinner-placeholder">직무 1</div>
+                            <div class="findinner-placeholder">직무 2</div>
+                        </div>
+                        <div class="common-div25">
+                            <div class="findinner-placeholder">포트폴리오 첨부파일</div>
+                            <div class="findinner-placeholder">포트폴리오 파일 링크</div>
+                            <button type="button" style="position: relative; top: 50%; left: 50%; transform: translate(-50%, -50%);">1 : 1 Chat</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="common-div25"></div>
+            </div>
+        </div>
+    </section>
+  
+    <footer>
+        <div id="footer"></div>
+    </footer>
+      
+    <script>
+        async function fetchHtmlAsText(url) {
+            return await (await fetch(url)).text();
+        }
+    
+        async function importPage(target) {
+            document.querySelector('#' + target).innerHTML = await fetchHtmlAsText(target + '.html');
+        }
+
+        importPage("topview");
+        importPage("footer");
+    </script>
+</body>
+</html>

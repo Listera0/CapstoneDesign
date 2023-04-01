@@ -1,0 +1,28 @@
+.recinner-background {
+    width: 100vw; min-height: 90vh; height: 90vh;
+    position: relative; top: 50%; left: 50%; transform: translate(-50%, 0%);
+    background-color: rgb(248, 248, 248);
+}
+
+.recinner-mainpanel {
+    width: 50%; height: 90%;
+    display: flex;
+    position: relative; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid rgb(222, 222, 222);
+}
+
+.recinner-img {
+    width: 25%; height: 90%;
+    position: relative; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background-color: white;
+    color: rgb(222, 222, 222);
+    border: 1px solid rgb(222, 222, 222);
+    text-align: center;
+    line-height: 900%;
+}
+.recinner-placeholder {
+    font-size: 16px;
+    color: rgb(222, 222, 222);
+    text-align: center;
+}
