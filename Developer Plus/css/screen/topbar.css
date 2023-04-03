@@ -1,5 +1,26 @@
 .topbar-background {
-    width: 100vw; height: 10vh;
-    position: relative; top: 50%; left: 50%; transform: translate(-50%, 0%);
-    background-color: white;
+  width: 100%;
+  height: 10vh;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.top-bar-find a {
+  float: right;
+  background-color: white;
+  font-weight: bold;
+  color: black;
+  font-size: 16px;
+  padding-left: 10px;
+  padding-right: 1rem;
+}
+.top-bar-find a:hover {
+  color: #94b2ef;
+}
+.topbar-first-filter {
+  font-size: 25px;
+  font-weight: bold;
+  font-family: Tahoma;
+  margin-left: 2%;
 }

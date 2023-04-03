@@ -29,17 +29,18 @@ a {
 }
 
 ul {
+  padding-right: 1rem;
 }
 li {
   display: inline-block;
   font-weight: bold;
 }
-.dropdown {
-  float: right;
+i {
+  margin-right: 5px;
 }
 .topview-dropdown-menu a:hover {
   color: rgb(148, 178, 239);
 }
 .topview-dropdown-menu i:hover {
-  color: rgb(148, 178, 239);
+  color: #94b2ef;
 }
