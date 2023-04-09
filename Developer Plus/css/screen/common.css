@@ -1,75 +1,75 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 .common-topline {
-    border-top: 1px solid rgb(222, 222, 222);
+  border-top: 1px solid rgb(222, 222, 222);
 }
 
 .common-bottomline {
-    border-bottom: 1px solid rgb(222, 222, 222);
+  border-bottom: 1px solid rgb(222, 222, 222);
 }
 
 .common-divcol {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .common-divrow {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .common-div10 {
-    flex: 10 1 auto;
+  flex: 10 1 auto;
 }
 
 .common-div15 {
-    flex: 15 1 auto;
+  flex: 15 1 auto;
 }
 
 .common-div20 {
-    flex: 20 1 auto;
+  flex: 20 1 auto;
 }
 
 .common-div25 {
-    flex: 25 1 auto;
+  flex: 25 1 auto;
 }
 
 .common-div30 {
-    flex: 30 1 auto;
+  flex: 30 1 auto;
 }
 
 .common-div35 {
-    flex: 35 1 auto;
+  flex: 35 1 auto;
 }
 
 .common-div40 {
-    flex: 40 1 auto;
+  flex: 40 1 auto;
 }
 
 .common-div50 {
-    flex: 50 1 auto;
+  flex: 50 1 auto;
 }
 
 .common-div60 {
-    flex: 60 1 auto;
+  flex: 60 1 auto;
 }
 
 .common-div80 {
-    flex: 80 1 auto;
+  flex: 80 1 auto;
 }
 
 .common-div85 {
-    flex: 85 1 auto;
+  flex: 85 1 auto;
 }
 
 .common-div90 {
-    flex: 90 1 auto;
+  flex: 90 1 auto;
 }
