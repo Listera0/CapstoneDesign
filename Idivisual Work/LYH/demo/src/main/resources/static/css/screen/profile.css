@@ -1,55 +1,107 @@
-.profile-background {
-    width: 100vw; height: 90vh;
-    position: relative; top: 50%; left: 50%; transform: translate(-50%, 0%);
+section {
+    /* padding-top: 10vh; */
     background-color: rgb(248, 248, 248);
-}
-
-.profile-mainpanel {
-    width: 80%; height: 80%;
+  }
+  .profile-main {
+    width: 100%;
+    height: 100vh;
     display: flex;
-    position: relative; top: 50%; left: 50%; transform: translate(-50%, -50%);
-}
-
-.profile-centerpanel {
-    width: 80%; height: 100%;
-    position: relative; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    justify-content: space-between;
+  }
+  .left {
+    width: 30%;
+    height: 100vh;
+    float: left;
+    background-color: white;
+  }
+  .center {
+    width: 50%;
+    height: 100vh;
+    background-color: white;
+    float: center;
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  .right {
+    width: 30%;
+    height: 100vh;
+    float: right;
+    background-color: white;
+  }
+  .profile img {
+    width: 20%;
+    height: 20%;
+  }
+  .profile {
+    padding-top: 10%;
+    text-align: center;
+  }
+  .profile-name {
+    padding-top: 5%;
+    text-align: center;
+    font-weight: 600;
+    padding-bottom: 3%;
+  }
+  .profile-info {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  .first-ul {
     display: flex;
     flex-direction: column;
-    background-color: white;
-    border: 1px solid rgb(222, 222, 222);
-    align-items: center;
-}
-
-.profile-sidepanel {
-    width: 96%; height: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    border: 1px solid rgb(222, 222, 222);
-    align-items: center;
-}
-
-.profile-img {
-    width: 230%; height: 80%;
-    position: relative; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    background-color: white;
-    color: rgb(222, 222, 222);
-    border: 1px solid rgb(222, 222, 222);
-    text-align: center;
-    line-height: 900%;
-}
-
-.profile-placeholder {
-    font-size: 16px;
-    color: rgb(222, 222, 222);
-    text-align: center;
-}
-
-.profile-chatcontent {
-    width: 90%; height: 20%;
-    background-color: rgb(248, 248, 248);
-    border: 1px solid rgb(222, 222, 222);
+  }
+  .title-job {
+    margin-bottom: 3%;
+  }
+  .main-job {
+    margin-bottom: 2%;
+  }
+  .main-job span {
+    margin-right: 10%;
+  }
+  .career span {
+    margin-right: 10%;
+  }
+  
+  h3 {
+    padding-left: 3%;
+  }
+  .introduce {
+    padding-top: 3%;
+    padding-bottom: 3%;
+  }
+  
+  .meeting span {
+    margin-right: 10%;
+  }
+  .outlink {
     margin-top: 3%;
-    text-align: center;
-    line-height: 750%;
-}
+  }
+  .talk {
+    width: 100%;
+    height: 10%;
+  }
+  .talk button {
+    margin-top: 3%;
+    width: 100%;
+    height: 20vh;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-style: none;
+  }
+  .talk button:hover {
+    background-color: rgb(213, 209, 209);
+  }
+  
+  .button-name img {
+    height: 10vh;
+    border-radius: 10px;
+  }
+  .button-name {
+    width: 100%;
+    display: flex;
+  }
+  .mychat {
+    margin-left: 5%;
+    font-weight: 600;
+  }
