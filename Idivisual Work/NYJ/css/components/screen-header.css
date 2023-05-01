@@ -1,6 +1,6 @@
 .header {
   padding: 15px;
-  position: fixed;
+  display: fixed;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   width: 100%;
   box-sizing: border-box;
