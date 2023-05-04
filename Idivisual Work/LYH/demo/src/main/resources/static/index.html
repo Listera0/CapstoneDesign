@@ -25,7 +25,13 @@
           </button>
         </div>
       </div>
+      <div id="test"><span style="color: red;">테스트</span></div>
+      <input type="button" value="test" onclick="temptest()";>
     </section>
+
+    <footer>
+      <div id="footer"></div>
+    </footer>
 
     <script>
       async function fetchHtmlAsText(url) {
@@ -39,7 +45,17 @@
       }
 
       importPage('topview');
+      importPage('footer');
     </script>
+
+    <script>
+      function temptest()
+      {
+          const element = document.getElementById('test');
+          element.innerHTML = "<div style=color: blue;>text</div>";
+      }
+    </script>
+
     <script
       src="https://kit.fontawesome.com/a91a455094.js"
       crossorigin="anonymous"
