@@ -41,35 +41,35 @@
 }
 
 .chat-div10 {
-    flex: 10 1 auto;
+    flex: 10 0 auto;
 }
 
 .chat-div15 {
-    flex: 15 1 auto;
+    flex: 15 0 auto;
 }
 
 .chat-div20 {
-    flex: 20 1 auto;
+    flex: 20 0 auto;
 }
 
 .chat-div40 {
-    flex: 40 1 auto;
+    flex: 40 0 auto;
 }
 
 .chat-div60 {
-    flex: 60 1 auto;
+    flex: 60 0 auto;
 }
 
 .chat-div80 {
-    flex: 80 1 auto;
+    flex: 80 0 auto;
 }
 
 .chat-div85 {
-    flex: 85 1 auto;
+    flex: 85 0 auto;
 }
 
 .chat-div90 {
-    flex: 90 1 auto;
+    flex: 90 0 auto;
 }
 
 .linebox-full {
