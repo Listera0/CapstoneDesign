@@ -1,24 +1,26 @@
 import { developerData } from '../data.js';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 function ViewDeveloper(props) {
-  const goToviewDeveloperDetail = () => {
-    props.navigate('/ViewDeveloperDetail');
-  };
-  const like = 1;
+  let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
+
+  let [developer, setDeveloper] = useState(developerData);
   return (
     <div className='container'>
       <div className='row' style={{ paddingTop: '2%', paddingBottom: '2%' }}>
         {props.developer.map((a, i) => {
           return (
             <DeveloperCard
-              developer={props.developer[i]}
+              developer={developer[i].id}
+              developerData={developerData}
               i={i}
-              goToviewDeveloperDetail={props.goToviewDeveloperDetail}
               goodCount={props.goodCount}
               changeGoodCount={props.changeGoodCount}
-              setDeveloper={props.setDeveloper}
+              setDeveloper={setDeveloper}
+              navigate={props.navigate}
+              id={id}
             ></DeveloperCard>
           );
         })}
@@ -38,11 +40,13 @@ function DeveloperCard(props) {
         margin: '1%',
       }}
     >
-      <div className='col-div'>
+      <div
+        className='col-div'
+        onClick={() => {
+          props.navigate(`/ViewDeveloperDetail/${props.developer}`);
+        }}
+      >
         <img
-          onClick={() => {
-            props.goToviewDeveloperDetail();
-          }}
           style={{ paddingTop: '3%' }}
           className='col-div_developer'
           src={process.env.PUBLIC_URL + '/' + (props.i + 1) + '.jpg'}
@@ -50,20 +54,20 @@ function DeveloperCard(props) {
       </div>
 
       <div className='col-content_developer'>
-        <p>{props.developer.name}</p>
-        <p>{props.developer.mainJob}</p>
-        <p>{props.developer.subJob}</p>
+        <p>{props.developerData[props.i].name}</p>
+        <p>{props.developerData[props.i].mainJob}</p>
+        <p>{props.developerData[props.i].subJob}</p>
       </div>
 
       <div className='col-content_developer'>
-        <p>{props.developer.project}</p>
+        <p>{props.developerData[props.i].project}</p>
 
         <div className='subdiv'>
           <div className='col-6 '>
             <span
               onClick={(e) => {
                 e.stopPropagation();
-                let copy = [...developerData];
+                let copy = [...props.developerData];
                 copy[props.i] = copy[props.i] + 1;
                 props.setDeveloper(copy);
               }}

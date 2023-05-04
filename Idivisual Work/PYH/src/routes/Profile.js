@@ -1,189 +1,500 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark } from '@fortawesome/free-solid-svg-icons';
-
-function Profile() {
+import { useParams } from 'react-router-dom';
+import { Nav } from 'react-bootstrap';
+import { useState } from 'react';
+import Table from 'react-bootstrap/Table';
+function Profile(props) {
+  let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
+  let developerDetail = props.developer.find(function (x) {
+    return x.id == id;
+  });
+  let [tab, setTab] = useState(0);
+  let [maintab, setMainTab] = useState(0);
   return (
-    <div className='container'>
-      <div
-        class='grid text-center'
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginRight: '1%',
-        }}
-      >
-        <div
-          className='g-col-6 g-col-md-4 profile_bookmark'
-          style={{
-            border: '1px solid rgb(222,222,222)',
-            width: '25%',
-            backgroundColor: 'white',
-            borderRadius: '5px',
-          }}
-        >
-          <h2 style={{ padding: '5%', fontSize: '22px' }}>북마크 목록</h2>
-          <div>
-            <div style={{ marginBottom: '1%' }}>
-              <a href='#'>
-                <div
-                  style={{
-                    textAlign: 'left',
-                    paddingLeft: '5%',
-                    paddingRight: '5%',
-                    display: 'flex',
-                  }}
-                >
-                  <div>
-                    <FontAwesomeIcon icon={faBookmark} />{' '}
-                  </div>
-                  <p style={{ paddingLeft: '3%' }}>나윤재</p>
-                </div>
-              </a>
-            </div>
-            <div style={{ marginBottom: '1%' }}>
-              <a href='#'>
-                <div
-                  style={{
-                    textAlign: 'left',
-                    paddingLeft: '5%',
-                    paddingRight: '5%',
-                    display: 'flex',
-                  }}
-                >
-                  <div>
-                    <FontAwesomeIcon icon={faBookmark} />{' '}
-                  </div>
-                  <p style={{ paddingLeft: '3%' }}>
-                    [서울] [직장인들을 위한 플랫폼 만들어봐요]
-                  </p>
-                </div>
-              </a>
-            </div>
-            <div style={{ marginBottom: '1%' }}>
-              <a href='#'>
-                <div
-                  style={{
-                    textAlign: 'left',
-                    paddingLeft: '5%',
-                    paddingRight: '5%',
-                    display: 'flex',
-                  }}
-                >
-                  <div>
-                    <FontAwesomeIcon icon={faBookmark} />{' '}
-                  </div>
-                  <p style={{ paddingLeft: '3%' }}>
-                    LINE 오픈챗 서버가 100배 급증하는 트래픽을 다루는 방법
-                  </p>
-                </div>
-              </a>
-            </div>
-          </div>
+    <section class='bg-light' style={{ marginTop: '-6%' }}>
+      <div class='container' style={{ paddingTop: '3%' }}>
+        <div class='row'>
+          <h2
+            style={{
+              textAlign: 'start',
+              paddingTop: '5%',
+              paddingLeft: '5%',
+              fontWeight: '600',
+            }}
+          >
+            마이페이지
+          </h2>
+          <Nav
+            fill
+            variant='tabs'
+            defaultActiveKey='link0'
+            style={{ paddingTop: '5%' }}
+          >
+            <Nav.Item>
+              <Nav.Link
+                onClick={() => {
+                  setMainTab(0);
+                }}
+                eventKey='link0'
+              >
+                정보
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                onClick={() => {
+                  setMainTab(1);
+                }}
+                eventKey='link1'
+              >
+                북마크
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+          <MainTabContent
+            tab={tab}
+            maintab={maintab}
+            setTab={setTab}
+            developerDetail={developerDetail}
+          ></MainTabContent>
         </div>
-        <div
-          className='g-col-6 g-col-md-4 '
-          style={{
-            border: '1px solid rgb(222,222,222)',
-            width: '45%',
+      </div>
+    </section>
+  );
+}
+function MainTabContent(props) {
+  if (props.maintab == 0) {
+    return (
+      <>
+        <div class='col-lg-8 mb-4 mb-sm-5'>
+          <div class='card card-style1 border-0'>
+            <div class='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'>
+              <div class='row align-items-center'>
+                <div class='col-lg-6 mb-4 mb-lg-0'>
+                  <img
+                    src={
+                      process.env.PUBLIC_URL +
+                      '/' +
+                      props.developerDetail.id +
+                      '.jpg'
+                    }
+                    width='70%'
+                    style={{ paddingTop: '3%', paddingBottom: '3%' }}
+                  ></img>
+                </div>
+                <div class='col-lg-6 px-xl-10'>
+                  <div>
+                    <h3 style={{ textAlign: 'start', fontWeight: '600' }}>
+                      {props.developerDetail.name}
+                    </h3>
+                  </div>
+                  <ul class='list-unstyled mb-1-9'>
+                    <li class='mb-2 mb-xl-3 display-28'>
+                      <p style={{ textAlign: 'start' }}>
+                        <span
+                          class='display-26 text-secondary me-2 font-weight-600'
+                          style={{ textAlign: 'start', fontSize: '18px' }}
+                        >
+                          Email
+                        </span>
+                        <span style={{ textAlign: 'start', fontSize: '15px' }}>
+                          qkaxhf8823@naver.com
+                        </span>
+                      </p>
+                    </li>
+                    <li class='mb-2 mb-xl-3 display-28'>
+                      <p style={{ textAlign: 'start' }}>
+                        <span
+                          class='display-26 text-secondary me-2 font-weight-600'
+                          style={{ textAlign: 'start', fontSize: '18px' }}
+                        >
+                          Phone
+                        </span>
+                        <span style={{ textAlign: 'start', fontSize: '15px' }}>
+                          010-8823-5776
+                        </span>
+                      </p>
+                    </li>
 
-            backgroundColor: 'white',
-            borderRadius: '5px',
-            paddingTop: '5%',
-          }}
-        >
-          <div className='col-div'>
-            <img
-              className='col-div_developer'
-              src={process.env.PUBLIC_URL + '/1.jpg'}
-            ></img>
+                    <li class='mb-2 mb-xl-3 display-28'>
+                      <p
+                        class='display-26 text-secondary me-2 font-weight-600'
+                        style={{ textAlign: 'start' }}
+                      >
+                        참여중인 프로젝트 {props.developerDetail.projectCount}개
+                        있습니다
+                      </p>{' '}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
-
-          <div className='col-content_developer'>
-            <p style={{ fontSize: '16px' }}>전준호</p>
-            <p
-              style={{
-                textAlign: 'center',
-
-                fontSize: '20px',
-              }}
-            >
-              정보
-            </p>
-            <hr></hr>
-            <p>[본 직무]</p>
-            <p>벡엔드</p>
-            <p>[부 직무]</p>
-            <p>서버 관리자</p>
-            <p>[경력]</p>
-            <p>신입</p>
-            <p>[소개]</p>
-            <p>안녕하세요.박용호입니다.</p>
-            <p>[링크]</p>
+          <Nav fill variant='tabs' defaultActiveKey='link0'>
+            <Nav.Item>
+              <Nav.Link
+                onClick={() => {
+                  props.setTab(0);
+                }}
+                eventKey='link0'
+              >
+                Profile
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                onClick={() => {
+                  props.setTab(1);
+                }}
+                eventKey='link1'
+              >
+                About Me
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                onClick={() => {
+                  props.setTab(2);
+                }}
+                eventKey='link2'
+              >
+                Link
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+          <TabContent tab={props.tab} developerDetail={props.developerDetail} />
+        </div>
+        <div class='col-lg-4 mb-4 mb-sm-5'>
+          <div class='card card-style1 border-0'>
             <div
+              class='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'
               style={{
-                display: 'flex',
-                justifyContent: 'center',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
-              <p style={{ paddingRight: '2%' }}>
-                {' '}
-                <FontAwesomeIcon icon={['fab', 'github']} size='2x' />
-              </p>
-              <div>
-                <p> https://github.com/ParkYongHo1 </p>
+              <div class='row align-items-center'>
+                <p
+                  style={{
+                    textAlign: 'start',
+                    paddingTop: '5%',
+                    paddingLeft: '5%',
+                    fontWeight: '600',
+                  }}
+                >
+                  모임
+                </p>
+                <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
+                  <button
+                    style={{
+                      width: '100%',
+                      height: '10vh',
+                      marginBottom: '3%',
+                      border: '1px solid rgb(222,222,222)',
+                      backgroundColor: 'white',
+                    }}
+                  >
+                    전체 톡방
+                  </button>
+                  <button
+                    style={{
+                      width: '100%',
+                      height: '10vh',
+                      marginBottom: '3%',
+                      border: '1px solid rgb(222,222,222)',
+                      backgroundColor: 'white',
+                    }}
+                  >
+                    DP 프로젝트 톡방
+                  </button>
+                  <button
+                    style={{
+                      width: '100%',
+                      height: '10vh',
+                      marginBottom: '3%',
+                      border: '1px solid rgb(222,222,222)',
+                      backgroundColor: 'white',
+                    }}
+                  >
+                    에타 프로젝트
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div
-          className='g-col-6 g-col-md-4 '
-          style={{
-            border: '1px solid rgb(222,222,222)',
-            width: '25%',
-
-            backgroundColor: 'white',
-            borderRadius: '5px',
-          }}
-        >
-          <h2 style={{ padding: '5%', fontSize: '22px' }}>대화방</h2>
-          <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
-            <button
-              style={{
-                width: '100%',
-                height: '10vh',
-                marginBottom: '3%',
-                border: '1px solid rgb(222,222,222)',
-                backgroundColor: 'white',
-              }}
-            >
-              전체 톡방
-            </button>
-            <button
-              style={{
-                width: '100%',
-                height: '10vh',
-                marginBottom: '3%',
-                border: '1px solid rgb(222,222,222)',
-                backgroundColor: 'white',
-              }}
-            >
-              DP 프로젝트 톡방
-            </button>
-            <button
-              style={{
-                width: '100%',
-                height: '10vh',
-                marginBottom: '3%',
-                border: '1px solid rgb(222,222,222)',
-                backgroundColor: 'white',
-              }}
-            >
-              에타 프로젝트
-            </button>
+      </>
+    );
+  }
+  if (props.maintab == 1) {
+    return (
+      <div>
+        <p></p>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>
+                <FontAwesomeIcon icon={faBookmark} />
+              </th>
+              <th>제목</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{props.developerDetail.name}</td>
+              <td>Mark</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Jacob</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td colSpan={2}>Larry the Bird</td>
+            </tr>
+          </tbody>
+        </Table>
+      </div>
+    );
+  }
+}
+function TabContent(props) {
+  if (props.tab == 0) {
+    return (
+      <div class='col-lg-12 mb-4 mb-sm-5'>
+        <div>
+          <span
+            class='section-title text-primary mb-3 mb-sm-4'
+            style={{ marginTop: '3%' }}
+          >
+            Profile
+          </span>
+          <div style={{ padding: '3%' }}>
+            <p style={{ textAlign: 'start' }}>
+              <span
+                class='display-26 text-secondary me-2 font-weight-600'
+                style={{
+                  textAlign: 'start',
+                  fontSize: '18px',
+                  marginBottom: '10%',
+                }}
+              >
+                [주 능력]
+              </span>
+              <p
+                style={{
+                  textAlign: 'start',
+                  fontSize: '15px',
+                  marginTop: '2%',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  직무
+                </span>{' '}
+                {props.developerDetail.mainJob}
+              </p>
+            </p>
+            <p style={{ textAlign: 'start' }}>
+              <p
+                style={{
+                  textAlign: 'start',
+                  fontSize: '15px',
+                  marginTop: '2%',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  경력
+                </span>{' '}
+                {props.developerDetail.career}
+              </p>
+            </p>
+            <p style={{ textAlign: 'start' }}>
+              <p
+                style={{
+                  textAlign: 'start',
+                  fontSize: '15px',
+                  marginTop: '2%',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  지역
+                </span>{' '}
+                {props.developerDetail.region}
+              </p>
+            </p>
+            <p style={{ textAlign: 'start' }}>
+              <span
+                class='display-26 text-secondary me-2 font-weight-600'
+                style={{
+                  textAlign: 'start',
+                  fontSize: '18px',
+                  marginBottom: '10%',
+                }}
+              >
+                [부 능력]
+              </span>
+              <p
+                style={{
+                  textAlign: 'start',
+                  fontSize: '15px',
+                  marginTop: '2%',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  직무
+                </span>{' '}
+                {props.developerDetail.subJob}
+              </p>
+            </p>
+            <p style={{ textAlign: 'start' }}>
+              <p
+                style={{
+                  textAlign: 'start',
+                  fontSize: '15px',
+                  marginTop: '2%',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  경력
+                </span>{' '}
+                {props.developerDetail.career}
+              </p>
+            </p>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+  if (props.tab == 1) {
+    return (
+      <div class='col-lg-12 mb-4 mb-sm-5'>
+        <div>
+          <span
+            class='section-title text-primary mb-3 mb-sm-4'
+            style={{ marginTop: '3%' }}
+          >
+            About Me
+          </span>
+          <div style={{ padding: '3%' }}>
+            <p style={{ textAlign: 'start' }}>
+              <span
+                class='display-26 text-secondary me-2 font-weight-600'
+                style={{
+                  textAlign: 'start',
+                  fontSize: '18px',
+                  marginBottom: '10%',
+                }}
+              >
+                [소개]
+              </span>
+              <p
+                style={{
+                  textAlign: 'start',
+                  fontSize: '15px',
+                  marginTop: '2%',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  {props.developerDetail.introduce}
+                </span>{' '}
+              </p>
+            </p>
+            <p style={{ textAlign: 'start' }}>
+              <span
+                class='display-26 text-secondary me-2 font-weight-600'
+                style={{
+                  textAlign: 'start',
+                  fontSize: '18px',
+                  marginBottom: '10%',
+                }}
+              >
+                [링크]
+              </span>
+              <p
+                style={{
+                  textAlign: 'start',
+                  fontSize: '15px',
+                  marginTop: '2%',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  <FontAwesomeIcon icon={['fab', 'github']} size='2x' />
+                </span>{' '}
+                <span
+                  onClick={() => {
+                    window.open(props.developerDetail.urlGithub);
+                  }}
+                  style={{ cursor: 'pointer', fontWeight: '600' }}
+                >
+                  깃허브
+                </span>
+              </p>
+            </p>
+            <p
+              style={{
+                textAlign: 'start',
+                fontSize: '15px',
+                marginTop: '2%',
+              }}
+            >
+              <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                <FontAwesomeIcon icon={['fab', 'instagram']} size='2x' />
+              </span>{' '}
+              <span
+                onClick={() => {
+                  window.open(props.developerDetail.urlInsta);
+                }}
+                style={{ cursor: 'pointer', fontWeight: '600' }}
+              >
+                인스타그램
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (props.tab == 2) {
+    return (
+      <div class='col-lg-12 mb-4 mb-sm-5'>
+        <div>
+          <div class='mb-4 mb-sm-5'>
+            <span
+              class='section-title text-primary mb-3 mb-sm-4'
+              style={{ marginTop: '3%' }}
+            >
+              Skill
+            </span>
+          </div>
+          <div style={{ padding: '3%' }}>
+            <p style={{ textAlign: 'start' }}>
+              <span
+                class='display-26 text-secondary me-2 font-weight-600'
+                style={{
+                  textAlign: 'start',
+                  fontSize: '18px',
+                  marginBottom: '10%',
+                }}
+              >
+                [스킬]
+              </span>
+              <p
+                style={{
+                  textAlign: 'start',
+                  fontSize: '15px',
+                  marginTop: '2%',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  {props.developerDetail.skill}
+                </span>{' '}
+              </p>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 export default Profile;

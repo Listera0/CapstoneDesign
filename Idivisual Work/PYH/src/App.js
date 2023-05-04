@@ -30,7 +30,7 @@ function App() {
     navigate('/StoryDetail');
   };
   const goToviewDeveloperDetail = () => {
-    navigate('/ViewDeveloperDetail');
+    navigate(`/ViewDeveloperDetail/${developer}`);
   };
   const goTofindDeveloperDetail = () => {
     navigate('/FindDeveloperDetail');
@@ -95,9 +95,9 @@ function App() {
                   {project.map((a, i) => {
                     return (
                       <ProjectCard
-                        project={project[i]}
+                        project={project}
                         i={i}
-                        navigate={navigate[i]}
+                        navigate={navigate}
                         goTofindDeveloperDetail={goTofindDeveloperDetail}
                       ></ProjectCard>
                     );
@@ -112,7 +112,7 @@ function App() {
                   <div className='col-6'>
                     <a
                       onClick={() => {
-                        navigate('/viewDeveloper');
+                        navigate('/ViewDeveloper');
                       }}
                       style={{ cursor: 'pointer' }}
                     >
@@ -131,9 +131,9 @@ function App() {
                     {developer.map((a, i) => {
                       return (
                         <DeveloperCard
-                          developer={developer[i]}
+                          developer={developer}
                           i={i}
-                          navigate={navigate[i]}
+                          navigate={navigate}
                           goToviewDeveloperDetail={goToviewDeveloperDetail}
                           id={id}
                         ></DeveloperCard>
@@ -163,7 +163,7 @@ function App() {
           }
         ></Route>
         <Route
-          path='/FindDeveloperdetail'
+          path='/FindDeveloperdetail/:id'
           element={<FindDeveloperDetail project={project} />}
         ></Route>
         <Route
@@ -175,7 +175,7 @@ function App() {
           element={<FindDeveloper project={project} />}
         ></Route>
         <Route
-          path='/viewDeveloper'
+          path='/ViewDeveloper'
           element={
             <ViewDeveloper
               developer={developer}
@@ -183,12 +183,18 @@ function App() {
               goodCount={goodCount}
               changeGoodCount={changeGoodCount}
               setDeveloper={setDeveloper}
+              navigate={navigate}
             />
           }
         ></Route>
 
         <Route path='/viewStory' element={<StoryDetail />}></Route>
-        <Route path='/profile' element={<Profile />}></Route>
+        <Route
+          path='/profile/:id'
+          element={
+            <Profile developer={developer} setDeveloper={setDeveloper} />
+          }
+        ></Route>
         <Route path='/serach' element={<Serach />}></Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/talk' element={<Talk />}></Route>
@@ -236,23 +242,25 @@ function DeveloperCard(props) {
         width: '24%',
       }}
     >
-      <div className='col-div'>
+      <div
+        className='col-div'
+        onClick={() => {
+          props.navigate(`/ViewDeveloperDetail/${props.developer[props.i].id}`);
+        }}
+      >
         <img
-          onClick={() => {
-            <Link to={`/viewDeveloperDetail/${props.id}`}></Link>;
-          }}
           style={{ paddingTop: '3%' }}
           className='col-div_developer'
           src={process.env.PUBLIC_URL + '/' + (props.i + 1) + '.jpg'}
         ></img>
       </div>
       <div className='col-content_developer'>
-        <p>{props.developer.name}</p>
-        <p>{props.developer.mainJob}</p>
-        <p>{props.developer.subJob}</p>
+        <p>{props.developer[props.i].name}</p>
+        <p>{props.developer[props.i].mainJob}</p>
+        <p>{props.developer[props.i].subJob}</p>
       </div>
       <div className='col-content_developer'>
-        <p>{props.developer.project}</p>
+        <p>{props.developer[props.i].project}</p>
         <button className='btn'>
           <span> 1대1 대화 </span>
         </button>
@@ -266,7 +274,7 @@ function ProjectCard(props) {
       <div className='col-div ' style={{ overflow: 'hidden' }}>
         <img
           onClick={() => {
-            props.goTofindDeveloperDetail();
+            props.navigate(`/FindDeveloperDetail/${props.project[props.i].id}`);
           }}
           className='col-img'
           src={process.env.PUBLIC_URL + '/main' + (props.i + 3) + '.jpg'}
@@ -279,9 +287,9 @@ function ProjectCard(props) {
             props.goTofindDeveloperDetail();
           }}
         >
-          {props.project.title}
+          {props.project[props.i].title}
         </span>
-        <p>{props.project.content}</p>
+        <p>{props.project[props.i].content}</p>
       </div>
     </div>
   );
@@ -291,7 +299,7 @@ function NavBar(props) {
   return (
     <nav
       className='navbar_main'
-      style={{ borderBottom: '1px solid rgb(222,222,222' }}
+      style={{ borderBottom: '1px solid rgb(222,222,222)' }}
     >
       <div className='navbar__logo'>
         <Nav.Link
@@ -307,19 +315,19 @@ function NavBar(props) {
           <li>
             <Nav.Link
               onClick={() => {
-                props.navigate('/viewDeveloper');
+                props.navigate('/findDeveloper');
               }}
             >
-              개발자 보기
+              프로젝트
             </Nav.Link>
           </li>
           <li>
             <Nav.Link
               onClick={() => {
-                props.navigate('/findDeveloper');
+                props.navigate('/viewDeveloper');
               }}
             >
-              개발자 찾기
+              개발자
             </Nav.Link>
           </li>
           <li>
@@ -331,7 +339,6 @@ function NavBar(props) {
               스토리
             </Nav.Link>
           </li>
-
           <li>
             <Nav.Link
               onClick={() => {
@@ -344,7 +351,7 @@ function NavBar(props) {
           <li>
             <Nav.Link
               onClick={() => {
-                props.navigate('/profile');
+                props.navigate(`/profile/0`);
               }}
             >
               프로필
@@ -453,16 +460,16 @@ function Footer(props) {
 function CarouselCard() {
   return (
     <Carousel style={{ paddingBottom: '10px' }}>
-      <Carousel.Item className='height'>
+      <Carousel.Item>
         <div className='carousel_height'>
           <img src={process.env.PUBLIC_URL + 'c3.jpg'} width='100%' />
         </div>
       </Carousel.Item>
 
-      <Carousel.Item className='height'>
+      <Carousel.Item>
         <img src={process.env.PUBLIC_URL + 'c1.jpg'} width='100%' />
       </Carousel.Item>
-      <Carousel.Item className='height'>
+      <Carousel.Item>
         <img src={process.env.PUBLIC_URL + 'c2.png'} width='100%' />
       </Carousel.Item>
     </Carousel>

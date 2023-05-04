@@ -83,6 +83,7 @@ let developerData = [
     urlInsta: 'https://www.instagram.com/pxxk._.h0/?next=%2Fstudy._ho%2F',
     introduce: '안녕하세요 프론트엔드를 꿈꾸는 박용호 입니다.',
     skill: 'javascript',
+    likeCount: '1',
   },
   {
     id: 2,
@@ -97,6 +98,7 @@ let developerData = [
     skill: 'javascript',
     urlInsta: 'https://www.instagram.com/pxxk._.h0/?next=%2Fstudy._ho%2F',
     introduce: '안녕하세요 프론트엔드를 꿈꾸는 박용호 입니다.',
+    likeCount: '1',
   },
   {
     id: 3,
@@ -111,6 +113,7 @@ let developerData = [
     skill: 'javascript',
     urlInsta: 'https://www.instagram.com/pxxk._.h0/?next=%2Fstudy._ho%2F',
     introduce: '안녕하세요 프론트엔드를 꿈꾸는 박용호 입니다.',
+    likeCount: '1',
   },
 ];
 //경력 ,지역

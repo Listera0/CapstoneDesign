@@ -325,9 +325,9 @@ function TabContent(props) {
                   onClick={() => {
                     window.open(props.developerDetail.urlGithub);
                   }}
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: 'pointer', fontWeight: '600' }}
                 >
-                  {props.developerDetail.urlGithub}
+                  깃허브
                 </span>
               </p>
             </p>
@@ -345,9 +345,9 @@ function TabContent(props) {
                 onClick={() => {
                   window.open(props.developerDetail.urlInsta);
                 }}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: 'pointer', fontWeight: '600' }}
               >
-                pxx._.h0
+                인스타그램
               </span>
             </p>
           </div>
