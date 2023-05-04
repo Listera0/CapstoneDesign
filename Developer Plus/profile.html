@@ -1,64 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/screen/common.css"  rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="css/screen/common.css" rel="stylesheet" />
     <link href="css/screen/profile.css" rel="stylesheet" />
     <title>profile</title>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <div id="topview"></div>
+      <div id="topview"></div>
     </header>
-  
-    <section>
-        <div class="profile-background">
-            <div class="profile-mainpanel common-divrow">
-                <div class="common-div25"></div>
-                <div class="common-div50">
-                    <div class="profile-centerpanel">
-                        <div class="common-div25">
-                            <div class="profile-img">이미지없음</div>
-                        </div>
-                        <div class="common-div50">
-                            <div class="profile-placeholder">이름</div>
-                            <div class="profile-placeholder">Email</div><br>
-                            <div class="profile-placeholder">직무 1</div>
-                            <div class="profile-placeholder">직무 2</div>
-                        </div>
-                        <div class="common-div25">
-                            <div class="profile-placeholder">포트폴리오 첨부파일</div>
-                            <div class="profile-placeholder">포트폴리오 파일 링크</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="common-div25">
-                    <div class="profile-sidepanel">
-                        <a class="profile-chatcontent" href="chat.html">Base</a>
-                        <a class="profile-chatcontent" href="chat.html">Add</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-  
-    <footer>
-        <div id="footer"></div>
-    </footer>
-      
-    <script>
-        async function fetchHtmlAsText(url) {
-            return await (await fetch(url)).text();
-        }
-    
-        async function importPage(target) {
-            document.querySelector('#' + target).innerHTML = await fetchHtmlAsText(target + '.html');
-        }
 
-        importPage("topview");
-        importPage("footer");
+    <section>
+      <div class="profile-main">
+        <div class="left">
+          <div class="profile-info">
+            <h3>북마크</h3>
+          </div>
+        </div>
+        <div class="center">
+          <div class="profile">
+            <img
+              src="https://avatars.githubusercontent.com/u/103355252?s=96&v=4"
+            />
+            <div class="profile-name">박용호</div>
+          </div>
+          <div class="profile-info">
+            <h3>정보</h3>
+          </div>
+          <ul class="first-ul">
+            <li class="title-job">[본 직무]</li>
+            <li class="main-job">
+              <span>직무</span>
+              <span>프론트엔드</span>
+            </li>
+            <li class="career">
+              <span>경력</span>
+              <span>신입</span>
+            </li>
+            <li class="introduce">[소개]</li>
+            <li class="meeting">
+              <span>안녕하세요 박용호입니다.</span>
+            </li>
+            <li class="outlink">[링크]</li>
+            <a href="https://github.com/ParkYongHo1">깃허브</a>
+          </ul>
+        </div>
+        <div class="right">
+          <div class="profile-info">
+            <h3>메시지</h3>
+          </div>
+          <div class="talk">
+            <button>
+              <div class="button-name">
+                <img
+                  src="https://avatars.githubusercontent.com/u/103355252?s=96&v=4"
+                />
+                <div class="mychat">나와의 채팅</div>
+              </div>
+            </button>
+            <button>add</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div id="footer"></div>
+    </footer>
+
+    <script>
+      async function fetchHtmlAsText(url) {
+        return await (await fetch(url)).text();
+      }
+
+      async function importPage(target) {
+        document.querySelector('#' + target).innerHTML = await fetchHtmlAsText(
+          target + '.html'
+        );
+      }
+
+      importPage('topview');
+      importPage('footer');
     </script>
-</body>
+  </body>
 </html>
