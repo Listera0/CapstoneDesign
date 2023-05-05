@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/screen/common.css"  rel="stylesheet">
+    <link href="css/screen/story.css" rel="stylesheet" />
+    <title>Story</title>
+</head>
+<body>
+    <header>
+        <div id="topview"></div>
+        <div class="story-toptitle">스토리</div>
+    </header>
+  
+    <section>
+        <div class="story-background">
+            <div class="story-mainpanel">
+                <div class="story-content common-divcol">
+                    <div class="common-div30">
+                        <div class="story-contentimg">이미지 없음</div>
+                    </div>
+                    <div class="common-div20 common-divrow">
+                        <div class="common-div80">
+                            <div class="story-placeholder"><a href="storyinner.html">스토리이름</a></div>
+                            <div class="story-placeholder">작성자</div>
+                        </div>
+                        <div class="common-div20">
+                            <div class="story-placeholder">조회수</div>
+                        </div>
+                    </div>
+                    <div class="common-div50">
+                        <div class="story-placeholder">스토리 설명</div>
+                    </div>
+                </div>
+                <div class="story-content"></div>
+                <div class="story-content"></div>
+                <div class="story-content"></div>
+                <div class="story-content"></div>
+                <div class="story-content"></div>
+            </div>
+        </div>
+    </section>
+  
+    <footer>
+        <div id="footer"></div>
+    </footer>
+
+    <script>
+        async function fetchHtmlAsText(url) {
+            return await (await fetch(url)).text();
+        }
+    
+        async function importPage(target) {
+            document.querySelector('#' + target).innerHTML = await fetchHtmlAsText(target + '.html');
+        }
+
+        importPage("topview");
+        importPage("footer");
+    </script>
+</body>
+</html>

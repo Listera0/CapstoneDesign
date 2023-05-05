@@ -34,7 +34,7 @@
 
 .main {
   background-color: #fafafa;
-  padding: 15px 0px 50px;
+  padding: 10px 30px;
 }
 .card {
   position: relative;
@@ -54,24 +54,39 @@
 .card_thumbnail:hover {
   transform: scale(1.2);
 }
-
 .card_contents {
   text-align: left;
-}
-.card_contents * {
-  padding-left: 10px;
-  padding-bottom: 10px;
+  position: relative;
+  left: 15px;
 }
 .card_title {
+  width: 330px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-weight: bold;
   font-size: 20px;
 }
 .card_user {
+  position: relative;
+  top: 5px;
   font-size: 14px;
 }
 .card_text {
+  width: 330px;
+  height: 100px;
+  position: relative;
+  top: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
   font-size: 18px;
 }
 .card_upload_time {
-  padding-bottom: 0;
+  padding: 0;
+  position: relative;
+  top: 15px;
 }
