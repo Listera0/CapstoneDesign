@@ -24,7 +24,17 @@ let projectData = [
   {
     id: 0,
     title: ' [서울] 미술 작품 거래 차트 서비스',
-    content: '박용호',
+    name: '박용호',
+    content:
+      '안녕하세요.   특정장소에 대한 실시간 정보거래 서비스를 개발하고자 합니다.    올해 23년 창업진흥원 예비창업패키지 서류전형을 통과했고, 지금은 사업기획에서 조금 정비중에 있습니다.    현재 시드투자 유치를 위해서 VC와 1차 미팅을 가진 상태이고, 사업기획과 UX/UI 디자인이 완료되는데로 VC와 2차 미팅을 가질 예정입니다.    올해 가을이 오기전에 시드 투자 유치를 하고 법인을 설립하여 운영하는것을 목표로 하고 있어요~^^    프로젝트 인원은 8명이고, 진행 정도에 따라 필요 인원은 추가로 증원하는것을 생각하고 있습니다.',
+    job: ['프론트엔드', '벡엔드', 'UX/UI기획'],
+    requireJob: [2, 0, 1],
+    nowJob: [2, 1, 1],
+    skill: ['javascript', 'react', 'java'],
+    imgURL: 'main1',
+    region: '서울',
+    startDate: '2023-05-05',
+    endDate: '2023-10-10',
   },
   {
     id: 1,
@@ -40,7 +50,7 @@ let projectData = [
     content: ' 임영훈',
     id: 4,
     title: ' [서울] [직장인들을 위한 플랫폼 만들어봐요]',
-    region: '',
+    region: '서울',
     content: ' 임영훈',
     name: '',
     //content:'
@@ -67,7 +77,7 @@ let developerData = [
     urlGithub: 'https://github.com/ParkYongHo1',
     urlInsta: 'https://www.instagram.com/pxxk._.h0/?next=%2Fstudy._ho%2F',
     introduce: '안녕하세요 프론트엔드를 꿈꾸는 박용호 입니다.',
-    skill: 'javascript',
+    skill: ['javascript', 'react', 'java'],
     likeCount: '1',
   },
   {

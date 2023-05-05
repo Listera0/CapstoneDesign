@@ -68,9 +68,11 @@ function App() {
                     return (
                       <StoryCard
                         setStory={setStory}
-                        story={story[i]}
+                        story={story}
+                        navigate={navigate}
                         i={i}
                         goToStoryDetail={goToStoryDetail}
+                        key={i}
                       ></StoryCard>
                     );
                   })}
@@ -99,6 +101,7 @@ function App() {
                         i={i}
                         navigate={navigate}
                         goTofindDeveloperDetail={goTofindDeveloperDetail}
+                        key={i}
                       ></ProjectCard>
                     );
                   })}
@@ -120,7 +123,7 @@ function App() {
                     </a>
                   </div>
                   <div
-                    class='grid text-center'
+                    className='grid text-center'
                     style={{
                       display: 'flex',
                       justifyContent: 'space-between',
@@ -136,6 +139,7 @@ function App() {
                           navigate={navigate}
                           goToviewDeveloperDetail={goToviewDeveloperDetail}
                           id={id}
+                          key={i}
                         ></DeveloperCard>
                       );
                     })}
@@ -164,7 +168,9 @@ function App() {
         ></Route>
         <Route
           path='/FindDeveloperdetail/:id'
-          element={<FindDeveloperDetail project={project} />}
+          element={
+            <FindDeveloperDetail project={project} developer={developer} />
+          }
         ></Route>
         <Route
           path='/story'
@@ -210,7 +216,7 @@ function StoryCard(props) {
         className='col-div '
         style={{ overflow: 'hidden' }}
         onClick={() => {
-          props.goToStoryDetail();
+          props.navigate(`/StoryDetail/${props.story[props.i].id}`);
         }}
       >
         <img

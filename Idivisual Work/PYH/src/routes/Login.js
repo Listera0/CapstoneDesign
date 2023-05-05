@@ -15,9 +15,7 @@ function Login() {
           <input type='password' placeholder='Password' required></input>
 
           <input type='submit' value='Sign In'></input>
-          <button type='button'>
-            <i class='fas fa-comment fa-1x'></i>카카오계정으로 로그인
-          </button>
+          <button type='button'>카카오계정으로 로그인</button>
         </form>
       </div>
     </div>
