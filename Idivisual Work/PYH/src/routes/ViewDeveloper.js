@@ -21,6 +21,7 @@ function ViewDeveloper(props) {
               setDeveloper={setDeveloper}
               navigate={props.navigate}
               id={id}
+              key={i}
             ></DeveloperCard>
           );
         })}

@@ -2,7 +2,7 @@ function Talk() {
   return (
     <div className='container'>
       <div
-        class='grid text-center'
+        className='grid text-center'
         style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -161,30 +161,30 @@ function Talk() {
                   style={{ padding: '0' }}
                 ></div>
               </header>
-              <main class='main-screen main-chat'>
-                <div class='chat__timestamp'>2023년, 2월 17일, 금요일</div>
-                <div class='message-row'>
+              <main className='main-screen main-chat'>
+                <div className='chat__timestamp'>2023년, 2월 17일, 금요일</div>
+                <div className='message-row'>
                   <img src='https://avatars.githubusercontent.com/u/103355252?s=96&v=4'></img>
-                  <div class='message-row__content'>
+                  <div className='message-row__content'>
                     <span
-                      class='message__author'
+                      className='message__author'
                       style={{ paddingRight: '65%' }}
                     >
                       용호
                     </span>
-                    <div class='message__info'>
-                      <span class='message__bubble'>Hi!</span>
-                      <span class='message__time'>21:27</span>
+                    <div className='message__info'>
+                      <span className='message__bubble'>Hi!</span>
+                      <span className='message__time'>21:27</span>
                     </div>
                   </div>
                 </div>
                 <div
-                  class='message-row message-row--own'
+                  className='message-row message-row--own'
                   style={{ marginRight: '3%' }}
                 >
-                  <div class='message__info'>
+                  <div className='message__info'>
                     <span
-                      class='message__bubble'
+                      className='message__bubble'
                       style={{
                         backgroundColor: 'white',
                         padding: '13px',
@@ -195,15 +195,15 @@ function Talk() {
                     >
                       하이
                     </span>
-                    <span class='message__time'>21:27</span>
+                    <span className='message__time'>21:27</span>
                   </div>
                 </div>
               </main>
-              <form class='reply'>
-                <div class='reply__column'>
-                  <i class='fas fa-plus fa-lg'></i>
+              <form className='reply'>
+                <div className='reply__column'>
+                  <i className='fas fa-plus fa-lg'></i>
                 </div>
-                <div class='reply__column'>
+                <div className='reply__column'>
                   <input
                     type='text'
                     placeholder='Write a message'
