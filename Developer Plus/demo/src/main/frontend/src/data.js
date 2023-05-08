@@ -89,7 +89,6 @@ let developerData = [
     name: ' 박용호',
     mainJob: '프론트엔드 ',
     subJob: '벡엔드 ',
-    project: '참여중인 프로젝트 2개 있습니다.',
     job: '[a,b]',
     career: '초보',
     region: '경기도',

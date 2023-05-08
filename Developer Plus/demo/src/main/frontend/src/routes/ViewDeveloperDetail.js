@@ -14,7 +14,7 @@ function ViewDeveloperDetail(props) {
 
   // useEffect(() => {}); //쓰는 이유 안에 있는 코드는 html 렌더링 후에 동작 - 서버에서 데이터가져오는 작업 , 타이머 , 어려운 연산
   let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
-  let developerDetail = props.developer.find(function (x) {
+  let developerDetail = props.allDevDto.find(function (x) {
     return x.id == id;
   });
   let [tab, setTab] = useState(0);
@@ -191,7 +191,7 @@ function TabContent(props) {
                 <span style={{ fontWeight: '600', marginRight: '10%' }}>
                   직무
                 </span>{' '}
-                {props.developerDetail.mainJob}
+                {props.developerDetail.job}
               </p>
             </span>
             <div style={{ textAlign: 'start' }}>
@@ -243,7 +243,7 @@ function TabContent(props) {
                 <span style={{ fontWeight: '600', marginRight: '10%' }}>
                   직무
                 </span>{' '}
-                {props.developerDetail.subJob}
+                {props.developerDetail.job}
               </p>
             </div>
             <div style={{ textAlign: 'start' }}>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import './App.css';
 import { data, projectData, developerData } from './data.js';
@@ -19,6 +19,7 @@ import axios from 'axios';
 import Login from './routes/Login';
 import { useParams } from 'react-router-dom';
 library.add(fab);
+
 function App() {
   let [story, setStory] = useState(data);
   let [project, setProject] = useState(projectData);
@@ -35,6 +36,7 @@ function App() {
   const goTofindDeveloperDetail = () => {
     navigate('/FindDeveloperDetail');
   };
+
   const [allDevDto, setAllDevDto] = useState(['']);
   {
     useEffect(() => {
@@ -69,7 +71,11 @@ function App() {
   {
     useEffect(() => {
       axios
-        .post('/api/getDevData', { id: '', orderBy: 'id desc', limit: '4' })
+        .post('/api/getDevData', {
+          id: '',
+          orderBy: 'likeCount desc',
+          limit: '4',
+        })
         .then((response) => setRankingDevDto(response.data))
         .catch((error) => console.log(error));
     }, []);
@@ -179,11 +185,9 @@ function App() {
                     return (
                       <StoryCard
                         setStory={setStory}
-                        story={story}
-                        navigate={navigate}
+                        story={story[i]}
                         i={i}
                         goToStoryDetail={goToStoryDetail}
-                        key={i}
                       ></StoryCard>
                     );
                   })}
@@ -212,8 +216,6 @@ function App() {
                         i={i}
                         navigate={navigate}
                         goTofindDeveloperDetail={goTofindDeveloperDetail}
-                        key={i}
-                        id={id}
                       ></ProjectCard>
                     );
                   })}
@@ -235,7 +237,7 @@ function App() {
                     </a>
                   </div>
                   <div
-                    className='grid text-center'
+                    class='grid text-center'
                     style={{
                       display: 'flex',
                       justifyContent: 'space-between',
@@ -243,7 +245,7 @@ function App() {
                       marginBottom: '1%',
                     }}
                   >
-                    {developer.map((a, i) => {
+                    {rankingDevDto.map((a, i) => {
                       return (
                         <DeveloperCard
                           developer={developer}
@@ -251,7 +253,7 @@ function App() {
                           navigate={navigate}
                           goToviewDeveloperDetail={goToviewDeveloperDetail}
                           id={id}
-                          key={i}
+                          rankingDevDto={rankingDevDto}
                         ></DeveloperCard>
                       );
                     })}
@@ -272,7 +274,7 @@ function App() {
           path='/ViewDeveloperDetail/:id'
           element={
             <ViewDeveloperDetail
-              developer={developer}
+              allDevDto={allDevDto}
               goodCount={goodCount}
               changeGoodCount={changeGoodCount}
             />
@@ -280,9 +282,7 @@ function App() {
         ></Route>
         <Route
           path='/FindDeveloperdetail/:id'
-          element={
-            <FindDeveloperDetail project={project} developer={developer} />
-          }
+          element={<FindDeveloperDetail project={project} />}
         ></Route>
         <Route
           path='/story'
@@ -328,7 +328,7 @@ function StoryCard(props) {
         className='col-div '
         style={{ overflow: 'hidden' }}
         onClick={() => {
-          props.navigate(`/StoryDetail/${props.story[props.i].id}`);
+          props.goToStoryDetail();
         }}
       >
         <img
@@ -363,7 +363,9 @@ function DeveloperCard(props) {
       <div
         className='col-div'
         onClick={() => {
-          props.navigate(`/ViewDeveloperDetail/${props.developer[props.i].id}`);
+          props.navigate(
+            `/ViewDeveloperDetail/${props.rankingDevDto[props.i].id}`
+          );
         }}
       >
         <img
@@ -373,12 +375,12 @@ function DeveloperCard(props) {
         ></img>
       </div>
       <div className='col-content_developer'>
-        <p>{props.developer[props.i].name}</p>
-        <p>{props.developer[props.i].mainJob}</p>
-        <p>{props.developer[props.i].subJob}</p>
+        <p>{props.rankingDevDto[props.i].name}</p>
+        <p>{props.rankingDevDto[props.i].job}</p>
+        <p>{props.rankingDevDto[props.i].job}</p>
       </div>
       <div className='col-content_developer'>
-        <p>{props.developer[props.i].project}</p>
+        <p>{props.rankingDevDto[props.i].projectCount}</p>
         <button className='btn'>
           <span> 1대1 대화 </span>
         </button>
@@ -388,7 +390,7 @@ function DeveloperCard(props) {
 }
 function ProjectCard(props) {
   return (
-    <div className='col-4 '>
+    <div className='col-md-4 '>
       <div className='col-div ' style={{ overflow: 'hidden' }}>
         <img
           onClick={() => {
