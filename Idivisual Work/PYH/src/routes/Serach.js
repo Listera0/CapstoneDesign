@@ -11,13 +11,13 @@ function Serach() {
           ></input>
 
           <div className="input_button">
-            <button class="input_del">
+            <button className="input_del">
               <img
                 src="https://letspl.me/assets/images/ic-del.svg"
                 alt="초기화"
               ></img>
             </button>
-            <button class="input_search">
+            <button className="input_search">
               <img
                 src="https://letspl.me/assets/images/ic-search.png"
                 alt="검색"

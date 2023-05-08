@@ -12,6 +12,7 @@ function Story(props) {
               i={props.i}
               goodCount={props.goodCount}
               changeGoodCount={props.changeGoodCount}
+              key={i}
             ></StoryCard>
           );
         })}

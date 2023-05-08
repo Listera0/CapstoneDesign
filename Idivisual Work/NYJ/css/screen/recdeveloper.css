@@ -1,0 +1,65 @@
+.rec-mainpanel {
+  width: 75%;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1em;
+  row-gap: 3em;
+  margin: 5vh auto;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0);
+}
+.rec-content:hover {
+  border-color: rgb(148, 178, 239);
+}
+.rec-content {
+  width: 32%;
+  height: 60vh;
+  background-color: white;
+  border: 1px solid rgb(222, 222, 222);
+}
+
+.rec-contentimg {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border-bottom: 1px solid rgb(222, 222, 222);
+  color: rgb(222, 222, 222);
+  text-align: center;
+  /* 이미지 배경 설정 */
+  background-size: cover;
+  background-position: 50% 50%;
+  /* 이미지 축소 애니메이션 */
+  transition: transform 0.2s;
+}
+.rec-contentimg:hover {
+  /* 이미지 확대 애니메이션 */
+  transform: scale(1.1);
+  transition: transform 0.2s;
+}
+.rec-placeholder {
+  font-size: 16px;
+  color: rgb(222, 222, 222);
+  margin: 2px 3px 0px 20px; /* top right bottom left */
+}
+/* 제목 */
+.rec-title > a {
+  color: rgb(0, 0, 0);
+  text-align: center;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* 작성자 */
+.rec-user {
+  color: rgb(0, 0, 0);
+}
+/* 프로젝트 설명 */
+.rec-text {
+  color: rgb(0, 0, 0);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+}

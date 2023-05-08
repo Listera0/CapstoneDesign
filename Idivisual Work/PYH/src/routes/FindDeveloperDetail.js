@@ -1,68 +1,471 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookmark } from '@fortawesome/free-solid-svg-icons';
+import { useParams } from 'react-router-dom';
+import { Nav } from 'react-bootstrap';
+import { useState } from 'react';
+import jobs from '../icons2';
 function FindDeveloperDetail(props) {
+  let [tab, setTab] = useState(0);
+  let [maintab, setMainTab] = useState(0);
+  let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
+  let projectDetail = props.project.find(function (x) {
+    return x.id == id;
+  });
+
   return (
-    <div
-      className='container'
-      style={{ paddingLeft: '20%', paddingRight: '20%' }}
-    >
-      <div
-        className='row'
-        width='30%'
-        style={{ paddingTop: '2%', paddingBottom: '2%' }}
-      >
-        <div className='col-12'>
-          <p style={{ fontSize: '22px' }}>
-            [서울] [직장인들을 위한 플랫폼 만들어봐요]
-          </p>
-        </div>
-        <div style={{ paddingTop: '2%', paddingBottom: '2%' }}>
-          <img src={process.env.PUBLIC_URL + '/main.jpg'} width='50%'></img>
-        </div>
-        <p>안녕하세요 직무전환을 위해 사이드 프로젝트를 진행하려고 합니다!</p>
-        <p>
-          현재는 사이드 프로젝트지만, 후에 앱 런칭과 운영까지 생각하고 있어요 🙂
-        </p>
-        <p>프로젝트 인원은 9명이고, 필요에 따라 증원될 수 있습니다.</p>
-        <div style={{ paddingTop: '2%', paddingBottom: '2%', display: 'flex' }}>
-          <div className='col-6'>
-            <h4>모집인원</h4>
-            <p>프론트엔드 2/3명</p>
-            <p>벡 엔드 1/2명</p>
-            <p>서버개발 0/1명</p>
-          </div>
-          <div className='col-6'>
-            <h4>담당자 연락처</h4>
-            <p>이름 박용호</p>
-            <p>전화번호 010-8823-5776</p>
-            <p>이메일 qkaxhf8823@naver.com</p>
-            <button
-              style={{
-                width: '50%',
-                alignItems: 'center',
-                backgroundColor: 'white',
-                border: '1px solid rgb(222,222,222)',
-                borderRadius: '5px',
-              }}
-            >
-              담당자와 연락
-            </button>
-          </div>
-        </div>
-        <div>
-          <button
+    <section className='bg-light' style={{ marginTop: '-6%' }}>
+      <div className='container' style={{ paddingTop: '3%' }}>
+        <div className='row'>
+          <h2
             style={{
-              width: '30%',
-              alignItems: 'center',
-              backgroundColor: 'white',
-              border: '1px solid rgb(222,222,222)',
-              borderRadius: '5px',
+              textAlign: 'center',
+              paddingTop: '5%',
+              paddingLeft: '5%',
+              fontWeight: '600',
             }}
           >
-            연락하기
-          </button>
+            {projectDetail.title}
+          </h2>
+
+          <MainTabContent
+            tab={tab}
+            maintab={maintab}
+            setTab={setTab}
+            projectDetail={projectDetail}
+          ></MainTabContent>
         </div>
       </div>
-    </div>
+    </section>
   );
+}
+function MainTabContent(props) {
+  return (
+    <>
+      <div className='col-lg-12 mb-4 mb-sm-5'>
+        <div className='card card-style1 border-0'>
+          <div
+            className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'
+            style={{ display: 'flex' }}
+          >
+            <div
+              className='row align-items-center'
+              style={{ border: 'none', display: 'flex' }}
+            >
+              <div
+                className='col-lg-12 mb-4 mb-lg-0'
+                style={{ alignItems: 'center' }}
+              >
+                <img
+                  src={
+                    process.env.PUBLIC_URL +
+                    '/' +
+                    props.projectDetail.imgURL +
+                    '.jpg'
+                  }
+                  width='100%'
+                  style={{ textAlign: 'center' }}
+                ></img>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Nav fill variant='tabs' defaultActiveKey='link0'>
+          <Nav.Item>
+            <Nav.Link
+              onClick={() => {
+                props.setTab(0);
+              }}
+              eventKey='link0'
+            >
+              정보
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link
+              onClick={() => {
+                props.setTab(1);
+              }}
+              eventKey='link1'
+            >
+              모집현황
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link
+              onClick={() => {
+                props.setTab(2);
+              }}
+              eventKey='link2'
+            >
+              기술/언어
+            </Nav.Link>
+          </Nav.Item>
+        </Nav>
+        <TabContent
+          tab={props.tab}
+          projectDetail={props.projectDetail}
+          setTab={props.setTab}
+        />
+      </div>
+    </>
+  );
+}
+function TabContent(props) {
+  if (props.tab == 0) {
+    return (
+      <div style={{ display: 'flex' }}>
+        <div className='col-md-8 '>
+          <div className='card card-style1 border-0'>
+            <div className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'>
+              <div className='row align-items-center'>
+                <div>
+                  <div style={{ padding: '3%' }}>
+                    <div style={{ textAlign: 'start' }}>
+                      <span
+                        className='display-26 text-secondary me-2 font-weight-600'
+                        style={{
+                          textAlign: 'start',
+                          fontSize: '18px',
+                          marginBottom: '10%',
+                        }}
+                      >
+                        [소개]
+                      </span>
+                      <div
+                        style={{
+                          textAlign: 'start',
+                          fontSize: '15px',
+                          marginTop: '2%',
+                        }}
+                      >
+                        {props.projectDetail.content}
+                        <span
+                          style={{ fontWeight: '600', marginRight: '10%' }}
+                        ></span>{' '}
+                      </div>
+                    </div>
+                    <div style={{ textAlign: 'start', marginTop: '3%' }}>
+                      <span
+                        className='display-26 text-secondary me-2 font-weight-600'
+                        style={{
+                          textAlign: 'start',
+                          fontSize: '18px',
+                        }}
+                      >
+                        [참고링크]
+                      </span>
+                      <p
+                        style={{
+                          textAlign: 'start',
+                          fontSize: '15px',
+                          marginTop: '3%',
+                        }}
+                      >
+                        <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                          <FontAwesomeIcon icon={['fab', 'github']} size='2x' />
+                        </span>{' '}
+                        <span
+                          onClick={() => {}}
+                          style={{ cursor: 'pointer', fontWeight: '600' }}
+                        >
+                          깃허브
+                        </span>
+                      </p>
+                    </div>
+                    <p
+                      style={{
+                        textAlign: 'start',
+                        fontSize: '15px',
+                        marginTop: '2%',
+                      }}
+                    >
+                      <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                        <FontAwesomeIcon
+                          icon={['fab', 'instagram']}
+                          size='2x'
+                        />
+                      </span>{' '}
+                      <span
+                        onClick={() => {}}
+                        style={{ cursor: 'pointer', fontWeight: '600' }}
+                      >
+                        인스타그램
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className='col-md-4 '>
+          <div className='card card-style1 border-0'>
+            <div
+              className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'
+              style={{
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <div className='row align-items-center'>
+                <div
+                  style={{
+                    textAlign: 'start',
+                    paddingTop: '5%',
+                    paddingLeft: '5%',
+                    fontWeight: '600',
+                  }}
+                >
+                  리더정보
+                  <div
+                    style={{
+                      textAlign: 'start',
+                      paddingTop: '5%',
+
+                      fontWeight: '600',
+                    }}
+                  >
+                    {props.projectDetail.name}
+                  </div>
+                  <hr></hr>
+                </div>
+
+                <div
+                  style={{
+                    textAlign: 'start',
+                    paddingTop: '5%',
+                    paddingLeft: '5%',
+                    fontWeight: '600',
+                  }}
+                >
+                  프로젝트지역
+                  <p
+                    style={{
+                      textAlign: 'start',
+                      paddingTop: '5%',
+                      fontWeight: '600',
+                    }}
+                  >
+                    {props.projectDetail.region}
+                  </p>
+                  <hr></hr>
+                </div>
+                <div
+                  style={{
+                    textAlign: 'start',
+                    paddingTop: '5%',
+                    paddingLeft: '5%',
+                    fontWeight: '600',
+                  }}
+                >
+                  프로젝트기간
+                  <p
+                    style={{
+                      textAlign: 'start',
+                      paddingTop: '5%',
+                      fontWeight: '600',
+                    }}
+                  >
+                    {props.projectDetail.startDate}~
+                    {props.projectDetail.endDate}
+                  </p>
+                  <hr></hr>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (props.tab == 1) {
+    return (
+      <div className='col-lg-12 mb-4 mb-sm-5'>
+        <div>
+          <div style={{ padding: '3%' }}>
+            <div style={{ textAlign: 'start' }}>
+              <span
+                className='display-26 text-secondary me-2 font-weight-600'
+                style={{
+                  textAlign: 'start',
+                  fontSize: '18px',
+                  marginBottom: '10%',
+                }}
+              >
+                [모집현황]
+              </span>
+              <div
+                style={{
+                  textAlign: 'start',
+                  fontSize: '15px',
+                  marginTop: '2%',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  {props.projectDetail.job.map((ele, i) => {
+                    return (
+                      <Jobs
+                        key={i}
+                        jobs={jobs}
+                        i={i}
+                        ele={ele}
+                        projectDetail={props.projectDetail}
+                        job={props.job}
+                      />
+                    );
+                  })}
+                </span>{' '}
+              </div>
+            </div>
+            <div style={{ textAlign: 'start' }}>
+              <span
+                className='display-26 text-secondary me-2 font-weight-600'
+                style={{
+                  textAlign: 'start',
+                  fontSize: '18px',
+                  marginBottom: '10%',
+                }}
+              >
+                [링크]
+              </span>
+              <p
+                style={{
+                  textAlign: 'start',
+                  fontSize: '15px',
+                  marginTop: '2%',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  <FontAwesomeIcon icon={['fab', 'github']} size='2x' />
+                </span>{' '}
+                <span
+                  onClick={() => {}}
+                  style={{ cursor: 'pointer', fontWeight: '600' }}
+                >
+                  깃허브
+                </span>
+              </p>
+            </div>
+            <p
+              style={{
+                textAlign: 'start',
+                fontSize: '15px',
+                marginTop: '2%',
+              }}
+            >
+              <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                <FontAwesomeIcon icon={['fab', 'instagram']} size='2x' />
+              </span>{' '}
+              <span
+                onClick={() => {}}
+                style={{ cursor: 'pointer', fontWeight: '600' }}
+              >
+                인스타그램
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  function Jobs(props) {
+    return (
+      <div key={props.i} style={{}}>
+        <div style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ marginBottom: '1%' }}>{props.jobs[props.ele]}</div>
+          <div style={{ textAlign: 'start', display: 'flex' }}>
+            {props.projectDetail.job[props.i]}
+            <div
+              style={{
+                paddingLeft: '3%',
+                display: 'flex',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div>
+                {props.projectDetail.requireJob[props.i]}/
+                {props.projectDetail.nowJob[props.i]}
+              </div>
+              {props.projectDetail.requireJob[props.i] ==
+              props.projectDetail.nowJob[props.i] ? (
+                <button
+                  style={{
+                    border: '1px solid rgb(222,222,222)',
+                    borderRadius: '5px',
+                  }}
+                  disabled
+                >
+                  마감
+                </button>
+              ) : (
+                <button
+                  style={{
+                    border: '1px solid rgb(222,222,222)',
+                    borderRadius: '5px',
+                  }}
+                  onClick={() =>
+                    console.log(props.projectDetail.requireJob[props.i] + 1)
+                  }
+                >
+                  지원
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (props.tab == 2) {
+    return (
+      <div className='col-lg-12 mb-4 mb-sm-5'>
+        <div>
+          <div className='mb-4 mb-sm-5'>
+            <span
+              className='section-title text-primary mb-3 mb-sm-4'
+              style={{ marginTop: '3%' }}
+            >
+              기술/언어
+            </span>
+          </div>
+          <div style={{ padding: '3%' }}>
+            <div style={{ textAlign: 'start' }}>
+              <span
+                className='display-26 text-secondary me-2 font-weight-600'
+                style={{
+                  textAlign: 'start',
+                  fontSize: '18px',
+                  marginBottom: '10%',
+                }}
+              >
+                [스킬]
+              </span>
+              <p
+                style={{
+                  textAlign: 'start',
+                  fontSize: '15px',
+                  marginTop: '2%',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      marginTop: '5%',
+                      marginLeft: '10%',
+                      marginRight: '10%',
+                      flexWrap: 'wrap',
+                    }}
+                  ></div>
+                </span>{' '}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default FindDeveloperDetail;

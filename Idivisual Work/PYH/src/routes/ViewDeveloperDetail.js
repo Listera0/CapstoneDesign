@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Nav } from 'react-bootstrap';
+import icons2 from '../icons2.js';
 function ViewDeveloperDetail(props) {
   // useEffect(()=>{}) 1. 재렌더링마다 코드를 실행하고 싶으면
   // useEffect(()=>{},[]) 2. mount시 1회 코드 실행하고 싶으면
@@ -19,14 +20,14 @@ function ViewDeveloperDetail(props) {
   let [tab, setTab] = useState(0);
 
   return (
-    <section class='bg-light'>
-      <div class='container' style={{ marginTop: '-3%' }}>
-        <div class='row'>
-          <div class='col-lg-12 mb-4 mb-sm-5'>
-            <div class='card card-style1 border-0'>
-              <div class='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'>
-                <div class='row align-items-center'>
-                  <div class='col-lg-6 mb-4 mb-lg-0'>
+    <section className='bg-light'>
+      <div className='container' style={{ marginTop: '-3%' }}>
+        <div className='row'>
+          <div className='col-lg-12 mb-4 mb-sm-5'>
+            <div className='card card-style1 border-0'>
+              <div className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'>
+                <div className='row align-items-center'>
+                  <div className='col-lg-6 mb-4 mb-lg-0'>
                     <img
                       src={
                         process.env.PUBLIC_URL +
@@ -38,17 +39,17 @@ function ViewDeveloperDetail(props) {
                       style={{ paddingTop: '3%', paddingBottom: '3%' }}
                     ></img>
                   </div>
-                  <div class='col-lg-6 px-xl-10'>
+                  <div className='col-lg-6 px-xl-10'>
                     <div>
                       <h3 style={{ textAlign: 'start' }}>
                         {developerDetail.name}
                       </h3>
                     </div>
-                    <ul class='list-unstyled mb-1-9'>
-                      <li class='mb-2 mb-xl-3 display-28'>
+                    <ul className='list-unstyled mb-1-9'>
+                      <li className='mb-2 mb-xl-3 display-28'>
                         <p style={{ textAlign: 'start' }}>
                           <span
-                            class='display-26 text-secondary me-2 font-weight-600'
+                            className='display-26 text-secondary me-2 font-weight-600'
                             style={{ textAlign: 'start', fontSize: '18px' }}
                           >
                             Email
@@ -60,10 +61,10 @@ function ViewDeveloperDetail(props) {
                           </span>
                         </p>
                       </li>
-                      <li class='mb-2 mb-xl-3 display-28'>
+                      <li className='mb-2 mb-xl-3 display-28'>
                         <p style={{ textAlign: 'start' }}>
                           <span
-                            class='display-26 text-secondary me-2 font-weight-600'
+                            className='display-26 text-secondary me-2 font-weight-600'
                             style={{ textAlign: 'start', fontSize: '18px' }}
                           >
                             Phone
@@ -76,9 +77,9 @@ function ViewDeveloperDetail(props) {
                         </p>
                       </li>
 
-                      <li class='mb-2 mb-xl-3 display-28'>
+                      <li className='mb-2 mb-xl-3 display-28'>
                         <p
-                          class='display-26 text-secondary me-2 font-weight-600'
+                          className='display-26 text-secondary me-2 font-weight-600'
                           style={{ textAlign: 'start' }}
                         >
                           참여중인 프로젝트 {developerDetail.projectCount}개
@@ -120,7 +121,6 @@ function ViewDeveloperDetail(props) {
               </div>
             </div>
           </div>
-
           <Nav fill variant='tabs' defaultActiveKey='link0'>
             <Nav.Item>
               <Nav.Link
@@ -162,26 +162,25 @@ function ViewDeveloperDetail(props) {
 function TabContent(props) {
   if (props.tab == 0) {
     return (
-      <div class='col-lg-12 mb-4 mb-sm-5'>
+      <div className='col-lg-12 mb-4 mb-sm-5'>
         <div>
           <span
-            class='section-title text-primary mb-3 mb-sm-4'
+            className='section-title text-primary mb-3 mb-sm-4'
             style={{ marginTop: '3%' }}
           >
             Profile
           </span>
           <div style={{ padding: '3%' }}>
-            <p style={{ textAlign: 'start' }}>
-              <span
-                class='display-26 text-secondary me-2 font-weight-600'
+            <span style={{ textAlign: 'start' }}>
+              <p
+                className='display-26 text-secondary me-2 font-weight-600'
                 style={{
                   textAlign: 'start',
                   fontSize: '18px',
-                  marginBottom: '10%',
                 }}
               >
                 [주 능력]
-              </span>
+              </p>
               <p
                 style={{
                   textAlign: 'start',
@@ -194,8 +193,8 @@ function TabContent(props) {
                 </span>{' '}
                 {props.developerDetail.mainJob}
               </p>
-            </p>
-            <p style={{ textAlign: 'start' }}>
+            </span>
+            <div style={{ textAlign: 'start' }}>
               <p
                 style={{
                   textAlign: 'start',
@@ -208,8 +207,8 @@ function TabContent(props) {
                 </span>{' '}
                 {props.developerDetail.career}
               </p>
-            </p>
-            <p style={{ textAlign: 'start' }}>
+            </div>
+            <div style={{ textAlign: 'start' }}>
               <p
                 style={{
                   textAlign: 'start',
@@ -222,10 +221,10 @@ function TabContent(props) {
                 </span>{' '}
                 {props.developerDetail.region}
               </p>
-            </p>
-            <p style={{ textAlign: 'start' }}>
+            </div>
+            <div style={{ textAlign: 'start' }}>
               <span
-                class='display-26 text-secondary me-2 font-weight-600'
+                className='display-26 text-secondary me-2 font-weight-600'
                 style={{
                   textAlign: 'start',
                   fontSize: '18px',
@@ -246,8 +245,8 @@ function TabContent(props) {
                 </span>{' '}
                 {props.developerDetail.subJob}
               </p>
-            </p>
-            <p style={{ textAlign: 'start' }}>
+            </div>
+            <div style={{ textAlign: 'start' }}>
               <p
                 style={{
                   textAlign: 'start',
@@ -260,7 +259,7 @@ function TabContent(props) {
                 </span>{' '}
                 {props.developerDetail.career}
               </p>
-            </p>
+            </div>
           </div>
         </div>
       </div>
@@ -268,18 +267,18 @@ function TabContent(props) {
   }
   if (props.tab == 1) {
     return (
-      <div class='col-lg-12 mb-4 mb-sm-5'>
+      <div className='col-lg-12 mb-4 mb-sm-5'>
         <div>
           <span
-            class='section-title text-primary mb-3 mb-sm-4'
+            className='section-title text-primary mb-3 mb-sm-4'
             style={{ marginTop: '3%' }}
           >
             About Me
           </span>
           <div style={{ padding: '3%' }}>
-            <p style={{ textAlign: 'start' }}>
+            <div style={{ textAlign: 'start' }}>
               <span
-                class='display-26 text-secondary me-2 font-weight-600'
+                className='display-26 text-secondary me-2 font-weight-600'
                 style={{
                   textAlign: 'start',
                   fontSize: '18px',
@@ -299,10 +298,10 @@ function TabContent(props) {
                   {props.developerDetail.introduce}
                 </span>{' '}
               </p>
-            </p>
-            <p style={{ textAlign: 'start' }}>
+            </div>
+            <div style={{ textAlign: 'start' }}>
               <span
-                class='display-26 text-secondary me-2 font-weight-600'
+                className='display-26 text-secondary me-2 font-weight-600'
                 style={{
                   textAlign: 'start',
                   fontSize: '18px',
@@ -311,7 +310,7 @@ function TabContent(props) {
               >
                 [링크]
               </span>
-              <p
+              <div
                 style={{
                   textAlign: 'start',
                   fontSize: '15px',
@@ -329,9 +328,9 @@ function TabContent(props) {
                 >
                   깃허브
                 </span>
-              </p>
-            </p>
-            <p
+              </div>
+            </div>
+            <div
               style={{
                 textAlign: 'start',
                 fontSize: '15px',
@@ -349,7 +348,7 @@ function TabContent(props) {
               >
                 인스타그램
               </span>
-            </p>
+            </div>
           </div>
         </div>
       </div>
@@ -357,20 +356,20 @@ function TabContent(props) {
   }
   if (props.tab == 2) {
     return (
-      <div class='col-lg-12 mb-4 mb-sm-5'>
+      <div className='col-lg-12 mb-4 mb-sm-5'>
         <div>
-          <div class='mb-4 mb-sm-5'>
+          <div className='mb-4 mb-sm-5'>
             <span
-              class='section-title text-primary mb-3 mb-sm-4'
+              className='section-title text-primary mb-3 mb-sm-4'
               style={{ marginTop: '3%' }}
             >
               Skill
             </span>
           </div>
           <div style={{ padding: '3%' }}>
-            <p style={{ textAlign: 'start' }}>
-              <span
-                class='display-26 text-secondary me-2 font-weight-600'
+            <div style={{ textAlign: 'start' }}>
+              <p
+                className='display-26 text-secondary me-2 font-weight-600'
                 style={{
                   textAlign: 'start',
                   fontSize: '18px',
@@ -378,23 +377,56 @@ function TabContent(props) {
                 }}
               >
                 [스킬]
-              </span>
-              <p
+              </p>
+              <div
                 style={{
                   textAlign: 'start',
                   fontSize: '15px',
-                  marginTop: '2%',
                 }}
               >
                 <span style={{ fontWeight: '600', marginRight: '10%' }}>
-                  {props.developerDetail.skill}
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      marginTop: '5%',
+                      marginLeft: '10%',
+                      marginRight: '10%',
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    {props.developerDetail.skill.map((ele, i) => {
+                      return (
+                        <Icons
+                          key={i}
+                          icons2={icons2}
+                          i={i}
+                          ele={ele}
+                          developerDetail={props.developerDetail}
+                          skill={props.skill}
+                        />
+                      );
+                    })}
+                  </div>
                 </span>{' '}
-              </p>
-            </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     );
   }
+}
+function Icons(props) {
+  return (
+    <div key={props.i} style={{}}>
+      <div style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+        <p style={{ paddingLeft: '1%' }}>{props.icons2[props.ele]}</p>
+        <p style={{ textAlign: 'center' }}>
+          {props.developerDetail.skill[props.i]}
+        </p>
+      </div>
+    </div>
+  );
 }
 export default ViewDeveloperDetail;
