@@ -1,17 +1,21 @@
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark } from '@fortawesome/free-solid-svg-icons';
 import { useParams } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
-import { useState } from 'react';
-import jobs from '../icons2';
+
+import { jobs, icons2 } from '../icons2';
+
 function FindDeveloperDetail(props) {
   let [tab, setTab] = useState(0);
   let [maintab, setMainTab] = useState(0);
+
   let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
   let projectDetail = props.project.find(function (x) {
     return x.id == id;
   });
-
+  let [req2, setReq2] = useState(projectDetail.requireJob);
+  console.log(req2);
   return (
     <section className='bg-light' style={{ marginTop: '-6%' }}>
       <div className='container' style={{ paddingTop: '3%' }}>
@@ -32,6 +36,8 @@ function FindDeveloperDetail(props) {
             maintab={maintab}
             setTab={setTab}
             projectDetail={projectDetail}
+            req2={req2}
+            setReq2={setReq2}
           ></MainTabContent>
         </div>
       </div>
@@ -104,7 +110,8 @@ function MainTabContent(props) {
         <TabContent
           tab={props.tab}
           projectDetail={props.projectDetail}
-          setTab={props.setTab}
+          icons2={props.icons2}
+          i={props.i}
         />
       </div>
     </>
@@ -113,12 +120,12 @@ function MainTabContent(props) {
 function TabContent(props) {
   if (props.tab == 0) {
     return (
-      <div style={{ display: 'flex' }}>
-        <div className='col-md-8 '>
+      <div className='row'>
+        <div className='col-lg-8 mb-4 mb-sm-5' style={{ display: 'flex' }}>
           <div className='card card-style1 border-0'>
             <div className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'>
               <div className='row align-items-center'>
-                <div>
+                <div className='col-lg-12 px-xl-10'>
                   <div style={{ padding: '3%' }}>
                     <div style={{ textAlign: 'start' }}>
                       <span
@@ -133,7 +140,6 @@ function TabContent(props) {
                       </span>
                       <div
                         style={{
-                          textAlign: 'start',
                           fontSize: '15px',
                           marginTop: '2%',
                         }}
@@ -198,7 +204,8 @@ function TabContent(props) {
             </div>
           </div>
         </div>
-        <div className='col-md-4 '>
+
+        <div className='col-lg-4 mb-4 mb-sm-5'>
           <div className='card card-style1 border-0'>
             <div
               className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'
@@ -216,60 +223,69 @@ function TabContent(props) {
                     fontWeight: '600',
                   }}
                 >
-                  리더정보
                   <div
                     style={{
                       textAlign: 'start',
                       paddingTop: '5%',
-
+                      paddingLeft: '5%',
                       fontWeight: '600',
                     }}
                   >
-                    {props.projectDetail.name}
+                    리더정보
+                    <div
+                      style={{
+                        textAlign: 'start',
+                        paddingTop: '5%',
+
+                        fontWeight: '600',
+                      }}
+                    >
+                      {props.projectDetail.name}
+                    </div>
+                    <hr></hr>
                   </div>
-                  <hr></hr>
-                </div>
 
-                <div
-                  style={{
-                    textAlign: 'start',
-                    paddingTop: '5%',
-                    paddingLeft: '5%',
-                    fontWeight: '600',
-                  }}
-                >
-                  프로젝트지역
-                  <p
+                  <div
                     style={{
                       textAlign: 'start',
                       paddingTop: '5%',
+                      paddingLeft: '5%',
                       fontWeight: '600',
                     }}
                   >
-                    {props.projectDetail.region}
-                  </p>
-                  <hr></hr>
-                </div>
-                <div
-                  style={{
-                    textAlign: 'start',
-                    paddingTop: '5%',
-                    paddingLeft: '5%',
-                    fontWeight: '600',
-                  }}
-                >
-                  프로젝트기간
-                  <p
+                    프로젝트지역
+                    <p
+                      style={{
+                        textAlign: 'start',
+                        paddingTop: '5%',
+                        fontWeight: '600',
+                      }}
+                    >
+                      {props.projectDetail.region}
+                    </p>
+                    <hr></hr>
+                  </div>
+                  <div
                     style={{
                       textAlign: 'start',
                       paddingTop: '5%',
+                      paddingLeft: '5%',
                       fontWeight: '600',
                     }}
                   >
-                    {props.projectDetail.startDate}~
-                    {props.projectDetail.endDate}
-                  </p>
-                  <hr></hr>
+                    프로젝트기간
+                    <p
+                      style={{
+                        textAlign: 'start',
+                        paddingTop: '5%',
+                        fontWeight: '600',
+                      }}
+                    >
+                      {props.projectDetail.startDate}~
+                      {props.projectDetail.endDate}
+                    </p>
+                    <hr></hr>
+                  </div>
                 </div>
               </div>
             </div>
@@ -301,7 +317,7 @@ function TabContent(props) {
                   marginTop: '2%',
                 }}
               >
-                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                <div style={{ fontWeight: '600', marginRight: '10%' }}>
                   {props.projectDetail.job.map((ele, i) => {
                     return (
                       <Jobs
@@ -311,10 +327,12 @@ function TabContent(props) {
                         ele={ele}
                         projectDetail={props.projectDetail}
                         job={props.job}
+                        req2={props.req2}
+                        setReq2={props.setReq2}
                       />
                     );
                   })}
-                </span>{' '}
+                </div>{' '}
               </div>
             </div>
             <div style={{ textAlign: 'start' }}>
@@ -328,7 +346,7 @@ function TabContent(props) {
               >
                 [링크]
               </span>
-              <p
+              <div
                 style={{
                   textAlign: 'start',
                   fontSize: '15px',
@@ -344,9 +362,9 @@ function TabContent(props) {
                 >
                   깃허브
                 </span>
-              </p>
+              </div>
             </div>
-            <p
+            <div
               style={{
                 textAlign: 'start',
                 fontSize: '15px',
@@ -362,7 +380,7 @@ function TabContent(props) {
               >
                 인스타그램
               </span>
-            </p>
+            </div>
           </div>
         </div>
       </div>
@@ -371,41 +389,33 @@ function TabContent(props) {
   function Jobs(props) {
     return (
       <div key={props.i} style={{}}>
-        <div style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ marginBottom: '1%' }}>{props.jobs[props.ele]}</div>
-          <div style={{ textAlign: 'start', display: 'flex' }}>
-            {props.projectDetail.job[props.i]}
+        <div>
+          <div
+            style={{ display: 'flex', marginBottom: '2%', textAlign: 'start' }}
+          >
+            <div style={{ fontWeight: '600', marginRight: '10%' }}>
+              {props.projectDetail.job[props.i]}{' '}
+            </div>
             <div
               style={{
-                paddingLeft: '3%',
-                display: 'flex',
-                justifyContent: 'space-between',
+                marginRight: '10%',
+                textAlign: 'start',
               }}
             >
-              <div>
-                {props.projectDetail.requireJob[props.i]}/
-                {props.projectDetail.nowJob[props.i]}
-              </div>
+              {props.projectDetail.requireJob[props.i]}/
+              {props.projectDetail.nowJob[props.i]}
+            </div>
+            <div style={{ textAlign: 'start' }}>
               {props.projectDetail.requireJob[props.i] ==
               props.projectDetail.nowJob[props.i] ? (
-                <button
-                  style={{
-                    border: '1px solid rgb(222,222,222)',
-                    borderRadius: '5px',
-                  }}
-                  disabled
-                >
+                <button style={{}} disabled>
                   마감
                 </button>
               ) : (
                 <button
-                  style={{
-                    border: '1px solid rgb(222,222,222)',
-                    borderRadius: '5px',
+                  onClick={() => {
+                    props.req2 = props.req2[props.i] + 1;
                   }}
-                  onClick={() =>
-                    console.log(props.projectDetail.requireJob[props.i] + 1)
-                  }
                 >
                   지원
                 </button>
@@ -420,14 +430,6 @@ function TabContent(props) {
     return (
       <div className='col-lg-12 mb-4 mb-sm-5'>
         <div>
-          <div className='mb-4 mb-sm-5'>
-            <span
-              className='section-title text-primary mb-3 mb-sm-4'
-              style={{ marginTop: '3%' }}
-            >
-              기술/언어
-            </span>
-          </div>
           <div style={{ padding: '3%' }}>
             <div style={{ textAlign: 'start' }}>
               <span
@@ -438,16 +440,16 @@ function TabContent(props) {
                   marginBottom: '10%',
                 }}
               >
-                [스킬]
+                [희망스킬]
               </span>
-              <p
+              <div
                 style={{
                   textAlign: 'start',
                   fontSize: '15px',
                   marginTop: '2%',
                 }}
               >
-                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                <div style={{ fontWeight: '600', marginRight: '10%' }}>
                   <div
                     style={{
                       display: 'flex',
@@ -457,9 +459,22 @@ function TabContent(props) {
                       marginRight: '10%',
                       flexWrap: 'wrap',
                     }}
-                  ></div>
-                </span>{' '}
-              </p>
+                  >
+                    {props.projectDetail.skill.map((ele, i) => {
+                      return (
+                        <Icons2
+                          key={i}
+                          icons2={icons2}
+                          i={i}
+                          ele={ele}
+                          projectDetail={props.projectDetail}
+                          skill={props.skill}
+                        ></Icons2>
+                      );
+                    })}
+                  </div>
+                </div>{' '}
+              </div>
             </div>
           </div>
         </div>
@@ -467,5 +482,14 @@ function TabContent(props) {
     );
   }
 }
-
+function Icons2(props) {
+  return (
+    <div style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+      <p style={{ paddingLeft: '1%' }}>{props.icons2[props.ele]}</p>
+      <p style={{ textAlign: 'center' }}>
+        {props.projectDetail.skill[props.i]}
+      </p>
+    </div>
+  );
+}
 export default FindDeveloperDetail;

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
 import { useState } from 'react';
 import Table from 'react-bootstrap/Table';
-import icons2 from '../icons2.js';
+import { icons2, jobs } from '../icons2.js';
 function Profile(props) {
   let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
   let developerDetail = props.developer.find(function (x) {

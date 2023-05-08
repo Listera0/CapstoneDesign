@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Nav } from 'react-bootstrap';
-import icons2 from '../icons2.js';
+import { icons2, jobs } from '../icons2.js';
 function ViewDeveloperDetail(props) {
   // useEffect(()=>{}) 1. 재렌더링마다 코드를 실행하고 싶으면
   // useEffect(()=>{},[]) 2. mount시 1회 코드 실행하고 싶으면

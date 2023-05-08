@@ -102,6 +102,7 @@ function App() {
                         navigate={navigate}
                         goTofindDeveloperDetail={goTofindDeveloperDetail}
                         key={i}
+                        id={id}
                       ></ProjectCard>
                     );
                   })}
@@ -276,7 +277,7 @@ function DeveloperCard(props) {
 }
 function ProjectCard(props) {
   return (
-    <div className='col-md-4 '>
+    <div className='col-4 '>
       <div className='col-div ' style={{ overflow: 'hidden' }}>
         <img
           onClick={() => {

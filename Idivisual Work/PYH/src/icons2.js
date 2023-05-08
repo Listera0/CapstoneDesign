@@ -39,4 +39,4 @@ const jobs = {
   'UX/UI기획': 'UX/UI기획',
   벡엔드: '벡엔드',
 };
-export default { icons2, jobs };
+export { icons2, jobs };

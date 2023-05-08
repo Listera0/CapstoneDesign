@@ -1,4 +1,6 @@
+import { useState } from 'react';
 function Login() {
+  let [modal, setModal] = useState(false);
   return (
     <div>
       <br></br>
@@ -16,8 +18,41 @@ function Login() {
 
           <input type='submit' value='Sign In'></input>
           <button type='button'>카카오계정으로 로그인</button>
+          <a
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setModal(!modal);
+            }}
+          >
+            Developer Plus Sign Up
+          </a>
         </form>
       </div>
+      {modal ? <Modal /> : null}
+    </div>
+  );
+}
+function Modal() {
+  return (
+    <div>
+      <form action='#' method='post' style={{}}>
+        <span>회원가입</span>
+        <input type='text' placeholder='Enter your name' required></input>
+        <input type='text' placeholder='Enter your ID' required></input>
+        <input
+          type='email'
+          placeholder='Enter your email address'
+          required
+        ></input>
+        <input
+          type='password'
+          placeholder='Enter your password'
+          required
+        ></input>
+        <button type='button' onclick="location.href='/login.html'">
+          Sign Up
+        </button>
+      </form>
     </div>
   );
 }
