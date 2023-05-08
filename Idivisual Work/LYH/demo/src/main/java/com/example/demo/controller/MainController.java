@@ -39,21 +39,18 @@ public class MainController {
 
 
     @RequestMapping(value="/api/getDevData", method = RequestMethod.POST)
-    public List<DeveloperDto> getDevDataFromId(@RequestBody Map<String, String> request) {
-        System.out.println(devRepository.getDataFromId(request.get("data")));
-        return devRepository.getDataFromId(request.get("data"));
+    public List<DeveloperDto> getDevData(@RequestBody Map<String, String> request) {
+        return devRepository.getData(request.get("id"), request.get("orderBy"), request.get("limit"));
     }
 
     @RequestMapping(value="/api/getStoryData", method = RequestMethod.POST)
-    public List<StoryDto> getStoryDataFromId(@RequestBody Map<String, String> request) {
-        System.out.println(devRepository.getDataFromId(request.get("data")));
-        return storyRepository.getDataFromId(request.get("data"));
+    public List<StoryDto> getStoryData(@RequestBody Map<String, String> request) {
+        return storyRepository.getData(request.get("id"), request.get("orderBy"), request.get("limit"));
     }
 
     @RequestMapping(value="/api/getProjectData", method = RequestMethod.POST)
-    public List<ProjectDto> getProjectDataFromId(@RequestBody Map<String, String> request) {
-        System.out.println(devRepository.getDataFromId(request.get("data")));
-        return projectRepository.getDataFromId(request.get("data"));
+    public List<ProjectDto> getProjectData(@RequestBody Map<String, String> request) {
+        return projectRepository.getData(request.get("id"), request.get("orderBy"), request.get("limit"));
     }
 
 

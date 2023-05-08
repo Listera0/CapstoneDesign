@@ -20,9 +20,20 @@ public class DeveloperDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public List<DeveloperDto> getDataAll()
+    public List<DeveloperDto> getData(String id, String orderBy, String limit)
     {
-        return jdbcTemplate.query("select * from developer", 
+        String query = "select * from developer";
+
+        if(id != "")
+            query += " where id = " + id;
+
+        if(orderBy != "")
+            query += " order by " + orderBy;
+
+        if(limit != "")
+            query += " limit " + limit;
+
+        return jdbcTemplate.query(query, 
 			new RowMapper<DeveloperDto>() 
             {
 				public DeveloperDto mapRow(ResultSet rs, int rowNum) throws SQLException 
@@ -40,10 +51,9 @@ public class DeveloperDao {
         );
     }
 
-    public List<DeveloperDto> getDataFromId(String id)
+    public List<DeveloperDto> getDataAll()
     {
-        String query = "select * from developer where id = " + id;
-        return jdbcTemplate.query(query, 
+        return jdbcTemplate.query("select * from developer", 
 			new RowMapper<DeveloperDto>() 
             {
 				public DeveloperDto mapRow(ResultSet rs, int rowNum) throws SQLException 

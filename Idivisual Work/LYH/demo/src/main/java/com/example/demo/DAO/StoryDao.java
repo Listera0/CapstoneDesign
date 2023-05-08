@@ -20,10 +20,20 @@ public class StoryDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public List<StoryDto> getDataAll()
+    public List<StoryDto> getData(String id, String orderBy, String limit)
     {
-        System.out.println("this");
-        return jdbcTemplate.query("select * from story", 
+        String query = "select * from story";
+
+        if(id != "")
+            query += " where id = " + id;
+
+        if(orderBy != "")
+            query += " order by " + orderBy;
+
+        if(limit != "")
+            query += " limit " + limit;
+
+        return jdbcTemplate.query(query, 
 			new RowMapper<StoryDto>() 
             {
 				public StoryDto mapRow(ResultSet rs, int rowNum) throws SQLException 
@@ -41,10 +51,9 @@ public class StoryDao {
         );
     }
 
-    public List<StoryDto> getDataFromId(String id)
+    public List<StoryDto> getDataAll()
     {
-        String query = "select * from story where id = " + id;
-        return jdbcTemplate.query(query, 
+        return jdbcTemplate.query("select * from project", 
 			new RowMapper<StoryDto>() 
             {
 				public StoryDto mapRow(ResultSet rs, int rowNum) throws SQLException 

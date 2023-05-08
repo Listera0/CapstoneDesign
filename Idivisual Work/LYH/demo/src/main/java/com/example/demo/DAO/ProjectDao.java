@@ -20,9 +20,20 @@ public class ProjectDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public List<ProjectDto> getDataAll()
+    public List<ProjectDto> getData(String id, String orderBy, String limit)
     {
-        return jdbcTemplate.query("select * from project", 
+        String query = "select * from project";
+
+        if(id != "")
+            query += " where id = " + id;
+
+        if(orderBy != "")
+            query += " order by " + orderBy;
+
+        if(limit != "")
+            query += " limit " + limit;
+
+        return jdbcTemplate.query(query, 
 			new RowMapper<ProjectDto>() 
             {
 				public ProjectDto mapRow(ResultSet rs, int rowNum) throws SQLException 
@@ -45,10 +56,9 @@ public class ProjectDao {
         );
     }
 
-    public List<ProjectDto> getDataFromId(String id)
+    public List<ProjectDto> getDataAll()
     {
-        String query = "select * from project where id = " + id;
-        return jdbcTemplate.query(query, 
+        return jdbcTemplate.query("select * from project", 
 			new RowMapper<ProjectDto>() 
             {
 				public ProjectDto mapRow(ResultSet rs, int rowNum) throws SQLException 

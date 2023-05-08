@@ -19,6 +19,7 @@ import axios from 'axios';
 import Login from './routes/Login';
 import { useParams } from 'react-router-dom';
 library.add(fab);
+
 function App() {
   let [story, setStory] = useState(data);
   let [project, setProject] = useState(projectData);
@@ -36,23 +37,7 @@ function App() {
     navigate('/FindDeveloperDetail');
   };
 
-  const devDto = {
-    id : 0, name : "이름", job : "직무", career : "커리어", region : "지역",
-    projectCount : 0
-  };
-
-  const storyDto = {
-    id : 0, title : "제목", name : "이름", content : "내용", imageUrl : "이미지",
-    hashTag : "해시태그"
-  };
-
-  const projectDto = {
-    id : 0, title : "제목", region : "지역", name : "이름", content : "내용",
-    job : "직무", requireJob : 0, nowJob : 0, career : "커리어", imageUrl : "이미지",
-    hashTag : "해시태그"
-  };
-
-  const [allDevDto, setAllDevDto] = useState('')
+  const [allDevDto, setAllDevDto] = useState([''])
   {
     useEffect(() => {
       axios.get('/api/getAllDevData')
@@ -61,7 +46,7 @@ function App() {
     }, []);
   };
 
-  const [allStoryDto, setAllStoryDto] = useState('')
+  const [allStoryDto, setAllStoryDto] = useState([''])
   {
     useEffect(() => {
       axios.get('/api/getAllStoryData')
@@ -70,7 +55,7 @@ function App() {
     }, []);
   };
 
-  const [allProjectDto, setAllProjectDto] = useState('')
+  const [allProjectDto, setAllProjectDto] = useState([''])
   {
     useEffect(() => {
       axios.get('/api/getAllProjectData')
@@ -79,11 +64,41 @@ function App() {
     }, []);
   };
 
-  const getDevDto = (location, id) => {
-    axios.post("/api/get" + location + "Data", {data : id})
-      .then(response => setAllDevDto(response.data))
+  const [rankingDevDto, setRankingDevDto] = useState([''])
+  {
+    useEffect(() => {
+      axios.post("/api/getDevData", {id : "", orderBy : "id desc", limit : "4"})
+      .then(response => setRankingDevDto(response.data))
       .catch(error => console.log(error));
-    showDataEach(allDevDto);
+    }, []);
+  };
+
+  const [rankingStoryDto, setRankingStoryDto] = useState([''])
+  {
+    useEffect(() => {
+      axios.post("/api/getStoryData", {id : "", orderBy : "id desc", limit : "3"})
+      .then(response => setRankingStoryDto(response.data))
+      .catch(error => console.log(error));
+    }, []);
+  };
+
+  const [rankingProjectDto, setRankingProjectDto] = useState([''])
+  {
+    useEffect(() => {
+      axios.post("/api/getProjectData", {id : "", orderBy : "id desc", limit : "3"})
+      .then(response => setRankingProjectDto(response.data))
+      .catch(error => console.log(error));
+    }, []);
+  };
+
+  
+  const [resultDto, setResultDto] = useState(['']);
+
+  const getDto = (location, _id, _orderBy, _limit) => {
+    axios.post("/api/get" + location + "Data", {id : _id, orderBy : _orderBy, limit : _limit})
+      .then(response => setResultDto(response.data))
+      .catch(error => console.log(error));
+    showDataList(resultDto);
   };
   
   const insertDataToServer = (location, data) => {
@@ -115,18 +130,14 @@ function App() {
     console.log(list);
   }
 
-  const showDataEach = (list) => {
-    Array.from(list).forEach((item) => {
-      console.log(item);
-  })};
-
   return (
     <div className='App '>
       {showDataList(allDevDto)}
       {showDataList(allStoryDto)}
       {showDataList(allProjectDto)}
-      <button onClick={() => {getDevDto("Dev", 0)}}>getDevData 0 </button>
-      <button onClick={() => {getDevDto("Dev", devDto)}}>insertDevData 0 </button>
+      {showDataList(rankingDevDto)}
+      {showDataList(rankingStoryDto)}
+      {showDataList(rankingProjectDto)}
       {/* <Routes>
         <Route path='/FindDeveloper' element={<Filiter />}></Route>
         <Route path='/ViewDeveloper' element={<Filiter />}></Route>
