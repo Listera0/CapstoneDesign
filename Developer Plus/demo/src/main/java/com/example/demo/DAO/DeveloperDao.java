@@ -44,7 +44,14 @@ public class DeveloperDao {
                         rs.getString("job"),
                         rs.getString("career"),
                         rs.getString("region"),
-                        rs.getInt("projectCount")
+                        rs.getInt("projectCount"),
+                        rs.getString("urlGithub"),
+                        rs.getString("urlInsta"),
+                        rs.getString("introduce"),
+                        rs.getString("skill"),
+                        rs.getInt("likeCount"),
+                        rs.getString("email"),
+                        rs.getString("phone")
                     );
 				}
 		    }
@@ -64,7 +71,14 @@ public class DeveloperDao {
                         rs.getString("job"),
                         rs.getString("career"),
                         rs.getString("region"),
-                        rs.getInt("projectCount")
+                        rs.getInt("projectCount"),
+                        rs.getString("urlGithub"),
+                        rs.getString("urlInsta"),
+                        rs.getString("introduce"),
+                        rs.getString("skill"),
+                        rs.getInt("likeCount"),
+                        rs.getString("email"),
+                        rs.getString("phone")
                     );
 				}
 		    }
@@ -73,10 +87,12 @@ public class DeveloperDao {
 
     public String insertToDatabase(DeveloperDto dto)
     {
-        String query = "insert into developer (id, name, job, career, region, projectCount) values (?, ?, ?, ?, ?, ?)";
+        String query = "insert into developer (id, name, job, career, region, projectCount, urlGithub, urlInsta, introduce, skill, likeCount, email, phone) " + 
+                                        "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try
         {
-            jdbcTemplate.update(query, dto.getId(), dto.getName(), dto.getJob(), dto.getCareer(), dto.getRegion(), dto.getProjectCount());
+            jdbcTemplate.update(query, dto.getId(), dto.getName(), dto.getJob(), dto.getCareer(), dto.getRegion(), dto.getProjectCount(),
+                                        dto.getUrlGithub(), dto.getUrlInsta(), dto.getIntroduce(), dto.getSkill(), dto.getLikeCount(), dto.getEmail(), dto.getPhone());
         }
         catch(DataAccessException  e)
         {
