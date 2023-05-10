@@ -28,7 +28,7 @@ function App() {
   let [goodCount, changeGoodCount] = useState([0, 0, 0, 0]);
   let navigate = useNavigate(); //페이지 이동
   const goToStoryDetail = () => {
-    navigate('/StoryDetail');
+    navigate(`/ViewStoryDetail/${story}`);
   };
   const goToviewDeveloperDetail = () => {
     navigate(`/ViewDeveloperDetail/${developer}`);
@@ -185,9 +185,10 @@ function App() {
                     return (
                       <StoryCard
                         setStory={setStory}
-                        story={story[i]}
+                        story={story}
                         i={i}
                         goToStoryDetail={goToStoryDetail}
+                        navigate={navigate}
                       ></StoryCard>
                     );
                   })}
@@ -252,7 +253,6 @@ function App() {
                           i={i}
                           navigate={navigate}
                           goToviewDeveloperDetail={goToviewDeveloperDetail}
-                          id={id}
                           rankingDevDto={rankingDevDto}
                         ></DeveloperCard>
                       );
@@ -277,6 +277,7 @@ function App() {
               allDevDto={allDevDto}
               goodCount={goodCount}
               changeGoodCount={changeGoodCount}
+              rankingDevDto={rankingDevDto}
             />
           }
         ></Route>
@@ -306,7 +307,10 @@ function App() {
           }
         ></Route>
 
-        <Route path='/viewStory' element={<StoryDetail />}></Route>
+        <Route
+          path='/ViewStoryDetail/:id'
+          element={<StoryDetail story={story} />}
+        ></Route>
         <Route
           path='/profile/:id'
           element={
@@ -328,7 +332,7 @@ function StoryCard(props) {
         className='col-div '
         style={{ overflow: 'hidden' }}
         onClick={() => {
-          props.goToStoryDetail();
+          props.navigate(`/ViewStoryDetail/${props.story[props.i].id}`);
         }}
       >
         <img
@@ -340,12 +344,12 @@ function StoryCard(props) {
       <div className='col-content'>
         <span
           onClick={() => {
-            props.goToStoryDetail();
+            props.navigate(`/ViewStoryDetail/${props.story[props.i].id}`);
           }}
         >
-          {props.story.title}
+          {props.story[props.i].title}
         </span>
-        <p>{props.story.content}</p>
+        <p>{props.story[props.i].content}</p>
       </div>
     </div>
   );
@@ -377,7 +381,7 @@ function DeveloperCard(props) {
       <div className='col-content_developer'>
         <p>{props.rankingDevDto[props.i].name}</p>
         <p>{props.rankingDevDto[props.i].job}</p>
-        <p>{props.rankingDevDto[props.i].job}</p>
+        <p>{props.rankingDevDto[props.i].career}</p>
       </div>
       <div className='col-content_developer'>
         <p>{props.rankingDevDto[props.i].projectCount}</p>

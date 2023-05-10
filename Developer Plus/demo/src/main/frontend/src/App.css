@@ -725,3 +725,48 @@ section {
 .rounded {
   border-radius: 0.25rem !important;
 }
+/*스토리 디테일*/
+.comment {
+  background-color: #f7f7f7;
+
+  /* flex-direction: column; */
+  /* box-sizing: border-box; */
+}
+.comment_object {
+  width: 100%;
+  padding: 2%;
+  background-color: #f7f7f7;
+}
+.comment_user {
+  margin-right: 1%;
+  overflow: hidden;
+  background-color: #fff;
+  font-size: 18px;
+}
+
+.commnet_input > p {
+  display: flex;
+
+  text-align: start;
+}
+.comment_input textarea {
+  width: 70%;
+  font-size: 0.875rem;
+  border: 1px solid #9796a7;
+  color: #333;
+  border-radius: 4px;
+  margin-bottom: 1%;
+  resize: none;
+}
+.comment_btn {
+  width: 10%;
+  size: 1%;
+  height: 5vh;
+  align-items: center;
+  background-color: #9796a7;
+  color: #fff;
+  padding: 0;
+  border: 1px solid #9796a7;
+  font-size: 0.75rem;
+  border-radius: 4px;
+}
