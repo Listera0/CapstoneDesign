@@ -1,5 +1,19 @@
 import { useState } from 'react';
+import axios from 'axios';
+
 function Login() {
+  const requestLogin = (_email, _password) => {
+    axios
+      .post('/api/requestLogin', {
+        email: _email,
+        password: _password,
+      })
+      .then((response) =>
+        console.log(response.data['message'] + ' id : ' + response.data['id'])
+      )
+      .catch((error) => console.log(error));
+  };
+
   let [modal, setModal] = useState(false);
   return (
     <div>
@@ -13,10 +27,21 @@ function Login() {
       </header>
       <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
         <form action='/home.html' method='POST' className='login-form'>
-          <input type='email' placeholder='Email' required></input>
-          <input type='password' placeholder='Password' required></input>
+          <input id='email' type='email' placeholder='Email' required></input>
+          <input
+            id='password'
+            type='password'
+            placeholder='Password'
+            required
+          ></input>
 
-          <input type='submit' value='Sign In'></input>
+          <input
+            onClick={() =>
+              requestLogin(event.target.value('email'), '12345')
+            }
+            type='submit'
+            value='Sign In'
+          ></input>
           <button type='button'>카카오계정으로 로그인</button>
           <a
             style={{ cursor: 'pointer' }}
