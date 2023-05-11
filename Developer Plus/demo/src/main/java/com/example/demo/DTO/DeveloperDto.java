@@ -24,11 +24,12 @@ public class DeveloperDto {
     private int likeCount;
     private String email;
     private String phone;
+    private String imgURL;
 
     @Override
     public String toString()
     {
-        return "[" + id + " | " + name + " | " + job + " | " + career + " | " + region + " | " + projectCount + 
-                " | " + urlGithub + " | " + urlInsta + " | " + introduce + " | " + skill + " | " + likeCount + " | " + email + " | " + phone + "]";
+        return "[" + id + " | " + name + " | " + job + " | " + career + " | " + region + " | " + projectCount + " | " + urlGithub + " | " + urlInsta + " | " + 
+                    introduce + " | " + skill + " | " + likeCount + " | " + email + " | " + phone  + " | " + imgURL + "]";
     }
 }

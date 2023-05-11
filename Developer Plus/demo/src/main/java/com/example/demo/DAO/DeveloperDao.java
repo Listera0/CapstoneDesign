@@ -10,9 +10,34 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.lang.Nullable;
 
 import com.example.demo.DTO.*;
 
+class DevRowMapper implements RowMapper<DeveloperDto> {
+
+    @Override
+    @Nullable
+    public DeveloperDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+        DeveloperDto dto = new DeveloperDto();
+        dto.setId(rs.getInt("id"));
+        dto.setName(rs.getString("name"));
+        dto.setJob(rs.getString("job"));
+        dto.setCareer(rs.getString("career"));
+        dto.setRegion(rs.getString("region"));
+        dto.setProjectCount(rs.getInt("projectCount"));
+        dto.setUrlGithub(rs.getString("urlGithub"));
+        dto.setUrlInsta(rs.getString("introduce"));
+        dto.setSkill(rs.getString("skill"));
+        dto.setLikeCount(rs.getInt("likeCount"));
+        dto.setEmail(rs.getString("email"));
+        dto.setPhone(rs.getString("phone"));
+        dto.setImgURL(rs.getString("imgURL"));
+
+        return dto;
+    }
+    
+}
 
 @Repository
 public class DeveloperDao {
@@ -33,66 +58,23 @@ public class DeveloperDao {
         if(limit != "")
             query += " limit " + limit;
 
-        return jdbcTemplate.query(query, 
-			new RowMapper<DeveloperDto>() 
-            {
-				public DeveloperDto mapRow(ResultSet rs, int rowNum) throws SQLException 
-                {
-					return new DeveloperDto(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("job"),
-                        rs.getString("career"),
-                        rs.getString("region"),
-                        rs.getInt("projectCount"),
-                        rs.getString("urlGithub"),
-                        rs.getString("urlInsta"),
-                        rs.getString("introduce"),
-                        rs.getString("skill"),
-                        rs.getInt("likeCount"),
-                        rs.getString("email"),
-                        rs.getString("phone")
-                    );
-				}
-		    }
-        );
+        return jdbcTemplate.query(query, new DevRowMapper());
     }
 
     public List<DeveloperDto> getDataAll()
     {
-        return jdbcTemplate.query("select * from developer", 
-			new RowMapper<DeveloperDto>() 
-            {
-				public DeveloperDto mapRow(ResultSet rs, int rowNum) throws SQLException 
-                {
-					return new DeveloperDto(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("job"),
-                        rs.getString("career"),
-                        rs.getString("region"),
-                        rs.getInt("projectCount"),
-                        rs.getString("urlGithub"),
-                        rs.getString("urlInsta"),
-                        rs.getString("introduce"),
-                        rs.getString("skill"),
-                        rs.getInt("likeCount"),
-                        rs.getString("email"),
-                        rs.getString("phone")
-                    );
-				}
-		    }
-        );
+        String query = "select * from developer";
+        return jdbcTemplate.query(query, new DevRowMapper());
     }
 
     public String insertToDatabase(DeveloperDto dto)
     {
-        String query = "insert into developer (id, name, job, career, region, projectCount, urlGithub, urlInsta, introduce, skill, likeCount, email, phone) " + 
-                                        "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "insert into developer (id, name, job, career, region, projectCount, urlGithub, urlInsta, introduce, skill, likeCount, email, phone, imgURL) " + 
+                                        "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, imgURL)";
         try
         {
-            jdbcTemplate.update(query, dto.getId(), dto.getName(), dto.getJob(), dto.getCareer(), dto.getRegion(), dto.getProjectCount(),
-                                        dto.getUrlGithub(), dto.getUrlInsta(), dto.getIntroduce(), dto.getSkill(), dto.getLikeCount(), dto.getEmail(), dto.getPhone());
+            jdbcTemplate.update(query, dto.getId(), dto.getName(), dto.getJob(), dto.getCareer(), dto.getRegion(), dto.getProjectCount(), dto.getUrlGithub(), dto.getUrlInsta(), 
+                                        dto.getIntroduce(), dto.getSkill(), dto.getLikeCount(), dto.getEmail(), dto.getPhone(), dto.getImgURL());
         }
         catch(DataAccessException  e)
         {
@@ -100,4 +82,6 @@ public class DeveloperDao {
         }
         return "Success Insert";
     }
+
+
 }
