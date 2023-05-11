@@ -21,12 +21,14 @@ import { useParams } from 'react-router-dom';
 library.add(fab);
 
 function App() {
+  console.log(process.env.PUBLIC_URL);
   let [story, setStory] = useState(data);
   let [project, setProject] = useState(projectData);
   let [developer, setDeveloper] = useState(developerData);
   let { id } = useParams();
-  let [goodCount, changeGoodCount] = useState([0, 0, 0, 0]);
+  let [goodCount, changeGoodCount] = useState(false);
   let navigate = useNavigate(); //페이지 이동
+
   const goToStoryDetail = () => {
     navigate(`/ViewStoryDetail/${story}`);
   };
@@ -46,7 +48,7 @@ function App() {
         .catch((error) => console.log(error));
     }, []);
   }
-
+  console.log(allDevDto.urlGithub);
   const [allStoryDto, setAllStoryDto] = useState(['']);
   {
     useEffect(() => {
@@ -85,7 +87,11 @@ function App() {
   {
     useEffect(() => {
       axios
-        .post('/api/getStoryData', { id: '', orderBy: 'id desc', limit: '3' })
+        .post('/api/getStoryData', {
+          id: '',
+          orderBy: 'id desc',
+          limit: '3',
+        })
         .then((response) => setRankingStoryDto(response.data))
         .catch((error) => console.log(error));
     }, []);
@@ -174,14 +180,14 @@ function App() {
                   <div className='col-6'>
                     <a
                       onClick={() => {
-                        navigate('/story');
+                        navigate('/Story');
                       }}
                       style={{ cursor: 'pointer' }}
                     >
                       전체보기
                     </a>
                   </div>
-                  {story.map((a, i) => {
+                  {rankingStoryDto.map((a, i) => {
                     return (
                       <StoryCard
                         setStory={setStory}
@@ -189,6 +195,8 @@ function App() {
                         i={i}
                         goToStoryDetail={goToStoryDetail}
                         navigate={navigate}
+                        rankingStoryDto={rankingStoryDto}
+                        allStoryDto={allStoryDto}
                       ></StoryCard>
                     );
                   })}
@@ -202,7 +210,7 @@ function App() {
                   <div className='col-6'>
                     <a
                       onClick={() => {
-                        navigate('/findDeveloper');
+                        navigate('/FindDeveloper');
                       }}
                       style={{ cursor: 'pointer' }}
                     >
@@ -210,13 +218,14 @@ function App() {
                     </a>
                   </div>
 
-                  {project.map((a, i) => {
+                  {rankingProjectDto.map((a, i) => {
                     return (
                       <ProjectCard
                         project={project}
                         i={i}
                         navigate={navigate}
                         goTofindDeveloperDetail={goTofindDeveloperDetail}
+                        rankingProjectDto={rankingProjectDto}
                       ></ProjectCard>
                     );
                   })}
@@ -247,14 +256,30 @@ function App() {
                     }}
                   >
                     {rankingDevDto.map((a, i) => {
+                      console.log(rankingDevDto[i].job);
+
+                      let jobDetail =
+                        rankingDevDto[i].job != null
+                          ? rankingDevDto[i].job.split(',')
+                          : '';
+                      let careerDetail =
+                        rankingDevDto[i].career != null
+                          ? rankingDevDto[i].career.split(',')
+                          : '';
                       return (
-                        <DeveloperCard
-                          developer={developer}
-                          i={i}
-                          navigate={navigate}
-                          goToviewDeveloperDetail={goToviewDeveloperDetail}
-                          rankingDevDto={rankingDevDto}
-                        ></DeveloperCard>
+                        <>
+                          <DeveloperCard
+                            developer={developer}
+                            i={i}
+                            a={a}
+                            navigate={navigate}
+                            goToviewDeveloperDetail={goToviewDeveloperDetail}
+                            rankingDevDto={rankingDevDto}
+                            allDevDto={allDevDto}
+                            jobDetail={jobDetail}
+                            careerDetail={careerDetail}
+                          ></DeveloperCard>
+                        </>
                       );
                     })}
                   </div>
@@ -266,10 +291,6 @@ function App() {
           }
         ></Route>
 
-        <Route
-          path='/Storydetail'
-          element={<StoryDetail story={story} />}
-        ></Route>
         <Route
           path='/ViewDeveloperDetail/:id'
           element={
@@ -286,11 +307,11 @@ function App() {
           element={<FindDeveloperDetail project={project} />}
         ></Route>
         <Route
-          path='/story'
+          path='/Story'
           element={<Story story={story} setStory={setStory} />}
         ></Route>
         <Route
-          path='/findDeveloper'
+          path='/FindDeveloper'
           element={<FindDeveloper project={project} />}
         ></Route>
         <Route
@@ -303,6 +324,7 @@ function App() {
               changeGoodCount={changeGoodCount}
               setDeveloper={setDeveloper}
               navigate={navigate}
+              allDevDto={allDevDto}
             />
           }
         ></Route>
@@ -332,7 +354,9 @@ function StoryCard(props) {
         className='col-div '
         style={{ overflow: 'hidden' }}
         onClick={() => {
-          props.navigate(`/ViewStoryDetail/${props.story[props.i].id}`);
+          props.navigate(
+            `/ViewStoryDetail/${props.rankingStoryDto[props.i].id}`
+          );
         }}
       >
         <img
@@ -344,12 +368,14 @@ function StoryCard(props) {
       <div className='col-content'>
         <span
           onClick={() => {
-            props.navigate(`/ViewStoryDetail/${props.story[props.i].id}`);
+            props.navigate(
+              `/ViewStoryDetail/${props.rankingStoryDto[props.i].id}`
+            );
           }}
         >
-          {props.story[props.i].title}
+          {props.rankingStoryDto[props.i].title}
         </span>
-        <p>{props.story[props.i].content}</p>
+        <p>{props.rankingStoryDto[props.i].name}</p>
       </div>
     </div>
   );
@@ -375,16 +401,36 @@ function DeveloperCard(props) {
         <img
           style={{ paddingTop: '3%' }}
           className='col-div_developer'
-          src={process.env.PUBLIC_URL + '/' + (props.i + 1) + '.jpg'}
+          src={`${process.env.PUBLIC_URL}/${
+            props.rankingDevDto[props.i].imgURL
+          }.jpg`}
         ></img>
       </div>
       <div className='col-content_developer'>
         <p>{props.rankingDevDto[props.i].name}</p>
-        <p>{props.rankingDevDto[props.i].job}</p>
-        <p>{props.rankingDevDto[props.i].career}</p>
+        <div style={{ display: 'flex' }}>
+          <span
+            style={{
+              textAlign: 'center',
+              marginBottom: '10%',
+            }}
+          >
+            [주 능력]
+          </span>
+          <p>{props.jobDetail[0]}</p>
+        </div>
+        <div style={{ display: 'flex' }}>
+          <p>경력</p>
+          <p> {props.careerDetail[0]}</p>
+        </div>
+        <p>{props.jobDetail[1] + props.careerDetail[1]}</p>
+        <p>👍 {props.rankingDevDto[props.i].likeCount}</p>
       </div>
       <div className='col-content_developer'>
-        <p>{props.rankingDevDto[props.i].projectCount}</p>
+        <p>
+          참여중인 프로젝트 {props.rankingDevDto[props.i].projectCount}개
+          있습니다.
+        </p>
         <button className='btn'>
           <span> 1대1 대화 </span>
         </button>
@@ -398,7 +444,9 @@ function ProjectCard(props) {
       <div className='col-div ' style={{ overflow: 'hidden' }}>
         <img
           onClick={() => {
-            props.navigate(`/FindDeveloperDetail/${props.project[props.i].id}`);
+            props.navigate(
+              `/FindDeveloperDetail/${props.rankingProjectDto[props.i].id}`
+            );
           }}
           className='col-img'
           src={process.env.PUBLIC_URL + '/main' + (props.i + 3) + '.jpg'}
@@ -411,9 +459,9 @@ function ProjectCard(props) {
             props.goTofindDeveloperDetail();
           }}
         >
-          {props.project[props.i].title}
+          {props.rankingProjectDto[props.i].title}
         </span>
-        <p>{props.project[props.i].content}</p>
+        <p>{props.rankingProjectDto[props.i].name}</p>
       </div>
     </div>
   );

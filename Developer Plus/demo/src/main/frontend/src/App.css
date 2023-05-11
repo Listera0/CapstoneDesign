@@ -770,3 +770,23 @@ section {
   font-size: 0.75rem;
   border-radius: 4px;
 }
+/* siun up*/
+
+.card {
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 15px 1px rgba(52, 40, 104, 0.08);
+}
+
+.card {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+
+  background-clip: border-box;
+
+  border-radius: 0.2rem;
+}
