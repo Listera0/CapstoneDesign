@@ -1,0 +1,74 @@
+dependency
+	jstl 		(javax.servlet / jstl)
+	bootstarp	(org.webjars / bootstrap)
+	tomcat		(org.apache.tomcat.embed / tomcat-embed-jasper)
+	mysql		(mysql / mysql-connector-java)
+	configuration	(org.springframework.boot / spring-boot-c~~)
+
+
+application.properties
+	spring.datasource.jdbcUrl=jdbc:mysql://localhost:3306/dbname1
+	username
+	password
+	driver
+
+	spring.secondDB.jdbcUrl=jdbc:mysql://localhost:3306/dbname2
+	username
+	password
+	driver
+
+WebConfig
+	@Configuration
+	public class WebConfig {
+		@Bean(name = "dbname1")
+		@ConfigurationProperties(prefix = "spring.datasource")
+		public DataSource dataSource1() {
+			return DaataSourceBuilder.create().build();
+		}
+
+		@Bean(name = "jdbcTemplate1")
+		public JdbcTemplate jdbcTemplate1(@Qualifier("dbname1") DataSource ds) {
+			return new JdbcTemplate(ds);
+		}
+
+		@Bean(name = "dbname2")
+		@ConfigurationProperties(prefix = "spring.secondDB")
+		public DataSource dataSource2() {
+			return DaataSourceBuilder.create().build();
+		}
+
+		@Bean(name = "jdbcTemplate2")
+		public JdbcTemplate jdbcTemplate2(@Qualifier("dbname2") DataSource ds) {
+			return new JdbcTemplate(ds);
+		}
+	}
+
+Dao
+	// @Transactional
+	@Repository
+
+	@Autowired
+	@Qualifier("jdbcTemplate1")
+	private JdbcTemplate jdbcTemplate1;
+
+	
+	List list2 = jdbcTemplate1.query(sql, new UserRowMapper());
+
+
+class UserRowMapper implements RowMapper {
+
+ 	@Override
+  	public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+   	User user = new User();	//Dto
+   	user.setUsername(rs.getString("username"));
+   	user.setEmail(rs.getString("email"));
+   
+   	return user;
+  	}
+  
+}
+
+
+
+
+
