@@ -20,7 +20,7 @@ class DevRowMapper implements RowMapper<DeveloperDto> {
     @Nullable
     public DeveloperDto mapRow(ResultSet rs, int rowNum) throws SQLException {
         DeveloperDto dto = new DeveloperDto();
-        dto.setId(rs.getInt("id"));
+        dto.setId(rs.getString("id"));
         dto.setName(rs.getString("name"));
         dto.setJob(rs.getString("job"));
         dto.setCareer(rs.getString("career"));
@@ -33,6 +33,7 @@ class DevRowMapper implements RowMapper<DeveloperDto> {
         dto.setEmail(rs.getString("email"));
         dto.setPhone(rs.getString("phone"));
         dto.setImgURL(rs.getString("imgURL"));
+        dto.setPassword(rs.getString("password"));
 
         return dto;
     }
@@ -69,12 +70,12 @@ public class DeveloperDao {
 
     public String insertToDatabase(DeveloperDto dto)
     {
-        String query = "insert into developer (id, name, job, career, region, projectCount, urlGithub, urlInsta, introduce, skill, likeCount, email, phone, imgURL) " + 
+        String query = "insert into developer (id, password, name, job, career, region, projectCount, urlGithub, urlInsta, introduce, skill, likeCount, email, phone, imgURL) " + 
                                         "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, imgURL)";
         try
         {
-            jdbcTemplate.update(query, dto.getId(), dto.getName(), dto.getJob(), dto.getCareer(), dto.getRegion(), dto.getProjectCount(), dto.getUrlGithub(), dto.getUrlInsta(), 
-                                        dto.getIntroduce(), dto.getSkill(), dto.getLikeCount(), dto.getEmail(), dto.getPhone(), dto.getImgURL());
+            jdbcTemplate.update(query, dto.getId(), dto.getPassword(), dto.getName(), dto.getJob(), dto.getCareer(), dto.getRegion(), dto.getProjectCount(), dto.getUrlGithub(), 
+                                        dto.getUrlInsta(), dto.getIntroduce(), dto.getSkill(), dto.getLikeCount(), dto.getEmail(), dto.getPhone(), dto.getImgURL());
         }
         catch(DataAccessException  e)
         {
