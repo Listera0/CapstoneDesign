@@ -1,26 +1,35 @@
 import { developerData } from '../data.js';
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Nav } from 'react-bootstrap';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 function ViewDeveloper(props) {
-  let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
-
-  let [developer, setDeveloper] = useState(developerData);
+  const [allDevDto, setAllDevDto] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .get('/api/getAllDevData')
+        .then((response) => setAllDevDto(response.data))
+        .catch((error) => console.log(error));
+    }, []);
+  }
+  useEffect(() => {
+    if (props.goodcount != 0 && props.goodcount < 3) {
+      props.changeGoodCount(props.goodCount + 1);
+    }
+  }, [props.goodCount]);
   return (
     <div className='container'>
       <div className='row' style={{ paddingTop: '2%', paddingBottom: '2%' }}>
-        {props.developer.map((a, i) => {
+        {allDevDto.map((a, i) => {
           return (
             <DeveloperCard
-              developer={developer[i].id}
-              developerData={developerData}
+              developer={allDevDto[i].id}
               i={i}
+              allDevDto={allDevDto}
               goodCount={props.goodCount}
               changeGoodCount={props.changeGoodCount}
-              setDeveloper={setDeveloper}
               navigate={props.navigate}
-              id={id}
               key={i}
             ></DeveloperCard>
           );
@@ -55,34 +64,76 @@ function DeveloperCard(props) {
       </div>
 
       <div className='col-content_developer'>
-        <p>{props.developerData[props.i].name}</p>
-        <p>{props.developerData[props.i].mainJob}</p>
-        <p>{props.developerData[props.i].subJob}</p>
+        <p>{props.allDevDto[props.i].name}</p>
+        <p>{props.allDevDto[props.i].job}</p>
+        <p>{props.allDevDto[props.i].career}</p>
       </div>
 
       <div className='col-content_developer'>
-        <p>{props.developerData[props.i].project}</p>
-
-        <div className='subdiv'>
-          <div className='col-6 '>
-            <span
-              onClick={(e) => {
-                e.stopPropagation();
-                let copy = [...props.developerData];
-                copy[props.i] = copy[props.i] + 1;
-                props.setDeveloper(copy);
-              }}
-            >
-              👍
-            </span>
-            {props.developer[props.i]}
-          </div>
-
-          <div className='col-6 '>댓글</div>
-        </div>
+        <p>{props.allDevDto[props.i].project}</p>
+        {props.goodCount ? (
+          <DeLike
+            developer={props.allDevDto[props.i].id}
+            i={props.i}
+            allDevDto={props.allDevDto}
+            goodCount={props.goodCount}
+            changeGoodCount={props.changeGoodCount}
+            navigate={props.navigate}
+          ></DeLike>
+        ) : (
+          <Like
+            developer={props.allDevDto[props.i].id}
+            i={props.i}
+            allDevDto={props.allDevDto}
+            goodCount={props.goodCount}
+            changeGoodCount={props.changeGoodCount}
+            navigate={props.navigate}
+          />
+        )}
       </div>
     </div>
   );
 }
 
+function DeLike(props) {
+  return (
+    <div className='col-content_developer'>
+      <div className='subdiv'>
+        <div className='col-6 '>
+          <span
+            onClick={() => {
+              props.changeGoodCount(props.goodCount - 1);
+            }}
+          >
+            👍
+          </span>
+          {props.goodCount}
+        </div>
+
+        <div className='col-6 '>댓글</div>
+      </div>
+    </div>
+  );
+}
+function Like(props) {
+  return (
+    <div className='col-content_developer'>
+      <p>{props.allDevDto[props.i].project}</p>
+      <div className='subdiv'>
+        <div className='col-6 '>
+          <span
+            onClick={(e) => {
+              props.changeGoodCount(props.goodCount + 1);
+            }}
+          >
+            👍
+          </span>
+          {props.goodCount}
+        </div>
+
+        <div className='col-6 '>댓글</div>
+      </div>
+    </div>
+  );
+}
 export default ViewDeveloper;

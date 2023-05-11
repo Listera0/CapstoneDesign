@@ -17,8 +17,13 @@ function ViewDeveloperDetail(props) {
   let developerDetail = props.allDevDto.find(function (x) {
     return x.id == id;
   });
-  let [tab, setTab] = useState(0);
 
+  let [tab, setTab] = useState(0);
+  let skillDetail = developerDetail.skill.split(',');
+  let jobDetail = developerDetail.job.split(',');
+  let careerDetail = developerDetail.career.split(',');
+  console.log(skillDetail);
+  console.log(developerDetail.skill);
   return (
     <section className='bg-light'>
       <div className='container' style={{ marginTop: '-3%' }}>
@@ -57,7 +62,7 @@ function ViewDeveloperDetail(props) {
                           <span
                             style={{ textAlign: 'start', fontSize: '15px' }}
                           >
-                            qkaxhf8823@naver.com
+                            {developerDetail.email}
                           </span>
                         </p>
                       </li>
@@ -72,7 +77,7 @@ function ViewDeveloperDetail(props) {
                           <span
                             style={{ textAlign: 'start', fontSize: '15px' }}
                           >
-                            010-8823-5776
+                            {developerDetail.phone}
                           </span>
                         </p>
                       </li>
@@ -89,18 +94,8 @@ function ViewDeveloperDetail(props) {
                     </ul>
                     <div className='subdiv'>
                       <div className='col-6 ' style={{ fontSize: '15px' }}>
-                        <span
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            let copy = [...props.goodCount];
-                            copy[1] = copy[1] + 1;
-                            props.changeGoodCount(copy);
-                          }}
-                          style={{ cursor: 'pointer' }}
-                        >
-                          👍
-                        </span>
-                        {props.goodCount[1]}
+                        <span>👍</span>
+                        {developerDetail.likeCount}
                       </div>
                       <div className='col-6' style={{ fontSize: '15px' }}>
                         <button
@@ -153,7 +148,13 @@ function ViewDeveloperDetail(props) {
               </Nav.Link>
             </Nav.Item>
           </Nav>
-          <TabContent tab={tab} developerDetail={developerDetail} />
+          <TabContent
+            tab={tab}
+            developerDetail={developerDetail}
+            skillDetail={skillDetail}
+            jobDetail={jobDetail}
+            careerDetail={careerDetail}
+          />
         </div>
       </div>
     </section>
@@ -191,7 +192,7 @@ function TabContent(props) {
                 <span style={{ fontWeight: '600', marginRight: '10%' }}>
                   직무
                 </span>{' '}
-                {props.developerDetail.job}
+                {props.jobDetail[0]}
               </p>
             </span>
             <div style={{ textAlign: 'start' }}>
@@ -205,21 +206,7 @@ function TabContent(props) {
                 <span style={{ fontWeight: '600', marginRight: '10%' }}>
                   경력
                 </span>{' '}
-                {props.developerDetail.career}
-              </p>
-            </div>
-            <div style={{ textAlign: 'start' }}>
-              <p
-                style={{
-                  textAlign: 'start',
-                  fontSize: '15px',
-                  marginTop: '2%',
-                }}
-              >
-                <span style={{ fontWeight: '600', marginRight: '10%' }}>
-                  지역
-                </span>{' '}
-                {props.developerDetail.region}
+                {props.careerDetail[0]}
               </p>
             </div>
             <div style={{ textAlign: 'start' }}>
@@ -243,7 +230,7 @@ function TabContent(props) {
                 <span style={{ fontWeight: '600', marginRight: '10%' }}>
                   직무
                 </span>{' '}
-                {props.developerDetail.job}
+                {props.jobDetail[1]}
               </p>
             </div>
             <div style={{ textAlign: 'start' }}>
@@ -257,7 +244,33 @@ function TabContent(props) {
                 <span style={{ fontWeight: '600', marginRight: '10%' }}>
                   경력
                 </span>{' '}
-                {props.developerDetail.career}
+                {props.careerDetail[1]}
+              </p>
+            </div>
+            <div style={{ textAlign: 'start' }}>
+              <span
+                className='display-26 text-secondary me-2 font-weight-600'
+                style={{
+                  textAlign: 'start',
+                  fontSize: '18px',
+                  marginBottom: '10%',
+                }}
+              >
+                [지역]
+              </span>
+            </div>
+            <div style={{ textAlign: 'start' }}>
+              <p
+                style={{
+                  textAlign: 'start',
+                  fontSize: '15px',
+                  marginTop: '2%',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  지역
+                </span>{' '}
+                {props.developerDetail.region}
               </p>
             </div>
           </div>
@@ -395,7 +408,7 @@ function TabContent(props) {
                       flexWrap: 'wrap',
                     }}
                   >
-                    {props.developerDetail.skill.map((ele, i) => {
+                    {props.skillDetail.map((ele, i) => {
                       return (
                         <Icons
                           key={i}
@@ -404,6 +417,7 @@ function TabContent(props) {
                           ele={ele}
                           developerDetail={props.developerDetail}
                           skill={props.skill}
+                          skillDetail={props.skillDetail}
                         />
                       );
                     })}
@@ -422,9 +436,7 @@ function Icons(props) {
     <div key={props.i} style={{}}>
       <div style={{ justifyContent: 'space-between', alignItems: 'center' }}>
         <p style={{ paddingLeft: '1%' }}>{props.icons2[props.ele]}</p>
-        <p style={{ textAlign: 'center' }}>
-          {props.developerDetail.skill[props.i]}
-        </p>
+        <p style={{ textAlign: 'center' }}>{props.skillDetail[props.i]}</p>
       </div>
     </div>
   );
