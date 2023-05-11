@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,33 @@ public class MainController {
     StoryDao storyRepository;
     @Autowired
     ProjectDao projectRepository;
+    @Autowired
+    LoginDao loginDao;
+
+    @RequestMapping(value="/api/requestLogin", method = RequestMethod.POST)
+    public Map<String, String> requestLogin(@RequestBody Map<String, String> request) {
+        List<DeveloperDto> loginData = loginDao.hasEmail(request.get("email"));
+        Map<String, String> answer = new HashMap<String, String>();
+        if(loginData.size() >= 1)
+        {
+            if(loginData.get(0).getPassword().equals(request.get("password")))
+            {
+                answer.put("result", "true");
+                answer.put("id", loginData.get(0).getId());
+                answer.put("message", "사용자 [" + loginData.get(0).getName() + "] 로그인 되었습니다.");
+                return answer;
+            }
+            answer.put("result", "false");
+            answer.put("message", "비밀번호가 옳지 않습니다.");
+
+            return answer;
+        }
+        answer.put("result", "false");
+        answer.put("message", "없는 사용자 입니다.");
+
+        return answer;
+    }
+
 
     @RequestMapping(value="/api/getAllDevData", method = RequestMethod.GET)
     public List<DeveloperDto> getAllDevData() {

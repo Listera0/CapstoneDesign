@@ -11,7 +11,8 @@ import lombok.Setter;
 public class DeveloperDto {
 
     // 데이터 베이스 구조
-    private int id;
+    private String id;
+    private String password;
     private String name;
     private String job;
     private String career;
@@ -29,7 +30,7 @@ public class DeveloperDto {
     @Override
     public String toString()
     {
-        return "[" + id + " | " + name + " | " + job + " | " + career + " | " + region + " | " + projectCount + " | " + urlGithub + " | " + urlInsta + " | " + 
-                    introduce + " | " + skill + " | " + likeCount + " | " + email + " | " + phone  + " | " + imgURL + "]";
+        return id + " | " + name + " | " + job + " | " + career + " | " + region + " | " + projectCount + " | " + urlGithub + " | " + password + "|" + 
+                    urlInsta + " | " + introduce + " | " + skill + " | " + likeCount + " | " + email + " | " + phone  + " | " + imgURL;
     }
 }

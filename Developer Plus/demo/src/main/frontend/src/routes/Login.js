@@ -36,9 +36,7 @@ function Login() {
           ></input>
 
           <input
-            onClick={() =>
-              requestLogin(event.target.value('email'), '12345')
-            }
+            onClick={() => requestLogin(event.target.value('email'), '12345')}
             type='submit'
             value='Sign In'
           ></input>
