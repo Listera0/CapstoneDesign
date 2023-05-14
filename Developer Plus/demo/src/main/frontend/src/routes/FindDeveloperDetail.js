@@ -11,11 +11,12 @@ function FindDeveloperDetail(props) {
   let [maintab, setMainTab] = useState(0);
 
   let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
-  let projectDetail = props.project.find(function (x) {
+  let projectDetail = props.allProjectDto.find(function (x) {
     return x.id == id;
   });
-  let [req2, setReq2] = useState(projectDetail.requireJob);
-  console.log(req2);
+
+  // let [req2, setReq2] = useState(projectDetail.requireJob);
+  // console.log(req2);
   return (
     <section className='bg-light' style={{ marginTop: '-6%' }}>
       <div className='container' style={{ paddingTop: '3%' }}>
@@ -36,8 +37,8 @@ function FindDeveloperDetail(props) {
             maintab={maintab}
             setTab={setTab}
             projectDetail={projectDetail}
-            req2={req2}
-            setReq2={setReq2}
+            // req2={req2}
+            // setReq2={setReq2}
           ></MainTabContent>
         </div>
       </div>

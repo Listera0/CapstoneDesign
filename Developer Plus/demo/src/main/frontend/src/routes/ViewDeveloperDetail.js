@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Nav } from 'react-bootstrap';
 import { icons2, jobs } from '../icons2.js';
+import axios from 'axios';
+
 function ViewDeveloperDetail(props) {
   // useEffect(()=>{}) 1. 재렌더링마다 코드를 실행하고 싶으면
   // useEffect(()=>{},[]) 2. mount시 1회 코드 실행하고 싶으면
@@ -14,16 +16,35 @@ function ViewDeveloperDetail(props) {
 
   // useEffect(() => {}); //쓰는 이유 안에 있는 코드는 html 렌더링 후에 동작 - 서버에서 데이터가져오는 작업 , 타이머 , 어려운 연산
   let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
-  let developerDetail = props.allDevDto.find(function (x) {
-    return x.id == id;
-  });
+  // let developerDetail = props.allDevDto.find(function (x) {
+  //   return x.id == id;
+  // });
+
+  const [userDetail, setUserDetail] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .post('/api/getDevData', {
+          id: id,
+          orderBy: '',
+          limit: '',
+        })
+        .then((response) => setUserDetail(response.data))
+        .catch((error) => console.log(error));
+    }, []);
+  }
+
+  let developerDetail = userDetail[0];
 
   let [tab, setTab] = useState(0);
-  let skillDetail = developerDetail.skill.split(',');
-  let jobDetail = developerDetail.job.split(',');
-  let careerDetail = developerDetail.career.split(',');
-  console.log(skillDetail);
-  console.log(developerDetail.skill);
+  let skillDetail =
+    developerDetail.skill != null ? developerDetail.skill.split(',') : '';
+  let jobDetail =
+    developerDetail.job != null ? developerDetail.job.split(',') : '';
+
+  let careerDetail =
+    developerDetail.career != null ? developerDetail.career.split(',') : '';
+
   return (
     <section className='bg-light'>
       <div className='container' style={{ marginTop: '-3%' }}>
@@ -144,7 +165,7 @@ function ViewDeveloperDetail(props) {
                 }}
                 eventKey='link2'
               >
-                Link
+                Skill
               </Nav.Link>
             </Nav.Item>
           </Nav>
@@ -416,7 +437,6 @@ function TabContent(props) {
                           i={i}
                           ele={ele}
                           developerDetail={props.developerDetail}
-                          skill={props.skill}
                           skillDetail={props.skillDetail}
                         />
                       );

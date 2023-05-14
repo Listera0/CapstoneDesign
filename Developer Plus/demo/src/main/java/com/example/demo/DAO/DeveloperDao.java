@@ -27,7 +27,8 @@ class DevRowMapper implements RowMapper<DeveloperDto> {
         dto.setRegion(rs.getString("region"));
         dto.setProjectCount(rs.getInt("projectCount"));
         dto.setUrlGithub(rs.getString("urlGithub"));
-        dto.setUrlInsta(rs.getString("introduce"));
+        dto.setUrlInsta(rs.getString("urlInsta"));
+        dto.setIntroduce(rs.getString("introduce"));
         dto.setSkill(rs.getString("skill"));
         dto.setLikeCount(rs.getInt("likeCount"));
         dto.setEmail(rs.getString("email"));

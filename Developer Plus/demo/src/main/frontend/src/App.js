@@ -101,7 +101,7 @@ function App() {
   {
     useEffect(() => {
       axios
-        .post('/api/getProjectData', { id: '', orderBy: 'id desc', limit: '3' })
+        .post('/api/getProjectData', { id: '', orderBy: 'id ', limit: '3' })
         .then((response) => setRankingProjectDto(response.data))
         .catch((error) => console.log(error));
     }, []);
@@ -155,12 +155,12 @@ function App() {
 
   return (
     <div className='App '>
-      {showDataList(allDevDto)}
-      {showDataList(allStoryDto)}
-      {showDataList(allProjectDto)}
-      {showDataList(rankingDevDto)}
-      {showDataList(rankingStoryDto)}
-      {showDataList(rankingProjectDto)}
+      {/* {showDataList(allDevDto)} */}
+      {/* {showDataList(allStoryDto)} */}
+      {/* {showDataList(allProjectDto)} */}
+      {/* {showDataList(rankingDevDto)} */}
+      {/* {showDataList(rankingStoryDto)} */}
+      {/* {showDataList(rankingProjectDto)} */}
       {/* <Routes>
         <Route path='/FindDeveloper' element={<Filiter />}></Route>
         <Route path='/ViewDeveloper' element={<Filiter />}></Route>
@@ -172,10 +172,12 @@ function App() {
           element={
             <>
               <CarouselCard></CarouselCard>
+
               <div className='container'>
                 <div className='row'>
                   <div className='col-6'>
-                    <h6 className='hotboard'>핫한 스토리</h6>
+                    {' '}
+                    <h6 className='hotboard'>핫한 프로젝트</h6>
                   </div>
                   <div className='col-6'>
                     <a
@@ -256,8 +258,6 @@ function App() {
                     }}
                   >
                     {rankingDevDto.map((a, i) => {
-                      console.log(rankingDevDto[i].job);
-
                       let jobDetail =
                         rankingDevDto[i].job != null
                           ? rankingDevDto[i].job.split(',')
@@ -304,7 +304,7 @@ function App() {
         ></Route>
         <Route
           path='/FindDeveloperdetail/:id'
-          element={<FindDeveloperDetail project={project} />}
+          element={<FindDeveloperDetail allProjectDto={allProjectDto} />}
         ></Route>
         <Route
           path='/Story'
@@ -406,24 +406,41 @@ function DeveloperCard(props) {
           }.jpg`}
         ></img>
       </div>
-      <div className='col-content_developer'>
+      <div className='col-content_developer' style={{ textAlign: 'center' }}>
         <p>{props.rankingDevDto[props.i].name}</p>
-        <div style={{ display: 'flex' }}>
-          <span
-            style={{
-              textAlign: 'center',
-              marginBottom: '10%',
-            }}
-          >
-            [주 능력]
-          </span>
-          <p>{props.jobDetail[0]}</p>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <p>[주 능력] {props.jobDetail[0]}</p>
         </div>
-        <div style={{ display: 'flex' }}>
-          <p>경력</p>
-          <p> {props.careerDetail[0]}</p>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <p style={{ textAlign: 'center' }}>[경력] {props.careerDetail[0]}</p>
         </div>
-        <p>{props.jobDetail[1] + props.careerDetail[1]}</p>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            textAlign: 'start',
+          }}
+        >
+          <p>[부 능력] {props.jobDetail[1]}</p>
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <p style={{ textAlign: 'center' }}>[경력] {props.careerDetail[1]}</p>
+        </div>
         <p>👍 {props.rankingDevDto[props.i].likeCount}</p>
       </div>
       <div className='col-content_developer'>

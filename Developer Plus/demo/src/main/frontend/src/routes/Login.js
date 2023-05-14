@@ -8,9 +8,7 @@ function Login() {
         email: _email,
         password: _password,
       })
-      .then((response) =>
-        console.log(response.data['message'] + ' id : ' + response.data['id'])
-      )
+      .then((response) => alert(response.data['message']))
       .catch((error) => console.log(error));
   };
 
@@ -36,8 +34,13 @@ function Login() {
           ></input>
 
           <input
-            onClick={() => requestLogin(event.target.value('email'), '12345')}
-            type='submit'
+            onClick={() =>
+              requestLogin(
+                document.getElementById('email').value,
+                document.getElementById('password').value
+              )
+            }
+            type='button'
             value='Sign In'
           ></input>
           <button type='button'>카카오계정으로 로그인</button>
@@ -51,31 +54,48 @@ function Login() {
           </a>
         </form>
       </div>
-      {modal ? <Modal /> : null}
+      {modal ? <Modal modal={modal} /> : null}
     </div>
   );
 }
-function Modal() {
+function Modal(props) {
   return (
-    <div>
-      <form action='#' method='post' style={{}}>
-        <span>회원가입</span>
-        <input type='text' placeholder='Enter your name' required></input>
-        <input type='text' placeholder='Enter your ID' required></input>
-        <input
-          type='email'
-          placeholder='Enter your email address'
-          required
-        ></input>
-        <input
-          type='password'
-          placeholder='Enter your password'
-          required
-        ></input>
-        <button type='button' onclick="location.href='/login.html'">
-          Sign Up
-        </button>
-      </form>
+    <div
+      style={{
+        top: '0',
+        left: '0',
+        bottom: '0',
+        right: '0',
+        background: 'rgba(0, 0, 0, 0.7)',
+        position: 'fixed',
+        zIndex: '999',
+      }}
+    >
+      <div>
+        <form
+          style={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            display: 'flex',
+            flexDirection: 'column',
+            transform: 'translate(-50%, -50%)',
+            zIndex: '1000',
+          }}
+        >
+          <h2 style={{ color: 'white' }}>회원가입</h2>
+          <input id='id' type='id' placeholder='ID' required></input>
+          <input
+            id='password'
+            type='password'
+            placeholder='PassWord'
+            required
+          ></input>
+          <input id='email' type='email' placeholder='Email' required></input>
+
+          <button type='button'>카카오계정으로 로그인</button>
+        </form>
+      </div>
     </div>
   );
 }

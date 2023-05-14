@@ -99,7 +99,6 @@ let developerData = [
     projectCount: '1',
     urlGithub: 'https://github.com/ParkYongHo1',
     urlInsta: 'https://www.instagram.com/pxxk._.h0/?next=%2Fstudy._ho%2F',
-    introduce: '안녕하세요 프론트엔드를 꿈꾸는 박용호 입니다.',
     skill: ['javascript', 'react', 'java'],
     likeCount: '1',
   },
