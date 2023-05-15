@@ -58,7 +58,20 @@ function Login() {
     </div>
   );
 }
+
 function Modal(props) {
+
+  const requestSignUp = (_name, _email, _password) => {
+    axios
+      .post('/api/requestSignUp', {
+        name: _name,
+        email: _email,
+        password: _password,
+      })
+      .then((response) => console.log(response.data['message'] + ' id : ' + response.data['id']))
+      .catch((error) => console.log(error));
+  };
+
   return (
     <div
       style={{
@@ -84,14 +97,26 @@ function Modal(props) {
           }}
         >
           <h2 style={{ color: 'white' }}>회원가입</h2>
-          <input id='id' type='id' placeholder='ID' required></input>
+          <input id='name2' type='name' placeholder='Name' required></input>
+          <input id='email2' type='email' placeholder='Email' required></input>
           <input
-            id='password'
+            id='password2'
             type='password'
             placeholder='PassWord'
             required
           ></input>
-          <input id='email' type='email' placeholder='Email' required></input>
+          
+          <input
+            onClick={() =>
+              requestSignUp(
+                document.getElementById('name2').value,
+                document.getElementById('email2').value,
+                document.getElementById('password2').value
+              )
+            }
+            type='button'
+            value='Sign Up'
+          ></input>
 
           <button type='button'>카카오계정으로 로그인</button>
         </form>

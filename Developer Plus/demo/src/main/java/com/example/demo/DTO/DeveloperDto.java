@@ -11,7 +11,7 @@ import lombok.Setter;
 public class DeveloperDto {
 
     // 데이터 베이스 구조
-    private String id;
+    private int id;
     private String password;
     private String name;
     private String job;

@@ -23,18 +23,18 @@ public class MainController {
     @Autowired
     ProjectDao projectRepository;
     @Autowired
-    LoginDao loginDao;
+    LoginDao loginRepository;
 
     @RequestMapping(value="/api/requestLogin", method = RequestMethod.POST)
     public Map<String, String> requestLogin(@RequestBody Map<String, String> request) {
-        List<DeveloperDto> loginData = loginDao.hasEmail(request.get("email"));
+        List<DeveloperDto> loginData = loginRepository.hasEmail(request.get("email"));
         Map<String, String> answer = new HashMap<String, String>();
         if(loginData.size() >= 1)
         {
             if(loginData.get(0).getPassword().equals(request.get("password")))
             {
                 answer.put("result", "true");
-                answer.put("id", loginData.get(0).getId());
+                answer.put("id", Integer.toString(loginData.get(0).getId()));
                 answer.put("message", "사용자 [" + loginData.get(0).getName() + "] 로그인 되었습니다.");
                 return answer;
             }
@@ -82,9 +82,40 @@ public class MainController {
     }
 
 
+    @RequestMapping(value="/api/requestSignUp", method = RequestMethod.POST)
+    public Map<String, String> requestSignUp(@RequestBody Map<String, String> request) {
+        List<DeveloperDto> loginData = loginRepository.hasEmail(request.get("email"));
+        List<DeveloperDto> lastData = devRepository.getData("", "id desc", "1");
+        Map<String, String> answer = new HashMap<String, String>();
+        if(loginData.size() < 2)
+        {
+            int nextId = lastData.get(0).getId() + 1;
+            String result = loginRepository.insertToDatabase(nextId, request.get("name"), request.get("email"), request.get("password"));
+            
+            if(result.equals("Success"))
+            {
+                answer.put("result", "true");
+                answer.put("message", "회원가입에 성공하였습니다.");
+                answer.put("id", Integer.toString(nextId));
+                return answer;
+            }
+            else
+            {
+                answer.put("result", "false");
+                answer.put("message", "회원가입에 실패하였습니다.");
+                return answer;
+            }
+        }
+        answer.put("result", "false");
+        answer.put("message", "이미 존재하는 사용자 입니다.");
+
+        return answer;
+    }
+
+
     @RequestMapping(value="/api/insertDevData", method = RequestMethod.POST)
-    public String insertDevData(@RequestBody DeveloperDto dto) {
-        return devRepository.insertToDatabase(dto);
+    public String insertDevData2(@RequestBody DeveloperDto dto) {
+        return "";
     }
 
     @RequestMapping(value="/api/insertStoryData", method = RequestMethod.POST)

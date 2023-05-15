@@ -20,7 +20,7 @@ class DevRowMapper implements RowMapper<DeveloperDto> {
     @Nullable
     public DeveloperDto mapRow(ResultSet rs, int rowNum) throws SQLException {
         DeveloperDto dto = new DeveloperDto();
-        dto.setId(rs.getString("id"));
+        dto.setId(rs.getInt("id"));
         dto.setName(rs.getString("name"));
         dto.setJob(rs.getString("job"));
         dto.setCareer(rs.getString("career"));
@@ -72,7 +72,7 @@ public class DeveloperDao {
     public String insertToDatabase(DeveloperDto dto)
     {
         String query = "insert into developer (id, password, name, job, career, region, projectCount, urlGithub, urlInsta, introduce, skill, likeCount, email, phone, imgURL) " + 
-                                        "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, imgURL)";
+                                        "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try
         {
             jdbcTemplate.update(query, dto.getId(), dto.getPassword(), dto.getName(), dto.getJob(), dto.getCareer(), dto.getRegion(), dto.getProjectCount(), dto.getUrlGithub(), 
@@ -80,10 +80,8 @@ public class DeveloperDao {
         }
         catch(DataAccessException  e)
         {
-            return "Failed Insert";
+            return "Fail";
         }
-        return "Success Insert";
+        return "Success";
     }
-
-
 }
