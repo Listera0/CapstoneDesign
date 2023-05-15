@@ -33,6 +33,44 @@ const icons2 = {
   java: (
     <FontAwesomeIcon icon='fa-brands fa-java' style={{ fontSize: '80px' }} />
   ),
+  Node_js: (
+    <FontAwesomeIcon
+      icon='fa-brands fa-node-js'
+      style={{ fontSize: '80px', color: 'green' }}
+    />
+  ),
+
+  python: (
+    <FontAwesomeIcon
+
+      icon=' fa-brands fa-python '
+      style={{
+        fontSize: '80px',
+      }}
+    />
+  ),
+
+  php: <FontAwesomeIcon icon='fa-brands fa-php' style={{ fontSize: '80px' }} />,
+  golang: (
+    <FontAwesomeIcon icon='fa-brands fa-golang' style={{ fontSize: '80px' }} />
+  ),
+
+  html: (
+    <FontAwesomeIcon icon='fa-brands fa-html5' style={{ fontSize: '80px' }} />
+  ),
+
+  css: (
+    <FontAwesomeIcon
+      icon='fa-brands fa-css3-alt'
+      style={{ fontSize: '80px' }}
+    />
+  ),
+  bootstrap: (
+    <FontAwesomeIcon
+      icon='fa-brands fa-bootstrap'
+      style={{ fontSize: '80px' }}
+    />
+  ),
 };
 const jobs = {
   프론트엔드: '프론트엔드',

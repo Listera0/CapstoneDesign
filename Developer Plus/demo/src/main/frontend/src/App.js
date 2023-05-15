@@ -177,7 +177,7 @@ function App() {
                 <div className='row'>
                   <div className='col-6'>
                     {' '}
-                    <h6 className='hotboard'>핫한 프로젝트</h6>
+                    <h6 className='hotboard'>핫한 스토리</h6>
                   </div>
                   <div className='col-6'>
                     <a
@@ -308,7 +308,14 @@ function App() {
         ></Route>
         <Route
           path='/Story'
-          element={<Story story={story} setStory={setStory} />}
+          element={
+            <Story
+              story={story}
+              setStory={setStory}
+              allStoryDto={allStoryDto}
+              navigate={navigate}
+            />
+          }
         ></Route>
         <Route
           path='/FindDeveloper'

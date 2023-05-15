@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import axios from 'axios';
-
+import CloseButton from 'react-bootstrap/CloseButton';
 function Login() {
+  const outside = useRef();
   const requestLogin = (_email, _password) => {
     axios
       .post('/api/requestLogin', {
@@ -47,20 +48,19 @@ function Login() {
           <a
             style={{ cursor: 'pointer' }}
             onClick={() => {
-              setModal(!modal);
+              setModal(true);
             }}
           >
             Developer Plus Sign Up
           </a>
         </form>
       </div>
-      {modal ? <Modal modal={modal} /> : null}
+      {modal ? <Modal modal={modal} setModal={setModal} /> : null}
     </div>
   );
 }
 
 function Modal(props) {
-
   const requestSignUp = (_name, _email, _password) => {
     axios
       .post('/api/requestSignUp', {
@@ -68,7 +68,9 @@ function Modal(props) {
         email: _email,
         password: _password,
       })
-      .then((response) => console.log(response.data['message'] + ' id : ' + response.data['id']))
+      .then((response) =>
+        console.log(response.data['message'] + ' id : ' + response.data['id'])
+      )
       .catch((error) => console.log(error));
   };
 
@@ -96,16 +98,22 @@ function Modal(props) {
             zIndex: '1000',
           }}
         >
+          <div
+            style={{ textAlign: 'end' }}
+            onClick={() => props.setModal(false)}
+          >
+            <CloseButton variant='white' />
+          </div>
           <h2 style={{ color: 'white' }}>회원가입</h2>
-          <input id='name2' type='name' placeholder='Name' required></input>
-          <input id='email2' type='email' placeholder='Email' required></input>
+          <input id='names' type='name' placeholder='Name' required></input>
+          <input id='emails' type='email' placeholder='Email' required></input>
           <input
             id='password2'
             type='password'
             placeholder='PassWord'
             required
           ></input>
-          
+
           <input
             onClick={() =>
               requestSignUp(
@@ -123,5 +131,8 @@ function Modal(props) {
       </div>
     </div>
   );
+}
+function BasicExample(props) {
+  return <CloseButton />;
 }
 export default Login;
