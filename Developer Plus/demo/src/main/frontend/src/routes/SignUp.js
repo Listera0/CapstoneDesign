@@ -1,5 +1,7 @@
 import Form from 'react-bootstrap/Form';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 function SignUp(props) {
   const [firstSelectValue, setFirstSelectValue] = useState('');
   const [secondSelectValue, setSecondSelectValue] = useState('');
@@ -269,7 +271,7 @@ function SignUp(props) {
                         fontSize: '15px',
                       }}
                     >
-                      기본 직무 설정
+                      직무 , 전문분야 설정
                     </span>
                   </div>
                   <div
@@ -323,22 +325,12 @@ function SignUp(props) {
                     </span>
                   </div>
                   <div
-                    className='col-lg-12 mb-4 mb-sm-5'
-                    style={{ textAlign: 'start' }}
+                    className='col-lg-5 mb-4 mb-sm-5'
+                    style={{
+                      display: 'flex',
+                    }}
                   >
-                    <span className='col-lg-12'>
-                      <input
-                        type='email'
-                        style={{
-                          width: '80%',
-                          height: '5vh',
-                          borderRadius: '5px',
-                          border: '1px solid rgb(222,222,222)',
-                          outline: 'none',
-                          marginRight: '1%',
-                        }}
-                      ></input>
-                    </span>
+                    <RegionSelect></RegionSelect>
                   </div>
                 </li>
                 <li className='mb-2 mb-xl-3'>
@@ -353,23 +345,8 @@ function SignUp(props) {
                       소개
                     </span>
                   </div>
-                  <div
-                    className='col-lg-12 mb-4 mb-sm-5'
-                    style={{ textAlign: 'start' }}
-                  >
-                    <span className='col-lg-12'>
-                      <input
-                        type='email'
-                        style={{
-                          width: '80%',
-                          height: '5vh',
-                          borderRadius: '5px',
-                          border: '1px solid rgb(222,222,222)',
-                          outline: 'none',
-                          marginRight: '1%',
-                        }}
-                      ></input>
-                    </span>
+                  <div>
+                    <FormFloatingTextareaExample />
                   </div>
                 </li>
                 <li className='mb-2 mb-xl-3'>
@@ -388,17 +365,65 @@ function SignUp(props) {
                     className='col-lg-12 mb-4 mb-sm-5'
                     style={{ textAlign: 'start' }}
                   >
-                    <span className='col-lg-12'>
+                    <span>
+                      <FontAwesomeIcon icon={['fab', 'github']} size='2x' />
+                    </span>
+                    <span className='col-lg-8'>
                       <input
-                        type='email'
+                        type='text'
                         style={{
                           width: '80%',
                           height: '5vh',
                           borderRadius: '5px',
                           border: '1px solid rgb(222,222,222)',
                           outline: 'none',
-                          marginRight: '1%',
+                          marginLeft: '2%',
                         }}
+                        placeholder={'Github'}
+                      ></input>
+                    </span>
+                  </div>
+                  <div
+                    className='col-lg-12 mb-4 mb-sm-5'
+                    style={{ textAlign: 'start' }}
+                  >
+                    <span>
+                      <FontAwesomeIcon icon={['fab', 'vimeo']} size='2x' />
+                    </span>
+                    <span className='col-lg-8'>
+                      <input
+                        type='text'
+                        style={{
+                          width: '80%',
+                          height: '5vh',
+                          borderRadius: '5px',
+                          border: '1px solid rgb(222,222,222)',
+                          outline: 'none',
+                          marginLeft: '2%',
+                        }}
+                        placeholder={'Velog'}
+                      ></input>
+                    </span>
+                  </div>
+                  <div
+                    className='col-lg-12 mb-4 mb-sm-5'
+                    style={{ textAlign: 'start' }}
+                  >
+                    <span>
+                      <FontAwesomeIcon icon={['fab', 'instagram']} size='2x' />
+                    </span>
+                    <span className='col-lg-8'>
+                      <input
+                        type='text'
+                        style={{
+                          width: '80%',
+                          height: '5vh',
+                          borderRadius: '5px',
+                          border: '1px solid rgb(222,222,222)',
+                          outline: 'none',
+                          marginLeft: '2%',
+                        }}
+                        placeholder={'Instagram'}
                       ></input>
                     </span>
                   </div>
@@ -449,8 +474,9 @@ function SelectBasicExample(props) {
         <option value='option13'>하드웨어 개발자</option>
         <option value='option14'>머신러닝 개발자</option>
         <option value='option15'>블록체인 개발자</option>
-        <option value='option16'>웹퍼블리셔</option>
-        <option value='option17'>QA</option>
+        <option value='option16'>클라우드엔지니어</option>
+        <option value='option17'>웹퍼블리셔</option>
+        <option value='option18'>QA</option>
       </Form.Select>
     </>
   );
@@ -464,18 +490,178 @@ function SelectTwo(props) {
     >
       {props.firstSelectValue === 'option1' && (
         <>
-          <option value='subOption1'>GUI</option>
-          <option value='subOption2'>반응형 웹</option>
-          <option value='subOption3'>인터페이스</option>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>GUI</option>
+          <option value='subOption3'>반응형 웹</option>
+          <option value='subOption4'>인터페이스</option>
         </>
       )}
       {props.firstSelectValue === 'option2' && (
         <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>서버관리</option>
+          <option value='subOption3'>SI개발</option>
+          <option value='subOption4'>클라이언트</option>
+          <option value='subOption5'>HTTP</option>
+          <option value='subOption6'>핀테크</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option3' && (
+        <>
+          <option value='subOption1'>전체</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option4' && (
+        <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>SI개발</option>
+          <option value='subOption3'>인터페이스</option>
+          <option value='subOption4'>증강현실</option>
+          <option value='subOption5'>가상현실</option>
+          <option value='subOption6'>핀테크</option>
+          <option value='subOption7'>메타버스</option>
+          <option value='subOption8'>챗봇</option>
+          <option value='subOption9'>음성인식</option>
+          <option value='subOption10'>암호화페</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option5' && (
+        <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>시스템운영</option>
           <option value='subOption3'>서버관리</option>
-          <option value='subOption4'>SI개발</option>
+          <option value='subOption4'>서버구축</option>
+          <option value='subOption5'>시스템설계</option>
+          <option value='subOption6'>시스템분석</option>
+          <option value='subOption7'>네트워크관리</option>
+          <option value='subOption8'>펌웨어</option>
+          <option value='subOption9'>SI개발</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option6' && (
+        <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>시스템운영</option>
+          <option value='subOption3'>네트워크관리</option>
+          <option value='subOption4'>서버구축</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option7' && (
+        <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>데이터관리</option>
+          <option value='subOption3'>데이터마이닝</option>
+          <option value='subOption4'>모델링</option>
+          <option value='subOption5'>DBMS</option>
+          <option value='subOption6'>DW모델러</option>
+          <option value='subOption7'>DB튜닝</option>
+          <option value='subOption8'>OLAP개발자</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option8' && (
+        <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>빅데이터</option>
+          <option value='subOption3'>데이터파이프라인</option>
+          <option value='subOption4'>데이터레이크</option>
+          <option value='subOption5'>ETL</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option9' && (
+        <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>데이터분석</option>
+          <option value='subOption3'>분석모델링</option>
+          <option value='subOption4'>데이터시각화</option>
+          <option value='subOption5'>BI</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option10' && (
+        <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>정보보안</option>
+          <option value='subOption3'>방화벽</option>
+          <option value='subOption4'>보안관제</option>
+          <option value='subOption5'>네트워크관리</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option11' && (
+        <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>SI개발</option>
+          <option value='subOption3'>시스템설계</option>
+          <option value='subOption4'>시스템분석</option>
           <option value='subOption5'>클라이언트</option>
-          <option value='subOption4'>HTTP</option>
-          <option value='subOption4'>핀테크</option>
+          <option value='subOption6'>아키텍처</option>
+          <option value='subOption7'>정보보안</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option12' && (
+        <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>MMORPG</option>
+          <option value='subOption3'>클라이언트</option>
+          <option value='subOption4'>모델링</option>
+          <option value='subOption5'>메타버스</option>
+          <option value='subOption6'>가상현실</option>
+          <option value='subOption7'>증강현실</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option13' && (
+        <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>회로설계</option>
+          <option value='subOption3'>펌웨어</option>
+          <option value='subOption4'>시스템설계</option>
+          <option value='subOption5'>검증</option>
+          <option value='subOption6'>시스템분석</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option14' && (
+        <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>인공지능</option>
+          <option value='subOption3'>딥러닝</option>
+          <option value='subOption4'>자연어처리</option>
+          <option value='subOption5'>모델링</option>
+          <option value='subOption6'>이미지프로세싱</option>
+          <option value='subOption7'>챗봇</option>
+          <option value='subOption8'>음성인식</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option15' && (
+        <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>스마트컨트랙트</option>
+          <option value='subOption3'>Dapp</option>
+          <option value='subOption4'>암호화폐</option>
+          <option value='subOption5'>DID</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option16' && (
+        <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>클라우드아키텍트</option>
+          <option value='subOption3'>클라우드개발자</option>
+          <option value='subOption4'>네트워크관리</option>
+          <option value='subOption5'>솔루션스아키텍트</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option17' && (
+        <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>웹표준,웹접근성</option>
+          <option value='subOption3'>반응형웹</option>
+          <option value='subOption4'>웹마스터</option>
+          <option value='subOption5'>GUI</option>
+        </>
+      )}
+      {props.firstSelectValue === 'option18' && (
+        <>
+          <option value='subOption1'>전체</option>
+          <option value='subOption2'>검증</option>
+          <option value='subOption1'>테스터</option>
+          <option value='subOption1'>웹마스터</option>
         </>
       )}
     </Form.Select>
@@ -494,6 +680,49 @@ function CareerSelect(props) {
         <option value='option2'>중수</option>
         <option value='option3'>고수</option>
       </Form.Select>
+    </>
+  );
+}
+function RegionSelect(props) {
+  return (
+    <>
+      <Form.Select
+        aria-label='Default select example'
+        value={props.firstSelectValue}
+        onChange={props.handleFirstSelectChange}
+      >
+        <option value=''>선택하세요</option>
+        <option value='option1'>서울</option>
+        <option value='option2'>인천</option>
+        <option value='option3'>경기</option>
+        <option value='option4'>세종</option>
+        <option value='option5'>충남</option>
+        <option value='option6'>충북</option>
+        <option value='option7'>광주</option>
+        <option value='option8'>전남</option>
+        <option value='option9'>전북</option>
+        <option value='option10'>대구</option>
+        <option value='option11'>경북</option>
+        <option value='option12'>부산</option>
+        <option value='option13'>울산</option>
+        <option value='option14'>경남</option>
+        <option value='option15'>강원</option>
+        <option value='option16'>제주</option>
+        <option value='option17'>전국</option>
+      </Form.Select>
+    </>
+  );
+}
+function FormFloatingTextareaExample() {
+  return (
+    <>
+      <FloatingLabel controlId='floatingTextarea2' label='Comments'>
+        <Form.Control
+          as='textarea'
+          placeholder='Leave a comment here'
+          style={{ height: '20vh', resize: 'none' }}
+        />
+      </FloatingLabel>
     </>
   );
 }

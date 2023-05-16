@@ -21,6 +21,7 @@ import { faEye as farEye } from '@fortawesome/free-regular-svg-icons';
 import { faCommentDots as farCommentDots } from '@fortawesome/free-regular-svg-icons';
 import { faBookmark as farBookmark } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import axios from 'axios';
 import Login from './routes/Login';
@@ -242,39 +243,30 @@ function App() {
                       전체보기
                     </a>
                   </div>
-                  <div
-                    class='grid text-center'
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      marginRight: '1%',
-                      marginBottom: '1%',
-                    }}
-                  >
-                    {rankingDevDto.map((a, i) => {
-                      let jobDetail =
-                        rankingDevDto[i].job != null
-                          ? rankingDevDto[i].job.split(',')
-                          : '';
-                      let careerDetail =
-                        rankingDevDto[i].career != null
-                          ? rankingDevDto[i].career.split(',')
-                          : '';
-                      return (
-                        <>
-                          <DeveloperCard
-                            i={i}
-                            a={a}
-                            navigate={navigate}
-                            rankingDevDto={rankingDevDto}
-                            allDevDto={allDevDto}
-                            jobDetail={jobDetail}
-                            careerDetail={careerDetail}
-                          ></DeveloperCard>
-                        </>
-                      );
-                    })}
-                  </div>
+
+                  {rankingDevDto.map((a, i) => {
+                    let jobDetail =
+                      rankingDevDto[i].job != null
+                        ? rankingDevDto[i].job.split(',')
+                        : '';
+                    let careerDetail =
+                      rankingDevDto[i].career != null
+                        ? rankingDevDto[i].career.split(',')
+                        : '';
+                    return (
+                      <>
+                        <DeveloperCard
+                          i={i}
+                          a={a}
+                          navigate={navigate}
+                          rankingDevDto={rankingDevDto}
+                          allDevDto={allDevDto}
+                          jobDetail={jobDetail}
+                          careerDetail={careerDetail}
+                        ></DeveloperCard>
+                      </>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -339,10 +331,7 @@ function App() {
         <Route path='/serach' element={<Serach />}></Route>
         <Route path='/login' element={<Login navigate={navigate} />}></Route>
         <Route path='/talk' element={<Talk />}></Route>
-        <Route
-          path='/SignUp'
-          element={<SignUp  />}
-        ></Route>
+        <Route path='/SignUp' element={<SignUp />}></Route>
       </Routes>
     </div>
   );
@@ -473,77 +462,118 @@ function ProjectCard(props) {
 function DeveloperCard(props) {
   return (
     <div
-      className='g-col-6 g-col-md-4 '
+      className='col-4 '
       style={{
-        border: '1px solid rgb(222,222,222)',
-        borderRadius: '5px',
-        width: '24%',
+        padding: '1%',
+        width: '25%',
       }}
     >
-      <div
-        className='col-div'
-        onClick={() => {
-          props.navigate(
-            `/ViewDeveloperDetail/${props.rankingDevDto[props.i].id}`
-          );
-        }}
-      >
-        <img
-          style={{ paddingTop: '3%' }}
-          className='col-div_developer'
-          src={`${process.env.PUBLIC_URL}/${
-            props.rankingDevDto[props.i].imgURL
-          }.jpg`}
-        ></img>
-      </div>
-      <div className='col-content_developer' style={{ textAlign: 'center' }}>
-        <p>{props.rankingDevDto[props.i].name}</p>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
-          <p>[주 능력] {props.jobDetail[0]}</p>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
-          <p style={{ textAlign: 'center' }}>[경력] {props.careerDetail[0]}</p>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            textAlign: 'start',
-          }}
-        >
-          <p>[부 능력] {props.jobDetail[1]}</p>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
-          <p style={{ textAlign: 'center' }}>[경력] {props.careerDetail[1]}</p>
-        </div>
-        <p>
-          <FontAwesomeIcon icon={farHeart} size='2x' />{' '}
-          {props.rankingDevDto[props.i].likeCount}
-        </p>
-      </div>
-      <div className='col-content_developer'>
-        <p>
-          참여중인 프로젝트 {props.rankingDevDto[props.i].projectCount}개
-          있습니다.
-        </p>
-        <button className='btn'>
-          <span> 1대1 대화 </span>
-        </button>
+      <div className='d-flex justify-content-around '>
+        <Card style={{ width: '18rem' }}>
+          <div
+            className='col-div '
+            style={{
+              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+            onClick={() => {
+              props.navigate(
+                `/ViewDeveloperDetail/${props.rankingDevDto[props.i].id}`
+              );
+            }}
+          >
+            <img
+              style={{
+                paddingTop: '3%',
+                cursor: 'pointer',
+                paddingLeft: '10%',
+                marginRight: '5%',
+              }}
+              src={`${process.env.PUBLIC_URL}/${
+                props.rankingDevDto[props.i].imgURL
+              }.jpg`}
+            ></img>
+            <Card.Text className='col-content' style={{ paddingTop: '3%' }}>
+              <span style={{ fontSize: '18px' }}>
+                {props.rankingDevDto[props.i].name}
+              </span>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <FontAwesomeIcon icon={faHeart} style={{ color: 'red' }} />{' '}
+                <div style={{ paddingLeft: '10%' }}>
+                  {props.rankingDevDto[props.i].likeCount}
+                </div>
+              </div>
+            </Card.Text>
+          </div>
+
+          <Card.Body>
+            <Card.Text className='col-content'>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingLeft: '3%',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                }}
+              >
+                [직무]
+                <div style={{ paddingLeft: '5%' }}>{props.jobDetail[0]}</div>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingLeft: '3%',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                }}
+              >
+                [전문분야]
+                <div style={{ paddingLeft: '5%' }}>{props.jobDetail[1]}</div>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingLeft: '3%',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                }}
+              >
+                [경력]
+                <div style={{ paddingLeft: '5%' }}>{props.careerDetail[0]}</div>
+              </div>
+            </Card.Text>
+            <Card.Text className='col-content'>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingLeft: '3%',
+                  fontSize: '12px',
+                  fontWeight: '400',
+                }}
+              >
+                참여중인 프로젝트 &nbsp;
+                <div style={{ fontWeight: '700', color: 'rgb(148,179,248)' }}>
+                  {props.rankingDevDto[props.i].projectCount}&nbsp;
+                </div>
+                개 있습니다.
+              </div>
+            </Card.Text>
+
+            <button className='btn'>
+              <span> 1대1 대화 </span>
+            </button>
+          </Card.Body>
+        </Card>
       </div>
     </div>
   );
@@ -551,10 +581,7 @@ function DeveloperCard(props) {
 
 function NavBar(props) {
   return (
-    <nav
-      className='navbar_main'
-      style={{ borderBottom: '1px solid rgb(222,222,222)' }}
-    >
+    <nav className='navbar_main'>
       <div className='navbar__logo'>
         <Nav.Link
           onClick={() => {

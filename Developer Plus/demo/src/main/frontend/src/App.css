@@ -195,6 +195,7 @@ button span {
 }
 .col-div_developer {
   cursor: pointer;
+  float: start;
 }
 .col-div {
   margin-right: 1%;
