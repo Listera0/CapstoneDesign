@@ -1,7 +1,11 @@
 import { useState, useRef } from 'react';
 import axios from 'axios';
 import CloseButton from 'react-bootstrap/CloseButton';
-function Login() {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faN } from '@fortawesome/free-solid-svg-icons';
+import { faComment } from '@fortawesome/free-solid-svg-icons';
+
+function Login(props) {
   const outside = useRef();
   const requestLogin = (_email, _password) => {
     axios
@@ -15,7 +19,7 @@ function Login() {
 
   let [modal, setModal] = useState(false);
   return (
-    <div>
+    <div style={{ backgroundColor: 'white' }}>
       <br></br>
 
       <header className='welcome-header'>
@@ -41,10 +45,106 @@ function Login() {
                 document.getElementById('password').value
               )
             }
+            style={{
+              backgroundColor: 'rgb(148,178,229)',
+              borderRadius: '5px',
+              paddingTop: '2%',
+              paddingBottom: '2%',
+              fontSize: '18px',
+            }}
             type='button'
             value='Sign In'
           ></input>
-          <button type='button'>카카오계정으로 로그인</button>
+
+          <div style={{}}>
+            <button
+              type='button'
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+                height: '8vh',
+                marginBottom: '3%',
+                borderRadius: '5px',
+                backgroundColor: '#04cf5c',
+                border: '1px solid rgba(222,222,222,0.2)',
+                borderRadius: '5px',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  width: '100%',
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faN}
+                  style={{
+                    color: 'white',
+                    fontSize: '20px',
+                    paddingLeft: '5%',
+                  }}
+                />
+
+                <div
+                  style={{
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    paddingLeft: '3%',
+                    color: 'white',
+                  }}
+                >
+                  네이버계정으로 로그인
+                </div>
+              </div>
+            </button>
+          </div>
+          <div style={{}}>
+            <button
+              type='button'
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+                height: '8vh',
+                marginBottom: '3%',
+                borderRadius: '5px',
+                backgroundColor: '#fae100',
+                border: '1px solid rgba(222,222,222,0.2)',
+                borderRadius: '5px',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  width: '100%',
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faComment}
+                  style={{
+                    fontSize: '20px',
+                    paddingLeft: '3%',
+                  }}
+                />
+
+                <div
+                  style={{
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    paddingLeft: '3%',
+                    fontWeight: '500',
+                  }}
+                >
+                  카카오계정으로 로그인
+                </div>
+              </div>
+            </button>
+          </div>
           <a
             style={{ cursor: 'pointer' }}
             onClick={() => {
@@ -55,7 +155,9 @@ function Login() {
           </a>
         </form>
       </div>
-      {modal ? <Modal modal={modal} setModal={setModal} /> : null}
+      {modal ? (
+        <Modal modal={modal} setModal={setModal} navigate={props.navigate} />
+      ) : null}
     </div>
   );
 }
@@ -81,7 +183,7 @@ function Modal(props) {
         left: '0',
         bottom: '0',
         right: '0',
-        background: 'rgba(0, 0, 0, 0.7)',
+        background: 'rgba(0, 0, 0, 0.5)',
         position: 'fixed',
         zIndex: '999',
       }}
@@ -96,37 +198,120 @@ function Modal(props) {
             flexDirection: 'column',
             transform: 'translate(-50%, -50%)',
             zIndex: '1000',
+            backgroundColor: 'white',
+            width: '30%',
+            height: '50vh',
+            borderRadius: '5px',
           }}
         >
           <div
-            style={{ textAlign: 'end' }}
+            style={{
+              textAlign: 'end',
+              paddingRight: '3%',
+              paddingTop: '2%',
+              fontSize: '20px',
+            }}
             onClick={() => props.setModal(false)}
           >
-            <CloseButton variant='white' />
+            <CloseButton />
           </div>
-          <h2 style={{ color: 'white' }}>회원가입</h2>
-          <input id='names' type='name' placeholder='Name' required></input>
-          <input id='emails' type='email' placeholder='Email' required></input>
-          <input
-            id='password2'
-            type='password'
-            placeholder='PassWord'
-            required
-          ></input>
+          <h2 style={{ color: 'black', marginTop: '1%' }}>회원가입</h2>
+          <div style={{}}>
+            <button
+              type='button'
+              style={{
+                width: '80%',
+                height: '8vh',
+                marginBottom: '3%',
+                marginTop: '1%',
+                backgroundColor: 'rgb(148,178,249)',
+                border: '1px solid rgba(222,222,222,0.2)',
+                borderRadius: '5px',
+              }}
+              onClick={() => {
+                props.navigate(`/SignUp`);
+              }}
+            >
+              Developer Plus로 가입
+            </button>
+            <div style={{}}>
+              <button
+                type='button'
+                style={{
+                  paddingLeft: '10%',
+                  width: '80%',
+                  height: '8vh',
+                  marginBottom: '3%',
+                  borderRadius: '5px',
+                  backgroundColor: '#04cf5c',
+                  border: '1px solid rgba(222,222,222,0.2)',
+                  borderRadius: '5px',
+                }}
+              >
+                <div style={{ display: 'flex' }}>
+                  <FontAwesomeIcon
+                    icon={faN}
+                    style={{
+                      color: 'white',
+                      fontSize: '20px',
+                      paddingLeft: '5%',
+                    }}
+                  />{' '}
+                  <div
+                    style={{
+                      alignItems: 'center',
+                      paddingLeft: '10%',
+                      color: 'white',
+                    }}
+                  >
+                    네이버계정으로 가입
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div style={{}}>
+              <button
+                type='button'
+                style={{
+                  paddingLeft: '10%',
+                  width: '80%',
+                  height: '8vh',
+                  marginBottom: '3%',
+                  borderRadius: '5px',
+                  backgroundColor: '#fae100',
+                  border: '1px solid rgba(222,222,222,0.2)',
+                  borderRadius: '5px',
+                }}
+              >
+                <div style={{ display: 'flex' }}>
+                  <FontAwesomeIcon
+                    icon={faComment}
+                    style={{
+                      fontSize: '20px',
+                      paddingLeft: '5%',
+                    }}
+                  />
 
-          <input
-            onClick={() =>
-              requestSignUp(
-                document.getElementById('name2').value,
-                document.getElementById('email2').value,
-                document.getElementById('password2').value
-              )
-            }
-            type='button'
-            value='Sign Up'
-          ></input>
-
-          <button type='button'>카카오계정으로 로그인</button>
+                  <div style={{ alignItems: 'center', paddingLeft: '10%' }}>
+                    카카오계정으로 가입
+                  </div>
+                </div>
+              </button>
+            </div>
+            <p
+              style={{
+                fontSize: '12px',
+                paddingLeft: '3%',
+                paddingRight: '3%',
+              }}
+            >
+              소셜 로그인으로 가입 시{' '}
+              <a style={{ color: 'red' }}>이용약관,&nbsp;</a>
+              <a style={{ color: 'red' }}>개인정보처리방침,&nbsp;</a>
+              <a style={{ color: 'red' }}> 전자금융거래약관</a>에 동의함으로
+              처리됩니다.
+            </p>
+          </div>
         </form>
       </div>
     </div>

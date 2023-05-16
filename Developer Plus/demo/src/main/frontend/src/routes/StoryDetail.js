@@ -1,6 +1,7 @@
 import { data, projectData, developerData } from '../data.js';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+
 function StoryDetail(props) {
   let [tab, setTab] = useState(0);
   let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()

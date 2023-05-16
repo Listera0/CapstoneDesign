@@ -1,13 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark as farBookmark } from '@fortawesome/free-regular-svg-icons';
-
 import { faCommentDots as farCommentDots } from '@fortawesome/free-regular-svg-icons';
-import { data } from '../data.js';
 import { useState, useEffect } from 'react';
 import { faEye as farEye } from '@fortawesome/free-regular-svg-icons';
 import axios from 'axios';
 import Card from 'react-bootstrap/Card';
-import Placeholder from 'react-bootstrap/Placeholder';
+import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
 function Story(props) {
   const [allStoryDto, setAllStoryDto] = useState(['']);
   {
@@ -31,12 +29,12 @@ function Story(props) {
       >
         {allStoryDto.map((a, i) => {
           return (
-            <CardExample
+            <StoryCard
               story={allStoryDto[i].id}
               i={i}
               allStoryDto={allStoryDto}
               navigate={props.navigate}
-            ></CardExample>
+            ></StoryCard>
           );
         })}
       </div>
@@ -55,44 +53,8 @@ function Story(props) {
     </div>
   );
 }
+
 function StoryCard(props) {
-  return (
-    <div
-      className='g-col-6 g-col-md-4 '
-      style={{
-        border: '1px solid rgb(222,222,222)',
-        padding: '0',
-        width: '33%',
-        margin: '0',
-      }}
-    >
-      <div
-        className='col-div '
-        style={{ overflow: 'hidden' }}
-        onClick={() => {
-          props.navigate(`/ViewStoryDetail/${props.allStoryDto[props.i].id}`);
-        }}
-      >
-        <img
-          className='col-img'
-          src={process.env.PUBLIC_URL + '/main' + (props.i + 1) + '.jpg'}
-          width='100vw'
-        ></img>
-      </div>
-      <div className='col-content'>
-        <span
-          onClick={() => {
-            props.navigate(`/ViewStoryDetail/${props.allStoryDto[props.i].id}`);
-          }}
-        >
-          {props.allStoryDto[props.i].title}
-        </span>
-        <p>{props.allStoryDto[props.i].name}</p>
-      </div>
-    </div>
-  );
-}
-function CardExample(props) {
   return (
     <div
       className='col-4 '
@@ -140,7 +102,8 @@ function CardExample(props) {
                 <FontAwesomeIcon icon={farCommentDots} size='2x' />
               </div>
               <div style={{ fontSize: '15px' }}>
-                👍 {props.allStoryDto[props.i].id}
+                <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />{' '}
+                {props.allStoryDto[props.i].id}
               </div>
               <div>
                 <FontAwesomeIcon icon={farBookmark} size='2x' />

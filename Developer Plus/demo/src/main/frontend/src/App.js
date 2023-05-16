@@ -1,19 +1,26 @@
 import { useState, useEffect } from 'react';
 import { Navbar, Container, Nav } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './App.css';
 import { data, projectData, developerData } from './data.js';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import StoryDetail from './routes/StoryDetail';
 import ViewDeveloperDetail from './routes/ViewDeveloperDetail';
 import FindDeveloperDetail from './routes/FindDeveloperDetail';
+import SignUp from './routes/SignUp';
 import Story from './routes/Story';
 import FindDeveloper from './routes/FindDeveloper';
 import ViewDeveloper from './routes/ViewDeveloper';
 import Profile from './routes/Profile';
 import Serach from './routes/Serach';
 import Talk from './routes/Talk';
+import Card from 'react-bootstrap/Card';
 import Carousel from 'react-bootstrap/Carousel';
 import { fab } from '@fortawesome/free-brands-svg-icons';
+import { faEye as farEye } from '@fortawesome/free-regular-svg-icons';
+import { faCommentDots as farCommentDots } from '@fortawesome/free-regular-svg-icons';
+import { faBookmark as farBookmark } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import axios from 'axios';
 import Login from './routes/Login';
@@ -28,16 +35,6 @@ function App() {
   let { id } = useParams();
   let [goodCount, changeGoodCount] = useState(false);
   let navigate = useNavigate(); //페이지 이동
-
-  const goToStoryDetail = () => {
-    navigate(`/ViewStoryDetail/${story}`);
-  };
-  const goToviewDeveloperDetail = () => {
-    navigate(`/ViewDeveloperDetail/${developer}`);
-  };
-  const goTofindDeveloperDetail = () => {
-    navigate('/FindDeveloperDetail');
-  };
 
   const [allDevDto, setAllDevDto] = useState(['']);
   {
@@ -192,10 +189,7 @@ function App() {
                   {rankingStoryDto.map((a, i) => {
                     return (
                       <StoryCard
-                        setStory={setStory}
-                        story={story}
                         i={i}
-                        goToStoryDetail={goToStoryDetail}
                         navigate={navigate}
                         rankingStoryDto={rankingStoryDto}
                         allStoryDto={allStoryDto}
@@ -226,8 +220,8 @@ function App() {
                         project={project}
                         i={i}
                         navigate={navigate}
-                        goTofindDeveloperDetail={goTofindDeveloperDetail}
                         rankingProjectDto={rankingProjectDto}
+                        allProjectDto={allProjectDto}
                       ></ProjectCard>
                     );
                   })}
@@ -269,11 +263,9 @@ function App() {
                       return (
                         <>
                           <DeveloperCard
-                            developer={developer}
                             i={i}
                             a={a}
                             navigate={navigate}
-                            goToviewDeveloperDetail={goToviewDeveloperDetail}
                             rankingDevDto={rankingDevDto}
                             allDevDto={allDevDto}
                             jobDetail={jobDetail}
@@ -308,25 +300,23 @@ function App() {
         ></Route>
         <Route
           path='/Story'
-          element={
-            <Story
-              story={story}
-              setStory={setStory}
-              allStoryDto={allStoryDto}
-              navigate={navigate}
-            />
-          }
+          element={<Story allStoryDto={allStoryDto} navigate={navigate} />}
         ></Route>
         <Route
           path='/FindDeveloper'
-          element={<FindDeveloper project={project} />}
+          element={
+            <FindDeveloper
+              project={project}
+              allProjectDto={allProjectDto}
+              navigate={navigate}
+            />
+          }
         ></Route>
         <Route
           path='/ViewDeveloper'
           element={
             <ViewDeveloper
               developer={developer}
-              goToviewDeveloperDetail={goToviewDeveloperDetail}
               goodCount={goodCount}
               changeGoodCount={changeGoodCount}
               setDeveloper={setDeveloper}
@@ -347,8 +337,12 @@ function App() {
           }
         ></Route>
         <Route path='/serach' element={<Serach />}></Route>
-        <Route path='/login' element={<Login />}></Route>
+        <Route path='/login' element={<Login navigate={navigate} />}></Route>
         <Route path='/talk' element={<Talk />}></Route>
+        <Route
+          path='/SignUp'
+          element={<SignUp  />}
+        ></Route>
       </Routes>
     </div>
   );
@@ -356,33 +350,122 @@ function App() {
 
 function StoryCard(props) {
   return (
-    <div className='col-md-4 '>
-      <div
-        className='col-div '
-        style={{ overflow: 'hidden' }}
-        onClick={() => {
-          props.navigate(
-            `/ViewStoryDetail/${props.rankingStoryDto[props.i].id}`
-          );
-        }}
-      >
-        <img
-          className='col-img'
-          src={process.env.PUBLIC_URL + '/main' + (props.i + 1) + '.jpg'}
-          width='100%'
-        ></img>
+    <div
+      className='col-4 '
+      style={{
+        padding: '1%',
+        width: '33%',
+      }}
+    >
+      <div className='d-flex justify-content-around '>
+        <Card style={{ width: '18rem' }}>
+          <div
+            className='col-div '
+            style={{ overflow: 'hidden' }}
+            onClick={() => {
+              props.navigate(
+                `/ViewStoryDetail/${props.rankingStoryDto[props.i].id}`
+              );
+            }}
+          >
+            <img
+              className='col-img'
+              src={process.env.PUBLIC_URL + '/main' + (props.i + 1) + '.jpg'}
+              width='100vw'
+            ></img>
+          </div>
+          <Card.Body>
+            <Card.Title className='col-content' style={{ fontSize: '13px' }}>
+              {props.rankingStoryDto[props.i].title}
+            </Card.Title>
+            <Card.Text className='col-content' style={{ fontSize: '10px' }}>
+              {props.rankingStoryDto[props.i].name}
+            </Card.Text>
+            <hr></hr>
+            <div
+              style={{
+                display: 'flex',
+                fontSize: '10px',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div>
+                <FontAwesomeIcon icon={farEye} size='2x' />
+              </div>
+              <div>
+                <FontAwesomeIcon icon={farCommentDots} size='2x' />
+              </div>
+              <div style={{ fontSize: '15px' }}>
+                <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />{' '}
+                {props.allStoryDto[props.i].id}
+              </div>
+              <div>
+                <FontAwesomeIcon icon={farBookmark} size='2x' />
+              </div>
+            </div>
+          </Card.Body>
+        </Card>
       </div>
-      <div className='col-content'>
-        <span
-          onClick={() => {
-            props.navigate(
-              `/ViewStoryDetail/${props.rankingStoryDto[props.i].id}`
-            );
-          }}
-        >
-          {props.rankingStoryDto[props.i].title}
-        </span>
-        <p>{props.rankingStoryDto[props.i].name}</p>
+    </div>
+  );
+}
+function ProjectCard(props) {
+  return (
+    <div
+      className='col-4 '
+      style={{
+        padding: '1%',
+        width: '33%',
+      }}
+    >
+      <div className='d-flex justify-content-around '>
+        <Card style={{ width: '18rem' }}>
+          <div
+            className='col-div '
+            style={{ overflow: 'hidden' }}
+            onClick={() => {
+              props.navigate(
+                `/ViewStoryDetail/${props.rankingProjectDto[props.i].id}`
+              );
+            }}
+          >
+            <img
+              className='col-img'
+              src={process.env.PUBLIC_URL + '/main' + (props.i + 1) + '.jpg'}
+              width='100vw'
+            ></img>
+          </div>
+          <Card.Body>
+            <Card.Title className='col-content' style={{ fontSize: '13px' }}>
+              {props.rankingProjectDto[props.i].title}
+            </Card.Title>
+            <Card.Text className='col-content' style={{ fontSize: '10px' }}>
+              {props.rankingProjectDto[props.i].name}
+            </Card.Text>
+            <hr></hr>
+            <div
+              style={{
+                display: 'flex',
+                fontSize: '10px',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div>
+                <FontAwesomeIcon icon={farEye} size='2x' />
+              </div>
+              <div>
+                <FontAwesomeIcon icon={farCommentDots} size='2x' />
+              </div>
+              <div style={{ fontSize: '15px' }}>
+                <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />{' '}
+                {props.allProjectDto[props.i].id}
+              </div>
+              <div>
+                <FontAwesomeIcon icon={farBookmark} size='2x' />
+              </div>
+            </div>
+          </Card.Body>
+        </Card>
       </div>
     </div>
   );
@@ -448,7 +531,10 @@ function DeveloperCard(props) {
         >
           <p style={{ textAlign: 'center' }}>[경력] {props.careerDetail[1]}</p>
         </div>
-        <p>👍 {props.rankingDevDto[props.i].likeCount}</p>
+        <p>
+          <FontAwesomeIcon icon={farHeart} size='2x' />{' '}
+          {props.rankingDevDto[props.i].likeCount}
+        </p>
       </div>
       <div className='col-content_developer'>
         <p>
@@ -458,34 +544,6 @@ function DeveloperCard(props) {
         <button className='btn'>
           <span> 1대1 대화 </span>
         </button>
-      </div>
-    </div>
-  );
-}
-function ProjectCard(props) {
-  return (
-    <div className='col-md-4 '>
-      <div className='col-div ' style={{ overflow: 'hidden' }}>
-        <img
-          onClick={() => {
-            props.navigate(
-              `/FindDeveloperDetail/${props.rankingProjectDto[props.i].id}`
-            );
-          }}
-          className='col-img'
-          src={process.env.PUBLIC_URL + '/main' + (props.i + 3) + '.jpg'}
-          width='100%'
-        ></img>
-      </div>
-      <div className='col-content'>
-        <span
-          onClick={() => {
-            props.goTofindDeveloperDetail();
-          }}
-        >
-          {props.rankingProjectDto[props.i].title}
-        </span>
-        <p>{props.rankingProjectDto[props.i].name}</p>
       </div>
     </div>
   );
@@ -567,6 +625,7 @@ function NavBar(props) {
     </nav>
   );
 }
+
 function Footer(props) {
   return (
     <footer style={{ backgroundColor: 'white' }}>

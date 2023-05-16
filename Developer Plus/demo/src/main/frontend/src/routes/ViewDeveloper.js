@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Nav } from 'react-bootstrap';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
+import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 function ViewDeveloper(props) {
   const [allDevDto, setAllDevDto] = useState(['']);
   {
@@ -156,7 +158,7 @@ function DeLike(props) {
             props.changeGoodCount(props.goodCount - 1);
           }}
         >
-          👍
+         <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />
         </span>
         {props.goodCount}
       </div>
@@ -172,7 +174,7 @@ function Like(props) {
             props.changeGoodCount(props.goodCount + 1);
           }}
         >
-          👍
+      <FontAwesomeIcon icon={farHeart} size='2x' />
         </span>
         {props.goodCount}
       </div>

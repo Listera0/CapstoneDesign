@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Nav } from 'react-bootstrap';
 import { icons2, jobs } from '../icons2.js';
 import axios from 'axios';
+import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
 
 function ViewDeveloperDetail(props) {
   // useEffect(()=>{}) 1. 재렌더링마다 코드를 실행하고 싶으면
