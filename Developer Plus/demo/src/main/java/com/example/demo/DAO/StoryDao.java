@@ -1,4 +1,4 @@
-package com.example.demo.DAO;
+package com.example.demo.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,19 +6,22 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+
+import com.example.demo.dto.*;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-
-import com.example.demo.DTO.*;
 
 
 @Repository
 public class StoryDao {
     
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    @Qualifier("DPTemplate")
+    JdbcTemplate DPJdbcTemplate;
 
     public List<StoryDto> getData(String id, String orderBy, String limit)
     {
@@ -33,7 +36,7 @@ public class StoryDao {
         if(limit != "")
             query += " limit " + limit;
 
-        return jdbcTemplate.query(query, 
+        return DPJdbcTemplate.query(query, 
 			new RowMapper<StoryDto>() 
             {
 				public StoryDto mapRow(ResultSet rs, int rowNum) throws SQLException 
@@ -53,7 +56,7 @@ public class StoryDao {
 
     public List<StoryDto> getDataAll()
     {
-        return jdbcTemplate.query("select * from project", 
+        return DPJdbcTemplate.query("select * from story", 
 			new RowMapper<StoryDto>() 
             {
 				public StoryDto mapRow(ResultSet rs, int rowNum) throws SQLException 
@@ -76,7 +79,7 @@ public class StoryDao {
         String query = "insert into story (id, title, name, content, imgURL, hashTag) values (?, ?, ?, ?, ?, ?)";
         try
         {
-            jdbcTemplate.update(query, dto.getId(), dto.getTitle(), dto.getName(), dto.getContent(), dto.getImgURL(), dto.getHashTag());
+            DPJdbcTemplate.update(query, dto.getId(), dto.getTitle(), dto.getName(), dto.getContent(), dto.getImgURL(), dto.getHashTag());
         }
         catch(DataAccessException  e)
         {

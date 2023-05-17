@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.DAO.*;
-import com.example.demo.DTO.*;
+
+import com.example.demo.dao.*;
+import com.example.demo.dto.*;
 
 @RestController
 public class MainController {

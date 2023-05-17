@@ -1,4 +1,4 @@
-package com.example.demo.DAO;
+package com.example.demo.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,13 +6,15 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+
+import com.example.demo.dto.*;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.lang.Nullable;
-
-import com.example.demo.DTO.*;
 
 class DevRowMapper implements RowMapper<DeveloperDto> {
 
@@ -45,7 +47,8 @@ class DevRowMapper implements RowMapper<DeveloperDto> {
 public class DeveloperDao {
     
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    @Qualifier("DPTemplate")
+    JdbcTemplate DPJdbcTemplate;
 
     public List<DeveloperDto> getData(String id, String orderBy, String limit)
     {
@@ -60,13 +63,13 @@ public class DeveloperDao {
         if(limit != "")
             query += " limit " + limit;
 
-        return jdbcTemplate.query(query, new DevRowMapper());
+        return DPJdbcTemplate.query(query, new DevRowMapper());
     }
 
     public List<DeveloperDto> getDataAll()
     {
         String query = "select * from developer";
-        return jdbcTemplate.query(query, new DevRowMapper());
+        return DPJdbcTemplate.query(query, new DevRowMapper());
     }
 
     public String insertToDatabase(DeveloperDto dto)
@@ -75,7 +78,7 @@ public class DeveloperDao {
                                         "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try
         {
-            jdbcTemplate.update(query, dto.getId(), dto.getPassword(), dto.getName(), dto.getJob(), dto.getCareer(), dto.getRegion(), dto.getProjectCount(), dto.getUrlGithub(), 
+            DPJdbcTemplate.update(query, dto.getId(), dto.getPassword(), dto.getName(), dto.getJob(), dto.getCareer(), dto.getRegion(), dto.getProjectCount(), dto.getUrlGithub(), 
                                         dto.getUrlInsta(), dto.getIntroduce(), dto.getSkill(), dto.getLikeCount(), dto.getEmail(), dto.getPhone(), dto.getImgURL());
         }
         catch(DataAccessException  e)
