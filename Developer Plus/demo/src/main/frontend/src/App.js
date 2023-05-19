@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Navbar, Container, Nav } from 'react-bootstrap';
+import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './App.css';
 import { data, projectData, developerData } from './data.js';
@@ -29,7 +29,6 @@ import { useParams } from 'react-router-dom';
 library.add(fab);
 
 function App() {
-  console.log(process.env.PUBLIC_URL);
   let [story, setStory] = useState(data);
   let [project, setProject] = useState(projectData);
   let [developer, setDeveloper] = useState(developerData);
@@ -37,6 +36,38 @@ function App() {
   let [goodCount, changeGoodCount] = useState(false);
   let navigate = useNavigate(); //페이지 이동
 
+  const [resultDto, setResultDto] = useState(['']);
+  const [view, setView] = useState(false);
+  const getDto = (location, _id, _orderBy, _limit) => {
+    axios
+      .post('/api/get' + location + 'Data', {
+        id: _id,
+        orderBy: _orderBy,
+        limit: _limit,
+      })
+      .then((response) => setResultDto(response.data))
+
+      .catch((error) => console.log(error));
+  };
+
+  const [isLogin, setIsLogin] = useState(false); //로그인 관리
+
+  useEffect(() => {
+    if (sessionStorage.getItem('id') === null) {
+      // sessionStorage 에 name 라는 key 값으로 저장된 값이 없다면
+    } else {
+      // sessionStorage 에 name 라는 key 값으로 저장된 값이 있다면
+      // 로그인 상태 변경
+      setIsLogin(true);
+      getDto('Dev', sessionStorage.getItem('id'), '', '');
+    }
+  });
+  const [session, setsession] = useState(sessionStorage.getItem('id'));
+  const handleClick = () => {
+    sessionStorage.removeItem('id');
+    setsession(null);
+    window.location.reload();
+  };
   const [allDevDto, setAllDevDto] = useState(['']);
   {
     useEffect(() => {
@@ -46,7 +77,6 @@ function App() {
         .catch((error) => console.log(error));
     }, []);
   }
-  console.log(allDevDto.urlGithub);
   const [allStoryDto, setAllStoryDto] = useState(['']);
   {
     useEffect(() => {
@@ -56,7 +86,6 @@ function App() {
         .catch((error) => console.log(error));
     }, []);
   }
-
   const [allProjectDto, setAllProjectDto] = useState(['']);
   {
     useEffect(() => {
@@ -105,20 +134,6 @@ function App() {
     }, []);
   }
 
-  const [resultDto, setResultDto] = useState(['']);
-
-  const getDto = (location, _id, _orderBy, _limit) => {
-    axios
-      .post('/api/get' + location + 'Data', {
-        id: _id,
-        orderBy: _orderBy,
-        limit: _limit,
-      })
-      .then((response) => setResultDto(response.data))
-      .catch((error) => console.log(error));
-    showDataList(resultDto);
-  };
-
   const insertDataToServer = (location, data) => {
     switch (location) {
       case 'Dev':
@@ -152,18 +167,29 @@ function App() {
   };
 
   return (
-    <div className='App '>
+    <div className='App ' style={{ margin: '0' }}>
       {/* {showDataList(allDevDto)} */}
       {/* {showDataList(allStoryDto)} */}
       {/* {showDataList(allProjectDto)} */}
       {/* {showDataList(rankingDevDto)} */}
       {/* {showDataList(rankingStoryDto)} */}
-      {/* {showDataList(rankingProjectDto)} */}
+      {showDataList(resultDto)}
       {/* <Routes>
         <Route path='/FindDeveloper' element={<Filiter />}></Route>
         <Route path='/ViewDeveloper' element={<Filiter />}></Route>
       </Routes> */}
-      <NavBar navigate={navigate}></NavBar>
+      <NavBar
+        navigate={navigate}
+        isLogin={isLogin}
+        setIsLogin={setIsLogin}
+        resultDto={resultDto}
+        setResultDto={setResultDto}
+        view={view}
+        setView={setView}
+        session={session}
+        setsession={setsession}
+        handleClick={handleClick}
+      ></NavBar>
       <Routes>
         <Route
           path='/'
@@ -386,7 +412,7 @@ function StoryCard(props) {
               </div>
               <div style={{ fontSize: '15px' }}>
                 <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />{' '}
-                {props.allStoryDto[props.i].id}
+                {props.rankingStoryDto[props.i].id}
               </div>
               <div>
                 <FontAwesomeIcon icon={farBookmark} size='2x' />
@@ -447,7 +473,7 @@ function ProjectCard(props) {
               </div>
               <div style={{ fontSize: '15px' }}>
                 <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />{' '}
-                {props.allProjectDto[props.i].id}
+                {props.rankingProjectDto[props.i].id}
               </div>
               <div>
                 <FontAwesomeIcon icon={farBookmark} size='2x' />
@@ -580,77 +606,182 @@ function DeveloperCard(props) {
 }
 
 function NavBar(props) {
-  return (
-    <nav className='navbar_main'>
-      <div className='navbar__logo'>
-        <Nav.Link
-          onClick={() => {
-            props.navigate('/');
-          }}
+  if (props.isLogin == false) {
+    return (
+      <nav
+        className='navbar_main'
+        style={{ paddingLeft: '0%', paddingRight: '5%' }}
+      >
+        <div className='navbar__logo navbar_main'>
+          <Nav.Link
+            onClick={() => {
+              props.navigate('/');
+            }}
+          >
+            Developer Plus
+          </Nav.Link>
+        </div>
+        <Nav style={{ textDecoration: 'none', color: 'black' }}>
+          <Nav.Link
+            onClick={() => {
+              props.navigate('/findDeveloper');
+            }}
+            style={{
+              textDecoration: 'none',
+              color: 'black',
+              fontWeight: '700',
+            }}
+          >
+            <span className='navbarmenu'> 프로젝트</span>
+          </Nav.Link>
+          <Nav.Link
+            onClick={() => {
+              props.navigate('/viewDeveloper');
+            }}
+            style={{
+              textDecoration: 'none',
+              color: 'black',
+              fontWeight: '700',
+            }}
+          >
+            <span className='navbarmenu'> 개발자</span>
+          </Nav.Link>
+          <Nav.Link
+            onClick={() => {
+              props.navigate('/story');
+            }}
+            style={{
+              textDecoration: 'none',
+              color: 'black',
+              fontWeight: '700',
+            }}
+          >
+            <span className='navbarmenu'> 스토리</span>
+          </Nav.Link>
+        </Nav>
+        <Nav style={{ textDecoration: 'none', color: 'black' }}>
+          <Nav.Link
+            onClick={() => {
+              props.navigate('/serach');
+            }}
+            style={{
+              textDecoration: 'none',
+              color: 'black',
+              fontWeight: '700',
+            }}
+          >
+            통합검색
+          </Nav.Link>
+          <Nav.Link
+            onClick={() => {
+              props.navigate('/Login');
+            }}
+            style={{
+              textDecoration: 'none',
+              color: 'black',
+              fontWeight: '700',
+            }}
+          >
+            로그인 | 회원가입
+          </Nav.Link>
+        </Nav>
+      </nav>
+    );
+  } else {
+    return (
+      <nav
+        className='navbar_main'
+        style={{ paddingLeft: '0%', paddingRight: '5%' }}
+      >
+        <div className='navbar__logo'>
+          <Nav.Link
+            onClick={() => {
+              props.navigate('/');
+            }}
+          >
+            Developer Plus
+          </Nav.Link>
+        </div>
+        <Nav
+          className='me-auto'
+          style={{ margin: '10%', textDecoration: 'none', color: 'black' }}
         >
-          Developer Plus
-        </Nav.Link>
-      </div>
-      <div className='navbarmenu'>
-        <ul>
-          <li>
-            <Nav.Link
-              onClick={() => {
-                props.navigate('/findDeveloper');
-              }}
-            >
-              프로젝트
-            </Nav.Link>
-          </li>
-          <li>
-            <Nav.Link
-              onClick={() => {
-                props.navigate('/viewDeveloper');
-              }}
-            >
-              개발자
-            </Nav.Link>
-          </li>
-          <li>
-            <Nav.Link
-              onClick={() => {
-                props.navigate('/story');
-              }}
-            >
-              스토리
-            </Nav.Link>
-          </li>
-          <li>
-            <Nav.Link
-              onClick={() => {
-                props.navigate('/serach');
-              }}
-            >
-              <span>통합검색</span>
-            </Nav.Link>
-          </li>
-          <li>
-            <Nav.Link
-              onClick={() => {
-                props.navigate(`/profile/0`);
-              }}
-            >
-              프로필
-            </Nav.Link>
-          </li>
-          <li>
-            <Nav.Link
-              onClick={() => {
-                props.navigate('/login');
-              }}
-            >
-              로그인|회원가입
-            </Nav.Link>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  );
+          <Nav.Link
+            onClick={() => {
+              props.navigate('/findDeveloper');
+            }}
+            style={{
+              textDecoration: 'none',
+              color: 'black',
+              fontWeight: '700',
+            }}
+          >
+            프로젝트
+          </Nav.Link>
+          <Nav.Link
+            onClick={() => {
+              props.navigate('/viewDeveloper');
+            }}
+            style={{
+              textDecoration: 'none',
+              color: 'black',
+              fontWeight: '700',
+            }}
+          >
+            개발자
+          </Nav.Link>
+          <Nav.Link
+            onClick={() => {
+              props.navigate('/story');
+            }}
+            style={{
+              textDecoration: 'none',
+              color: 'black',
+              fontWeight: '700',
+            }}
+          >
+            스토리
+          </Nav.Link>
+        </Nav>
+        <Nav style={{ textDecoration: 'none', color: 'black' }}>
+          <Nav.Link
+            onClick={() => {
+              props.navigate('/serach');
+            }}
+            style={{
+              textDecoration: 'none',
+              color: 'black',
+              fontWeight: '700',
+            }}
+          >
+            통합검색
+          </Nav.Link>
+          <Nav.Link
+            onClick={() => {
+              props.navigate(`/profile/${props.resultDto[0].id}`);
+            }}
+            style={{
+              textDecoration: 'none',
+              color: 'black',
+              fontWeight: '700',
+            }}
+          >
+            {props.resultDto[0].name}
+          </Nav.Link>
+          <Nav.Link
+            onClick={props.handleClick}
+            style={{
+              textDecoration: 'none',
+              color: 'black',
+              fontWeight: '700',
+            }}
+          >
+            로그아웃
+          </Nav.Link>
+        </Nav>
+      </nav>
+    );
+  }
 }
 
 function Footer(props) {

@@ -111,6 +111,7 @@ function MainTabContent(props) {
         <TabContent
           tab={props.tab}
           projectDetail={props.projectDetail}
+          
           icons2={props.icons2}
           i={props.i}
         />

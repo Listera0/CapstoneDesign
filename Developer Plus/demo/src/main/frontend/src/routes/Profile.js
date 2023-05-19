@@ -2,14 +2,35 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark } from '@fortawesome/free-solid-svg-icons';
 import { useParams } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import { icons2, jobs } from '../icons2.js';
+import axios from 'axios';
 function Profile(props) {
-  let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
-  let developerDetail = props.developer.find(function (x) {
-    return x.id == id;
-  });
+  let { id } = useParams();
+  const [userDetail, setUserDetail] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .post('/api/getDevData', {
+          id: id,
+          orderBy: '',
+          limit: '',
+        })
+        .then((response) => setUserDetail(response.data))
+        .catch((error) => console.log(error));
+    }, []);
+  }
+
+  let developerDetail = userDetail[0];
+
+  let skillDetail =
+    developerDetail.skill != null ? developerDetail.skill.split(',') : '';
+  let jobDetail =
+    developerDetail.job != null ? developerDetail.job.split(',') : '';
+
+  let careerDetail =
+    developerDetail.career != null ? developerDetail.career.split(',') : '';
   let [tab, setTab] = useState(0);
   let [maintab, setMainTab] = useState(0);
   return (
@@ -58,6 +79,9 @@ function Profile(props) {
             maintab={maintab}
             setTab={setTab}
             developerDetail={developerDetail}
+            jobDetail={jobDetail}
+            careerDetail={careerDetail}
+            skillDetail={skillDetail}
           ></MainTabContent>
         </div>
       </div>
@@ -100,7 +124,7 @@ function MainTabContent(props) {
                           Email
                         </span>
                         <span style={{ textAlign: 'start', fontSize: '15px' }}>
-                          qkaxhf8823@naver.com
+                          {props.developerDetail.email}
                         </span>
                       </p>
                     </li>
@@ -164,7 +188,13 @@ function MainTabContent(props) {
               </Nav.Link>
             </Nav.Item>
           </Nav>
-          <TabContent tab={props.tab} developerDetail={props.developerDetail} />
+          <TabContent
+            tab={props.tab}
+            developerDetail={props.developerDetail}
+            skillDetail={props.skillDetail}
+            jobDetail={props.jobDetail}
+            careerDetail={props.careerDetail}
+          />
         </div>
         <div className='col-lg-4 mb-4 mb-sm-5'>
           <div className='card card-style1 border-0'>
@@ -293,7 +323,7 @@ function TabContent(props) {
                 <span style={{ fontWeight: '600', marginRight: '10%' }}>
                   직무
                 </span>{' '}
-                {props.developerDetail.mainJob}
+                {props.jobDetail[0]}
               </p>
             </div>
             <div style={{ textAlign: 'start' }}>
@@ -307,7 +337,7 @@ function TabContent(props) {
                 <span style={{ fontWeight: '600', marginRight: '10%' }}>
                   경력
                 </span>{' '}
-                {props.developerDetail.career}
+                {props.careerDetail[0]}
               </p>
             </div>
             <div style={{ textAlign: 'start' }}>
@@ -345,7 +375,7 @@ function TabContent(props) {
                 <span style={{ fontWeight: '600', marginRight: '10%' }}>
                   직무
                 </span>{' '}
-                {props.developerDetail.subJob}
+                {props.jobDetail[1]}
               </p>
             </div>
             <div style={{ textAlign: 'start' }}>
@@ -359,7 +389,7 @@ function TabContent(props) {
                 <span style={{ fontWeight: '600', marginRight: '10%' }}>
                   경력
                 </span>{' '}
-                {props.developerDetail.career}
+                {props.careerDetail[1]}
               </p>
             </div>
           </div>
@@ -498,7 +528,7 @@ function TabContent(props) {
                       flexWrap: 'wrap',
                     }}
                   >
-                    {props.developerDetail.skill.map((ele, i) => {
+                    {props.skillDetail.map((ele, i) => {
                       return (
                         <Icons
                           key={i}

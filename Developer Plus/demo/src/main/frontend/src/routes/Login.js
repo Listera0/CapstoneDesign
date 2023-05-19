@@ -13,10 +13,16 @@ function Login(props) {
         email: _email,
         password: _password,
       })
-      .then((response) => alert(response.data['message']))
+      .then((response) => {
+        if (response.data['result'] == 'true') {
+          sessionStorage.setItem('id', response.data['id']);
+          props.navigate('/');
+        } else {
+          alert(response.data['message']);
+        }
+      })
       .catch((error) => console.log(error));
   };
-
   let [modal, setModal] = useState(false);
   return (
     <div style={{ backgroundColor: 'white' }}>
@@ -53,7 +59,7 @@ function Login(props) {
               fontSize: '18px',
             }}
             type='button'
-            value='Sign In'
+            value='Developer Plus 계정으로 로그인'
           ></input>
 
           <div style={{}}>

@@ -120,7 +120,7 @@ function SignUp(props) {
                   >
                     <span className='col-lg-8'>
                       <input
-                        type='email'
+                        type='text'
                         style={{
                           width: '70%',
                           height: '5vh',
@@ -207,7 +207,7 @@ function SignUp(props) {
                   >
                     <span className='col-lg-8'>
                       <input
-                        type='email'
+                        type='password'
                         style={{
                           width: '80%',
                           height: '5vh',
@@ -249,7 +249,7 @@ function SignUp(props) {
                   >
                     <span className='col-lg-12'>
                       <input
-                        type='email'
+                        type='text'
                         style={{
                           width: '80%',
                           height: '5vh',
@@ -405,28 +405,6 @@ function SignUp(props) {
                       ></input>
                     </span>
                   </div>
-                  <div
-                    className='col-lg-12 mb-4 mb-sm-5'
-                    style={{ textAlign: 'start' }}
-                  >
-                    <span>
-                      <FontAwesomeIcon icon={['fab', 'instagram']} size='2x' />
-                    </span>
-                    <span className='col-lg-8'>
-                      <input
-                        type='text'
-                        style={{
-                          width: '80%',
-                          height: '5vh',
-                          borderRadius: '5px',
-                          border: '1px solid rgb(222,222,222)',
-                          outline: 'none',
-                          marginLeft: '2%',
-                        }}
-                        placeholder={'Instagram'}
-                      ></input>
-                    </span>
-                  </div>
                 </li>
               </ul>
             </div>
@@ -459,24 +437,12 @@ function SelectBasicExample(props) {
         onChange={props.handleFirstSelectChange}
       >
         <option value=''>선택하세요</option>
-        <option value='option1'>프론트엔드개발자</option>
-        <option value='option2'>벡엔드개발자</option>
-        <option value='option3'>웹개발자</option>
-        <option value='option4'>앱개발자</option>
-        <option value='option5'>시스템 엔지니어</option>
-        <option value='option6'>네트워크 엔지니어</option>
-        <option value='option7'>DBA</option>
-        <option value='option8'>데이터 엔지니어</option>
-        <option value='option9'>데이터 사이언티스트</option>
-        <option value='option10'>보안 엔지니어</option>
-        <option value='option11'>소프트웨어 개발자</option>
-        <option value='option12'>게임 개발자</option>
-        <option value='option13'>하드웨어 개발자</option>
-        <option value='option14'>머신러닝 개발자</option>
-        <option value='option15'>블록체인 개발자</option>
-        <option value='option16'>클라우드엔지니어</option>
-        <option value='option17'>웹퍼블리셔</option>
-        <option value='option18'>QA</option>
+        <option value='option1'>기획</option>
+        <option value='option2'>디자인</option>
+        <option value='option3'>프론트엔드개발</option>
+        <option value='option4'>벡엔드개발</option>
+        <option value='option5'>사업</option>
+        <option value='option6'>기타</option>
       </Form.Select>
     </>
   );
@@ -491,177 +457,69 @@ function SelectTwo(props) {
       {props.firstSelectValue === 'option1' && (
         <>
           <option value='subOption1'>전체</option>
-          <option value='subOption2'>GUI</option>
-          <option value='subOption3'>반응형 웹</option>
-          <option value='subOption4'>인터페이스</option>
+          <option value='subOption2'>UX/UI기획</option>
+          <option value='subOption3'>게임기획</option>
+          <option value='subOption4'>프로젝트 매니저</option>
+          <option value='subOption5'>하드웨어(제품) 기획</option>
+          <option value='subOption6'>(기획)기타</option>
         </>
       )}
       {props.firstSelectValue === 'option2' && (
         <>
           <option value='subOption1'>전체</option>
-          <option value='subOption2'>서버관리</option>
-          <option value='subOption3'>SI개발</option>
-          <option value='subOption4'>클라이언트</option>
-          <option value='subOption5'>HTTP</option>
-          <option value='subOption6'>핀테크</option>
+          <option value='subOption2'>그래픽디자인</option>
+          <option value='subOption3'>UX/UI디자인</option>
+          <option value='subOption4'>3D디자인</option>
+          <option value='subOption5'>하드웨어(제품)디자인</option>
+          <option value='subOption6'>디자인(기타)</option>
         </>
       )}
       {props.firstSelectValue === 'option3' && (
         <>
           <option value='subOption1'>전체</option>
+          <option value='subOption2'>IOS</option>
+          <option value='subOption3'>안드로이드</option>
+          <option value='subOption4'>웹프론트엔드</option>
+          <option value='subOption5'>웹퍼블리셔</option>
+          <option value='subOption6'>크로스플랫폼</option>
+          <option value='subOption7'>임베디드SW</option>
         </>
       )}
       {props.firstSelectValue === 'option4' && (
         <>
           <option value='subOption1'>전체</option>
-          <option value='subOption2'>SI개발</option>
-          <option value='subOption3'>인터페이스</option>
-          <option value='subOption4'>증강현실</option>
-          <option value='subOption5'>가상현실</option>
-          <option value='subOption6'>핀테크</option>
-          <option value='subOption7'>메타버스</option>
-          <option value='subOption8'>챗봇</option>
-          <option value='subOption9'>음성인식</option>
-          <option value='subOption10'>암호화페</option>
+          <option value='subOption2'>웹서버</option>
+          <option value='subOption3'>블록체인</option>
+          <option value='subOption4'>AI</option>
+          <option value='subOption5'>DB/빅데이터/DS</option>
+          <option value='subOption6'>게임서버</option>
         </>
       )}
       {props.firstSelectValue === 'option5' && (
         <>
           <option value='subOption1'>전체</option>
-          <option value='subOption2'>시스템운영</option>
-          <option value='subOption3'>서버관리</option>
-          <option value='subOption4'>서버구축</option>
-          <option value='subOption5'>시스템설계</option>
-          <option value='subOption6'>시스템분석</option>
-          <option value='subOption7'>네트워크관리</option>
-          <option value='subOption8'>펌웨어</option>
-          <option value='subOption9'>SI개발</option>
+          <option value='subOption2'>사업기획</option>
+          <option value='subOption3'>마케팅</option>
+          <option value='subOption4'>재무/회계</option>
+          <option value='subOption5'>영업</option>
+          <option value='subOption6'>전략/컨설팅</option>
+          <option value='subOption7'>투자/고문</option>
+          <option value='subOption10'>사업(기타)</option>
         </>
       )}
       {props.firstSelectValue === 'option6' && (
         <>
-          <option value='subOption1'>전체</option>
-          <option value='subOption2'>시스템운영</option>
-          <option value='subOption3'>네트워크관리</option>
-          <option value='subOption4'>서버구축</option>
-        </>
-      )}
-      {props.firstSelectValue === 'option7' && (
-        <>
-          <option value='subOption1'>전체</option>
-          <option value='subOption2'>데이터관리</option>
-          <option value='subOption3'>데이터마이닝</option>
-          <option value='subOption4'>모델링</option>
-          <option value='subOption5'>DBMS</option>
-          <option value='subOption6'>DW모델러</option>
-          <option value='subOption7'>DB튜닝</option>
-          <option value='subOption8'>OLAP개발자</option>
-        </>
-      )}
-      {props.firstSelectValue === 'option8' && (
-        <>
-          <option value='subOption1'>전체</option>
-          <option value='subOption2'>빅데이터</option>
-          <option value='subOption3'>데이터파이프라인</option>
-          <option value='subOption4'>데이터레이크</option>
-          <option value='subOption5'>ETL</option>
-        </>
-      )}
-      {props.firstSelectValue === 'option9' && (
-        <>
-          <option value='subOption1'>전체</option>
-          <option value='subOption2'>데이터분석</option>
-          <option value='subOption3'>분석모델링</option>
-          <option value='subOption4'>데이터시각화</option>
-          <option value='subOption5'>BI</option>
-        </>
-      )}
-      {props.firstSelectValue === 'option10' && (
-        <>
-          <option value='subOption1'>전체</option>
-          <option value='subOption2'>정보보안</option>
-          <option value='subOption3'>방화벽</option>
-          <option value='subOption4'>보안관제</option>
-          <option value='subOption5'>네트워크관리</option>
-        </>
-      )}
-      {props.firstSelectValue === 'option11' && (
-        <>
-          <option value='subOption1'>전체</option>
-          <option value='subOption2'>SI개발</option>
-          <option value='subOption3'>시스템설계</option>
-          <option value='subOption4'>시스템분석</option>
-          <option value='subOption5'>클라이언트</option>
-          <option value='subOption6'>아키텍처</option>
-          <option value='subOption7'>정보보안</option>
-        </>
-      )}
-      {props.firstSelectValue === 'option12' && (
-        <>
-          <option value='subOption1'>전체</option>
-          <option value='subOption2'>MMORPG</option>
-          <option value='subOption3'>클라이언트</option>
-          <option value='subOption4'>모델링</option>
-          <option value='subOption5'>메타버스</option>
-          <option value='subOption6'>가상현실</option>
-          <option value='subOption7'>증강현실</option>
-        </>
-      )}
-      {props.firstSelectValue === 'option13' && (
-        <>
-          <option value='subOption1'>전체</option>
-          <option value='subOption2'>회로설계</option>
-          <option value='subOption3'>펌웨어</option>
-          <option value='subOption4'>시스템설계</option>
-          <option value='subOption5'>검증</option>
-          <option value='subOption6'>시스템분석</option>
-        </>
-      )}
-      {props.firstSelectValue === 'option14' && (
-        <>
-          <option value='subOption1'>전체</option>
-          <option value='subOption2'>인공지능</option>
-          <option value='subOption3'>딥러닝</option>
-          <option value='subOption4'>자연어처리</option>
-          <option value='subOption5'>모델링</option>
-          <option value='subOption6'>이미지프로세싱</option>
-          <option value='subOption7'>챗봇</option>
-          <option value='subOption8'>음성인식</option>
-        </>
-      )}
-      {props.firstSelectValue === 'option15' && (
-        <>
-          <option value='subOption1'>전체</option>
-          <option value='subOption2'>스마트컨트랙트</option>
-          <option value='subOption3'>Dapp</option>
-          <option value='subOption4'>암호화폐</option>
-          <option value='subOption5'>DID</option>
-        </>
-      )}
-      {props.firstSelectValue === 'option16' && (
-        <>
-          <option value='subOption1'>전체</option>
-          <option value='subOption2'>클라우드아키텍트</option>
-          <option value='subOption3'>클라우드개발자</option>
-          <option value='subOption4'>네트워크관리</option>
-          <option value='subOption5'>솔루션스아키텍트</option>
-        </>
-      )}
-      {props.firstSelectValue === 'option17' && (
-        <>
-          <option value='subOption1'>전체</option>
-          <option value='subOption2'>웹표준,웹접근성</option>
-          <option value='subOption3'>반응형웹</option>
-          <option value='subOption4'>웹마스터</option>
-          <option value='subOption5'>GUI</option>
-        </>
-      )}
-      {props.firstSelectValue === 'option18' && (
-        <>
-          <option value='subOption1'>전체</option>
-          <option value='subOption2'>검증</option>
-          <option value='subOption1'>테스터</option>
-          <option value='subOption1'>웹마스터</option>
+          <option value='option1'>전체</option>
+          <option value='option2'>DBA</option>
+          <option value='option3'>데이터 엔지니어</option>
+          <option value='option4'>데이터 사이언티스트</option>
+          <option value='option5'>보안 엔지니어</option>
+          <option value='option6'>소프트웨어 개발자</option>
+          <option value='option7'>게임 개발자</option>
+          <option value='option8'>하드웨어 개발자</option>
+          <option value='option9'>머신러닝 개발자</option>
+          <option value='option10'>클라우드엔지니어</option>
+          <option value='option11'>QA</option>
         </>
       )}
     </Form.Select>

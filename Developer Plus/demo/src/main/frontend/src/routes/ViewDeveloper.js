@@ -5,6 +5,8 @@ import { Nav } from 'react-bootstrap';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import Card from 'react-bootstrap/Card';
 function ViewDeveloper(props) {
   const [allDevDto, setAllDevDto] = useState(['']);
   {
@@ -59,91 +61,118 @@ function ViewDeveloper(props) {
 function DeveloperCard(props) {
   return (
     <div
-      className='g-col-6 g-col-md-4 '
+      className='col-4 '
       style={{
-        border: '1px solid rgb(222,222,222)',
-        borderRadius: '5px',
+        padding: '1%',
         width: '25%',
-        margin: '0',
       }}
     >
-      <div
-        className='col-12'
-        onClick={() => {
-          props.navigate(`/ViewDeveloperDetail/${props.allDevDto[props.i].id}`);
-        }}
-      >
-        <img
-          style={{ paddingTop: '3%' }}
-          className='col-div_developer'
-          src={`${process.env.PUBLIC_URL}/${
-            props.allDevDto[props.i].imgURL
-          }.jpg`}
-        ></img>
-      </div>
-      <div className='col-content_developer' style={{ textAlign: 'center' }}>
-        <p>{props.allDevDto[props.i].name}</p>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
-          <p>[주 능력] {props.jobDetail[0]}</p>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
-          <p style={{ textAlign: 'center' }}>[경력] {props.careerDetail[0]}</p>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            textAlign: 'start',
-          }}
-        >
-          <p>[부 능력] {props.jobDetail[1]}</p>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
-          <p style={{ textAlign: 'center' }}>[경력] {props.careerDetail[1]}</p>
-        </div>
-      </div>
-      <div className='col-content_developer'>
-        {props.goodCount ? (
-          <DeLike
-            developer={props.allDevDto[props.i].id}
-            i={props.i}
-            allDevDto={props.allDevDto}
-            goodCount={props.goodCount}
-            changeGoodCount={props.changeGoodCount}
-            navigate={props.navigate}
-          ></DeLike>
-        ) : (
-          <Like
-            developer={props.allDevDto[props.i].id}
-            i={props.i}
-            allDevDto={props.allDevDto}
-            goodCount={props.goodCount}
-            changeGoodCount={props.changeGoodCount}
-            navigate={props.navigate}
-          ></Like>
-        )}
+      <div className='d-flex justify-content-around '>
+        <Card style={{ width: '18rem' }}>
+          <div
+            className='col-div '
+            style={{
+              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+            onClick={() => {
+              props.navigate(
+                `/ViewDeveloperDetail/${props.allDevDto[props.i].id}`
+              );
+            }}
+          >
+            <img
+              style={{
+                paddingTop: '3%',
+                cursor: 'pointer',
+                paddingLeft: '10%',
+                marginRight: '5%',
+              }}
+              src={`${process.env.PUBLIC_URL}/${
+                props.allDevDto[props.i].imgURL
+              }.jpg`}
+            ></img>
+            <Card.Text className='col-content' style={{ paddingTop: '3%' }}>
+              <span style={{ fontSize: '18px' }}>
+                {props.allDevDto[props.i].name}
+              </span>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <FontAwesomeIcon icon={faHeart} style={{ color: 'red' }} />{' '}
+                <div style={{ paddingLeft: '10%' }}>
+                  {props.allDevDto[props.i].likeCount}
+                </div>
+              </div>
+            </Card.Text>
+          </div>
 
-        <p>
-          참여중인 프로젝트 {props.allDevDto[props.i].projectCount}개 있습니다.
-        </p>
-        <button className='btn'>
-          <span> 1대1 대화 </span>
-        </button>
+          <Card.Body>
+            <Card.Text className='col-content'>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingLeft: '3%',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                }}
+              >
+                [직무]
+                <div style={{ paddingLeft: '5%' }}>{props.jobDetail[0]}</div>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingLeft: '3%',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                }}
+              >
+                [전문분야]
+                <div style={{ paddingLeft: '5%' }}>{props.jobDetail[1]}</div>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingLeft: '3%',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                }}
+              >
+                [경력]
+                <div style={{ paddingLeft: '5%' }}>{props.careerDetail[0]}</div>
+              </div>
+            </Card.Text>
+            <Card.Text className='col-content'>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingLeft: '3%',
+                  fontSize: '12px',
+                  fontWeight: '400',
+                }}
+              >
+                참여중인 프로젝트 &nbsp;
+                <div style={{ fontWeight: '700', color: 'rgb(148,179,248)' }}>
+                  {props.allDevDto[props.i].projectCount}&nbsp;
+                </div>
+                개 있습니다.
+              </div>
+            </Card.Text>
+
+            <button className='btn'>
+              <span> 1대1 대화 </span>
+            </button>
+          </Card.Body>
+        </Card>
       </div>
     </div>
   );
@@ -158,7 +187,7 @@ function DeLike(props) {
             props.changeGoodCount(props.goodCount - 1);
           }}
         >
-         <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />
+          <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />
         </span>
         {props.goodCount}
       </div>
@@ -174,7 +203,7 @@ function Like(props) {
             props.changeGoodCount(props.goodCount + 1);
           }}
         >
-      <FontAwesomeIcon icon={farHeart} size='2x' />
+          <FontAwesomeIcon icon={farHeart} size='2x' />
         </span>
         {props.goodCount}
       </div>

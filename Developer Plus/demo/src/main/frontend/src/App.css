@@ -24,20 +24,33 @@
   z-index: 100;
   background-color: white;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   height: 10vh;
+  justify-content: space-between;
 }
-
+.navbarmenu2 {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  width: 100%;
+  align-items: center;
+  margin-left: 100%;
+  padding: 1%;
+}
+.navbarmenu2 span {
+  text-align: end;
+}
 .navbarmenu {
-  float: right;
+  float: center;
 }
 .navbarmenu ul {
   display: flex;
   justify-content: end;
   list-style: none;
-  padding-left: 0;
-  margin: 0;
+  width: 100%;
+  padding: 0;
+  align-items: center;
+  margin-left: 20%;
 }
 .navbarmenu li {
   padding: 8px 12px;
@@ -45,16 +58,9 @@
 
 @media screen and (max-width: 768px) {
   .navbar_main {
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
-  }
-  .navbarmenu {
-    width: 100%;
-  }
-  .navbarmenu ul {
-    justify-content: space-between;
-    font-size: 10px;
-    font-weight: 600;
   }
 }
 .container {
@@ -790,4 +796,32 @@ section {
   background-clip: border-box;
 
   border-radius: 0.2rem;
+}
+.nav_name:hover ~ .nav_dropbox {
+  display: block;
+}
+.nav_dropbox {
+  position: absolute;
+  flex-direction: column;
+
+  z-index: 1000;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+.nav_dropbox_content {
+  position: relative;
+}
+.nav_dropbox_content span {
+}
+.nav_dropbox_content:hover {
+  background-color: #999;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }
