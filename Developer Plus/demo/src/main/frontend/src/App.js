@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import { faN } from '@fortawesome/free-solid-svg-icons';
+import { faComment } from '@fortawesome/free-solid-svg-icons';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './App.css';
 import { data, projectData, developerData } from './data.js';
@@ -9,8 +13,10 @@ import ViewDeveloperDetail from './routes/ViewDeveloperDetail';
 import FindDeveloperDetail from './routes/FindDeveloperDetail';
 import SignUp from './routes/SignUp';
 import Story from './routes/Story';
+import Write from './routes/Write';
 import FindDeveloper from './routes/FindDeveloper';
 import ViewDeveloper from './routes/ViewDeveloper';
+import Footer from './components/Footer';
 import Profile from './routes/Profile';
 import Serach from './routes/Serach';
 import Talk from './routes/Talk';
@@ -26,8 +32,17 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import axios from 'axios';
 import Login from './routes/Login';
 import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
 library.add(fab);
-
+let MobileDeveloper = styled.div`
+  width: 25%;
+  @media screen and (max-width: 768px) {
+    disply: inline;
+    width: 120%;
+    overflow-x: scroll;
+    white-space: nowrap;
+  }
+`;
 function App() {
   let [story, setStory] = useState(data);
   let [project, setProject] = useState(projectData);
@@ -134,38 +149,21 @@ function App() {
     }, []);
   }
 
-  const insertDataToServer = (location, data) => {
-    switch (location) {
-      case 'Dev':
-        data.id = allDevDto.length + 1;
-        axios
-          .post('/api/insert' + location + 'Data', data)
-          .then((response) => console.log(response))
-          .catch((error) => console.log(error));
-        break;
-
-      case 'Story':
-        data.id = allStoryDto.length + 1;
-        axios
-          .post('/api/insert' + location + 'Data', data)
-          .then((response) => console.log(response))
-          .catch((error) => console.log(error));
-        break;
-
-      case 'Project':
-        data.id = allProjectDto.length + 1;
-        axios
-          .post('/api/insert' + location + 'Data', data)
-          .then((response) => console.log(response))
-          .catch((error) => console.log(error));
-        break;
-    }
+  const [likeBool, setLikeBool] = useState(false);
+  const likeInput = (_location, _userId, _targetId) => {
+    axios
+      .post('/api/likeInput', {
+        location: _location,
+        userId: _userId,
+        targetId: _targetId,
+      })
+      .then((response) => setLikeBool(response.data))
+      .catch((error) => console.log(error));
   };
-
   const showDataList = (list) => {
     console.log(list);
   };
-
+  let [modal, setModal] = useState(true);
   return (
     <div className='App ' style={{ margin: '0' }}>
       {/* {showDataList(allDevDto)} */}
@@ -190,6 +188,7 @@ function App() {
         setsession={setsession}
         handleClick={handleClick}
       ></NavBar>
+
       <Routes>
         <Route
           path='/'
@@ -289,14 +288,16 @@ function App() {
                           allDevDto={allDevDto}
                           jobDetail={jobDetail}
                           careerDetail={careerDetail}
+                          likeInput={likeInput}
+                          resultDto={resultDto}
+                          setLikeBool={setLikeBool}
+                          likeBool={likeBool}
                         ></DeveloperCard>
                       </>
                     );
                   })}
                 </div>
               </div>
-
-              <Footer navigate={navigate}></Footer>
             </>
           }
         ></Route>
@@ -358,7 +359,9 @@ function App() {
         <Route path='/login' element={<Login navigate={navigate} />}></Route>
         <Route path='/talk' element={<Talk />}></Route>
         <Route path='/SignUp' element={<SignUp />}></Route>
+        <Route path='/write' element={<Write />}></Route>
       </Routes>
+      <Footer navigate={navigate}></Footer>
     </div>
   );
 }
@@ -440,7 +443,7 @@ function ProjectCard(props) {
             style={{ overflow: 'hidden' }}
             onClick={() => {
               props.navigate(
-                `/ViewStoryDetail/${props.rankingProjectDto[props.i].id}`
+                `/FindDeveloperDetail/${props.rankingProjectDto[props.i].id}`
               );
             }}
           >
@@ -486,20 +489,17 @@ function ProjectCard(props) {
   );
 }
 function DeveloperCard(props) {
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(
+    props.rankingDevDto[props.i].likeCount
+  );
   return (
-    <div
-      className='col-4 '
-      style={{
-        padding: '1%',
-        width: '25%',
-      }}
-    >
-      <div className='d-flex justify-content-around '>
-        <Card style={{ width: '18rem' }}>
+    <MobileDeveloper>
+      <div className='d-flex justify-content-around ' style={{}}>
+        <Card style={{}}>
           <div
-            className='col-div '
+            className='col-div'
             style={{
-              overflow: 'hidden',
               display: 'flex',
               alignItems: 'center',
             }}
@@ -514,7 +514,7 @@ function DeveloperCard(props) {
                 paddingTop: '3%',
                 cursor: 'pointer',
                 paddingLeft: '10%',
-                marginRight: '5%',
+                marginRight: '15%',
               }}
               src={`${process.env.PUBLIC_URL}/${
                 props.rankingDevDto[props.i].imgURL
@@ -524,17 +524,6 @@ function DeveloperCard(props) {
               <span style={{ fontSize: '18px' }}>
                 {props.rankingDevDto[props.i].name}
               </span>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <FontAwesomeIcon icon={faHeart} style={{ color: 'red' }} />{' '}
-                <div style={{ paddingLeft: '10%' }}>
-                  {props.rankingDevDto[props.i].likeCount}
-                </div>
-              </div>
             </Card.Text>
           </div>
 
@@ -594,14 +583,51 @@ function DeveloperCard(props) {
                 개 있습니다.
               </div>
             </Card.Text>
-
-            <button className='btn'>
-              <span> 1대1 대화 </span>
-            </button>
+            <hr></hr>
+            <div
+              style={{
+                display: 'flex',
+                fontSize: '10px',
+                justifyContent: 'space-around',
+              }}
+            >
+              <div style={{ fontSize: '15px' }}>
+                <span
+                  style={{
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                  }}
+                >
+                  대화하기
+                </span>
+              </div>
+              <div style={{ fontSize: '15px' }}>
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  style={{
+                    fontSize: '20px',
+                    color: '#f1928e',
+                  }}
+                  onClick={() => {
+                    setLiked(!liked);
+                    setLikeCount(liked ? likeCount - 1 : likeCount + 1);
+                    props.likeInput(
+                      'developer',
+                      props.resultDto[0].id,
+                      props.rankingDevDto[props.i].id
+                    );
+                  }}
+                />{' '}
+                {likeCount}
+              </div>
+              <div>
+                <FontAwesomeIcon icon={farBookmark} size='2x' />
+              </div>
+            </div>
           </Card.Body>
         </Card>
       </div>
-    </div>
+    </MobileDeveloper>
   );
 }
 
@@ -609,265 +635,254 @@ function NavBar(props) {
   if (props.isLogin == false) {
     return (
       <nav
-        className='navbar_main'
-        style={{ paddingLeft: '0%', paddingRight: '5%' }}
+        className='navbar navbar-expand-lg bg-light '
+        style={{
+          padding: '1% 5%',
+          border: 'rgba(0,0,0,1)',
+        }}
       >
-        <div className='navbar__logo navbar_main'>
-          <Nav.Link
+        <div className='container-fluid'>
+          <a
+            class='navbar-brand'
             onClick={() => {
               props.navigate('/');
             }}
+            style={{ fontWeight: '700', cursor: 'pointer' }}
           >
             Developer Plus
-          </Nav.Link>
+          </a>
+          <button
+            class='navbar-toggler'
+            type='button'
+            data-bs-toggle='collapse'
+            data-bs-target='#navbarSupportedContent'
+            aria-controls='navbarSupportedContent'
+            aria-expanded='false'
+            aria-label='Toggle navigation'
+          >
+            <span class='navbar-toggler-icon'></span>
+          </button>
+          <div className='collapse navbar-collapse' id='navbarSupportedContent'>
+            <ul className='navbar-nav m-auto'>
+              <li
+                className='nav-item me-5'
+                onClick={() => {
+                  props.navigate('/findDeveloper');
+                }}
+                style={{
+                  color: 'black',
+                  fontWeight: '700',
+                  alignItems: 'center',
+                  cursor: 'pointer',
+                }}
+              >
+                프로젝트{' '}
+              </li>
+
+              <li
+                className='nav-item me-5'
+                onClick={() => {
+                  props.navigate('/viewDeveloper');
+                }}
+                style={{
+                  textDecoration: 'none',
+                  color: 'black',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                }}
+              >
+                개발자{' '}
+              </li>
+              <li
+                className='nav-item me-5'
+                onClick={() => {
+                  props.navigate('/story');
+                }}
+                style={{
+                  textDecoration: 'none',
+                  color: 'black',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                }}
+              >
+                스토리{' '}
+              </li>
+              <li
+                className='nav-item me-5 sub'
+                onClick={() => {
+                  props.navigate('/serach');
+                }}
+                style={{
+                  textDecoration: 'none',
+                  color: 'black',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                }}
+              >
+                통합검색{' '}
+              </li>
+            </ul>
+
+            <ul className='navbar-nav '>
+              <li
+                className='nav-item me-5'
+                onClick={() => {
+                  props.navigate('/Login');
+                }}
+                style={{
+                  textDecoration: 'none',
+                  color: 'white',
+                  fontWeight: '700',
+                  padding: '8px 15px',
+                  backgroundColor: 'black',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                }}
+              >
+                로그인 | 회원가입{' '}
+              </li>
+            </ul>
+          </div>
         </div>
-        <Nav style={{ textDecoration: 'none', color: 'black' }}>
-          <Nav.Link
-            onClick={() => {
-              props.navigate('/findDeveloper');
-            }}
-            style={{
-              textDecoration: 'none',
-              color: 'black',
-              fontWeight: '700',
-            }}
-          >
-            <span className='navbarmenu'> 프로젝트</span>
-          </Nav.Link>
-          <Nav.Link
-            onClick={() => {
-              props.navigate('/viewDeveloper');
-            }}
-            style={{
-              textDecoration: 'none',
-              color: 'black',
-              fontWeight: '700',
-            }}
-          >
-            <span className='navbarmenu'> 개발자</span>
-          </Nav.Link>
-          <Nav.Link
-            onClick={() => {
-              props.navigate('/story');
-            }}
-            style={{
-              textDecoration: 'none',
-              color: 'black',
-              fontWeight: '700',
-            }}
-          >
-            <span className='navbarmenu'> 스토리</span>
-          </Nav.Link>
-        </Nav>
-        <Nav style={{ textDecoration: 'none', color: 'black' }}>
-          <Nav.Link
-            onClick={() => {
-              props.navigate('/serach');
-            }}
-            style={{
-              textDecoration: 'none',
-              color: 'black',
-              fontWeight: '700',
-            }}
-          >
-            통합검색
-          </Nav.Link>
-          <Nav.Link
-            onClick={() => {
-              props.navigate('/Login');
-            }}
-            style={{
-              textDecoration: 'none',
-              color: 'black',
-              fontWeight: '700',
-            }}
-          >
-            로그인 | 회원가입
-          </Nav.Link>
-        </Nav>
       </nav>
     );
   } else {
     return (
       <nav
-        className='navbar_main'
-        style={{ paddingLeft: '0%', paddingRight: '5%' }}
+        className='navbar navbar-expand-lg bg-light '
+        style={{
+          padding: '1% 5%',
+          border: 'rgba(0,0,0,1)',
+        }}
       >
-        <div className='navbar__logo'>
-          <Nav.Link
+        <div className='container-fluid'>
+          <a
+            class='navbar-brand'
             onClick={() => {
               props.navigate('/');
             }}
           >
             Developer Plus
-          </Nav.Link>
-        </div>
-        <Nav
-          className='me-auto'
-          style={{ margin: '10%', textDecoration: 'none', color: 'black' }}
-        >
-          <Nav.Link
-            onClick={() => {
-              props.navigate('/findDeveloper');
-            }}
-            style={{
-              textDecoration: 'none',
-              color: 'black',
-              fontWeight: '700',
-            }}
+          </a>
+          <button
+            class='navbar-toggler'
+            type='button'
+            data-bs-toggle='collapse'
+            data-bs-target='#navbarSupportedContent'
+            aria-controls='navbarSupportedContent'
+            aria-expanded='false'
+            aria-label='Toggle navigation'
           >
-            프로젝트
-          </Nav.Link>
-          <Nav.Link
-            onClick={() => {
-              props.navigate('/viewDeveloper');
-            }}
-            style={{
-              textDecoration: 'none',
-              color: 'black',
-              fontWeight: '700',
-            }}
-          >
-            개발자
-          </Nav.Link>
-          <Nav.Link
-            onClick={() => {
-              props.navigate('/story');
-            }}
-            style={{
-              textDecoration: 'none',
-              color: 'black',
-              fontWeight: '700',
-            }}
-          >
-            스토리
-          </Nav.Link>
-        </Nav>
-        <Nav style={{ textDecoration: 'none', color: 'black' }}>
-          <Nav.Link
-            onClick={() => {
-              props.navigate('/serach');
-            }}
-            style={{
-              textDecoration: 'none',
-              color: 'black',
-              fontWeight: '700',
-            }}
-          >
-            통합검색
-          </Nav.Link>
-          <Nav.Link
-            onClick={() => {
-              props.navigate(`/profile/${props.resultDto[0].id}`);
-            }}
-            style={{
-              textDecoration: 'none',
-              color: 'black',
-              fontWeight: '700',
-            }}
-          >
-            {props.resultDto[0].name}
-          </Nav.Link>
-          <Nav.Link
-            onClick={props.handleClick}
-            style={{
-              textDecoration: 'none',
-              color: 'black',
-              fontWeight: '700',
-            }}
-          >
-            로그아웃
-          </Nav.Link>
-        </Nav>
-      </nav>
-    );
-  }
-}
+            <span class='navbar-toggler-icon'></span>
+          </button>
+          <div className='collapse navbar-collapse' id='navbarSupportedContent'>
+            <ul className='navbar-nav m-auto'>
+              <li
+                className='nav-item me-5'
+                onClick={() => {
+                  props.navigate('/findDeveloper');
+                }}
+                style={{
+                  color: 'black',
+                  fontWeight: '700',
+                  alignItems: 'center',
+                  cursor: 'pointer',
+                }}
+              >
+                프로젝트{' '}
+              </li>
 
-function Footer(props) {
-  return (
-    <footer style={{ backgroundColor: 'white' }}>
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div style={{ padding: '8px 12px' }}>
-            <p style={{ textDecoration: 'none', color: 'black' }}>
-              Developer Plus
-            </p>
-          </div>
-          <div style={{ display: 'flex', margin: '0', paddingRight: '1%' }}>
-            <ul
-              style={{
-                listStyle: 'none',
-                display: 'flex',
-                margin: '0',
-                padding: '0',
-              }}
-            >
-              <li style={{ padding: '8px 12px' }}>
-                <a
-                  onClick={() => {
-                    props.navigate('/viewDeveloper');
-                  }}
-                  style={{ cursor: 'pointer' }}
-                >
-                  개발자
-                </a>
+              <li
+                className='nav-item me-5'
+                onClick={() => {
+                  props.navigate('/viewDeveloper');
+                }}
+                style={{
+                  textDecoration: 'none',
+                  color: 'black',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                }}
+              >
+                개발자{' '}
               </li>
-              <li style={{ padding: '8px 12px' }}>
-                <a
-                  onClick={() => {
-                    props.navigate('/viewDeveloper');
-                  }}
-                  style={{ cursor: 'pointer' }}
-                >
-                  프로젝트
-                </a>
+              <li
+                className='nav-item me-5'
+                onClick={() => {
+                  props.navigate('/story');
+                }}
+                style={{
+                  textDecoration: 'none',
+                  color: 'black',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                }}
+              >
+                스토리{' '}
               </li>
-              <li style={{ padding: '8px 12px' }}>
-                <a
-                  onClick={() => {
-                    props.navigate('/viewDeveloper');
-                  }}
-                  style={{ cursor: 'pointer' }}
-                >
-                  스토리
-                </a>
+              <li
+                className='nav-item me-5 sub'
+                onClick={() => {
+                  props.navigate('/serach');
+                }}
+                style={{
+                  textDecoration: 'none',
+                  color: 'black',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                }}
+              >
+                통합검색{' '}
+              </li>
+            </ul>
+
+            <ul className='navbar-nav m-auto'>
+              <li
+                className='nav-item me-5 sub'
+                onClick={() => {
+                  props.navigate(`/write`);
+                }}
+                style={{
+                  textDecoration: 'none',
+                  color: 'black',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                }}
+              >
+                글작성하기
+              </li>
+              <li
+                className='nav-item me-5 sub'
+                onClick={() => {
+                  props.navigate(`/profile/${props.resultDto[0].id}`);
+                }}
+                style={{
+                  textDecoration: 'none',
+                  color: 'black',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                }}
+              >
+                {props.resultDto[0].name}
+              </li>
+              <li
+                className='nav-item me-5 sub'
+                onClick={props.handleClick}
+                style={{
+                  textDecoration: 'none',
+                  color: 'black',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                }}
+              >
+                로그아웃
               </li>
             </ul>
           </div>
         </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <ul style={{ listStyle: 'none' }}>
-            <li style={{ fontSize: '10px' }}>
-              {' '}
-              <p>(주)Developer Plus | 대표이사 박용호(qkaxhf8823@naver.com)</p>
-            </li>
-            <li style={{ fontSize: '10px' }}>
-              {' '}
-              <p>
-                서울특별시 중랑구 용마산로90길 28 (주)Developer Plus |
-                02-0000-0000
-              </p>
-            </li>
-
-            <li style={{ fontSize: '10px' }}>
-              <p>
-                사업자등록번호 679-87-00428 | 통신판매업신고번호
-                제2018-서울강남-02246호(사업자정보확인) |
-                유료직업소개사업등록번호: (국내)제2020-3220237-14-5-00014호
-              </p>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </footer>
-  );
+      </nav>
+    );
+  }
 }
 
 function CarouselCard() {
@@ -888,4 +903,5 @@ function CarouselCard() {
     </Carousel>
   );
 }
+
 export default App;

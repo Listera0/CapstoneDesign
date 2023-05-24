@@ -4,7 +4,8 @@ import CloseButton from 'react-bootstrap/CloseButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faN } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
-
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 function Login(props) {
   const outside = useRef();
   const requestLogin = (_email, _password) => {
@@ -25,44 +26,82 @@ function Login(props) {
   };
   let [modal, setModal] = useState(false);
   return (
-    <div style={{ backgroundColor: 'white' }}>
-      <br></br>
-
-      <header className='welcome-header'>
-        <h1 className='welcome-header__title'>Welcome to Developer Plus</h1>
-        <p className='welcome-header__text'>
-          If you have a Developer Plus Account, login with your Email.
-        </p>
-      </header>
-      <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-        <form action='/home.html' method='POST' className='login-form'>
-          <input id='email' type='email' placeholder='Email' required></input>
-          <input
-            id='password'
-            type='password'
-            placeholder='Password'
-            required
-          ></input>
-
-          <input
-            onClick={() =>
-              requestLogin(
-                document.getElementById('email').value,
-                document.getElementById('password').value
-              )
-            }
+    <div
+      className='modal show'
+      style={{ display: 'block', position: 'initial' }}
+    >
+      <Modal.Dialog>
+        <Modal.Header style={{ borderBottom: 'rgb(222,222,222)' }}>
+          <h2 style={{ fontWeight: '700' }}>로그인</h2>
+        </Modal.Header>
+        <div>
+          <p
             style={{
-              backgroundColor: 'rgb(148,178,229)',
-              borderRadius: '5px',
-              paddingTop: '2%',
-              paddingBottom: '2%',
-              fontSize: '18px',
+              fontWeight: '400',
+              fontSize: '13px',
+              color: 'gray',
+              textAlign: 'start',
+              fontFamily: 'Pretendard',
+              fontStyle: 'normal',
+              padding: '0rem 1rem',
+              lineHeight: '18px',
             }}
-            type='button'
-            value='Developer Plus 계정으로 로그인'
-          ></input>
+          >
+            팀빌딩을 원한다면 언제든지!<br></br> 직군에 관계없이 누구든지!
+          </p>
+        </div>
+        <Modal.Body>
+          <form action='/' method='POST'>
+            <input
+              id='email'
+              type='email'
+              placeholder='Email'
+              required
+              style={{
+                width: '100%',
+                border: 'none',
+                borderBottom: '1px solid rgba(0, 0, 0, 0.2)',
+                padding: '8px 0px',
+                marginBottom: '5%',
+              }}
+            ></input>
+            <input
+              id='password'
+              type='password'
+              placeholder='Password'
+              required
+              style={{
+                width: '100%',
+                border: 'none',
+                borderBottom: '1px solid rgba(0, 0, 0, 0.2)',
+                padding: '8px 0px',
+                marginBottom: '5%',
+              }}
+            ></input>
 
-          <div style={{}}>
+            <button
+              onClick={(e) => {
+                e.preventDefault(); // 기본 동작인 폼 제출을 막음
+                requestLogin(
+                  document.getElementById('email').value,
+                  document.getElementById('password').value
+                );
+              }}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+                height: '7vh',
+                marginBottom: '3%',
+                borderRadius: '5px',
+                backgroundColor: 'rgb(148,179,249)',
+                border: '1px solid rgba(222,222,222,0.2)',
+                borderRadius: '5px',
+              }}
+            >
+              Developer Plus 계정으로 로그인
+            </button>
             <button
               type='button'
               style={{
@@ -70,7 +109,7 @@ function Login(props) {
                 justifyContent: 'center',
                 alignItems: 'center',
                 width: '100%',
-                height: '8vh',
+                height: '7vh',
                 marginBottom: '3%',
                 borderRadius: '5px',
                 backgroundColor: '#04cf5c',
@@ -106,69 +145,75 @@ function Login(props) {
                 </div>
               </div>
             </button>
-          </div>
-          <div style={{}}>
-            <button
-              type='button'
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: '100%',
-                height: '8vh',
-                marginBottom: '3%',
-                borderRadius: '5px',
-                backgroundColor: '#fae100',
-                border: '1px solid rgba(222,222,222,0.2)',
-                borderRadius: '5px',
-              }}
-            >
-              <div
+            <div style={{}}>
+              <button
+                type='button'
                 style={{
                   display: 'flex',
                   justifyContent: 'center',
+                  alignItems: 'center',
                   width: '100%',
+                  height: '8vh',
+                  marginBottom: '3%',
+                  borderRadius: '5px',
+                  backgroundColor: '#fae100',
+                  border: '1px solid rgba(222,222,222,0.2)',
+                  borderRadius: '5px',
                 }}
               >
-                <FontAwesomeIcon
-                  icon={faComment}
-                  style={{
-                    fontSize: '20px',
-                    paddingLeft: '3%',
-                  }}
-                />
-
                 <div
                   style={{
-                    alignItems: 'center',
-                    textAlign: 'center',
-                    paddingLeft: '3%',
-                    fontWeight: '500',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    width: '100%',
                   }}
                 >
-                  카카오계정으로 로그인
+                  <FontAwesomeIcon
+                    icon={faComment}
+                    style={{
+                      fontSize: '20px',
+                      paddingLeft: '3%',
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      alignItems: 'center',
+                      textAlign: 'center',
+                      paddingLeft: '3%',
+                      fontWeight: '500',
+                    }}
+                  >
+                    카카오계정으로 로그인
+                  </div>
                 </div>
-              </div>
-            </button>
-          </div>
-          <a
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              setModal(true);
-            }}
-          >
-            Developer Plus Sign Up
-          </a>
-        </form>
-      </div>
+              </button>
+            </div>
+            <a
+              className='signuphover'
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                setModal(true);
+              }}
+            >
+              Developer Plus Sign Up
+            </a>
+          </form>
+        </Modal.Body>
+      </Modal.Dialog>
+
       {modal ? (
-        <Modal modal={modal} setModal={setModal} navigate={props.navigate} />
+        <SignUpModal
+          modal={modal}
+          setModal={setModal}
+          navigate={props.navigate}
+        />
       ) : null}
     </div>
   );
 }
 
-function Modal(props) {
+function SignUpModal(props) {
   const requestSignUp = (_name, _email, _password) => {
     axios
       .post('/api/requestSignUp', {
@@ -194,59 +239,70 @@ function Modal(props) {
         zIndex: '999',
       }}
     >
-      <div>
-        <form
-          style={{
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            display: 'flex',
-            flexDirection: 'column',
-            transform: 'translate(-50%, -50%)',
-            zIndex: '1000',
-            backgroundColor: 'white',
-            width: '30%',
-            height: '50vh',
-            borderRadius: '5px',
-          }}
-        >
-          <div
-            style={{
-              textAlign: 'end',
-              paddingRight: '3%',
-              paddingTop: '2%',
-              fontSize: '20px',
-            }}
-            onClick={() => props.setModal(false)}
-          >
-            <CloseButton />
-          </div>
-          <h2 style={{ color: 'black', marginTop: '1%' }}>회원가입</h2>
-          <div style={{}}>
-            <button
-              type='button'
+      <div
+        className='modal show'
+        style={{ display: 'block', position: 'initial' }}
+      >
+        <Modal.Dialog>
+          <Modal.Header style={{ borderBottom: 'rgb(222,222,222)' }}>
+            <h2 style={{ fontWeight: '700' }}>회원가입</h2>
+            <div
               style={{
-                width: '80%',
-                height: '8vh',
-                marginBottom: '3%',
-                marginTop: '1%',
-                backgroundColor: 'rgb(148,178,249)',
-                border: '1px solid rgba(222,222,222,0.2)',
-                borderRadius: '5px',
+                textAlign: 'end',
+                paddingRight: '3%',
+                paddingTop: '2%',
+                fontSize: '20px',
               }}
-              onClick={() => {
-                props.navigate(`/SignUp`);
+              onClick={() => props.setModal(false)}
+            >
+              <CloseButton />
+            </div>
+          </Modal.Header>
+          <div>
+            <p
+              style={{
+                fontWeight: '400',
+                fontSize: '13px',
+                color: 'gray',
+                textAlign: 'start',
+                fontFamily: 'Pretendard',
+                fontStyle: 'normal',
+                padding: '0rem 1rem',
+                lineHeight: '18px',
               }}
             >
-              Developer Plus로 가입
-            </button>
-            <div style={{}}>
+              팀빌딩을 원한다면 언제든지!<br></br> 직군에 관계없이 누구든지!
+            </p>
+          </div>
+          <Modal.Body>
+            <form>
+              <button
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '100%',
+                  height: '7vh',
+                  marginBottom: '3%',
+                  borderRadius: '5px',
+                  backgroundColor: 'rgb(148,179,249)',
+                  border: '1px solid rgba(222,222,222,0.2)',
+                  borderRadius: '5px',
+                }}
+                onClick={() => {
+                  props.navigate(`/SignUp`);
+                }}
+              >
+                Developer Plus로 가입
+              </button>
               <button
                 type='button'
                 style={{
-                  paddingLeft: '10%',
-                  width: '80%',
-                  height: '8vh',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '100%',
+                  height: '7vh',
                   marginBottom: '3%',
                   borderRadius: '5px',
                   backgroundColor: '#04cf5c',
@@ -254,7 +310,13 @@ function Modal(props) {
                   borderRadius: '5px',
                 }}
               >
-                <div style={{ display: 'flex' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    width: '100%',
+                  }}
+                >
                   <FontAwesomeIcon
                     icon={faN}
                     style={{
@@ -262,11 +324,13 @@ function Modal(props) {
                       fontSize: '20px',
                       paddingLeft: '5%',
                     }}
-                  />{' '}
+                  />
+
                   <div
                     style={{
                       alignItems: 'center',
-                      paddingLeft: '10%',
+                      textAlign: 'center',
+                      paddingLeft: '3%',
                       color: 'white',
                     }}
                   >
@@ -274,52 +338,88 @@ function Modal(props) {
                   </div>
                 </div>
               </button>
-            </div>
-            <div style={{}}>
-              <button
-                type='button'
-                style={{
-                  paddingLeft: '10%',
-                  width: '80%',
-                  height: '8vh',
-                  marginBottom: '3%',
-                  borderRadius: '5px',
-                  backgroundColor: '#fae100',
-                  border: '1px solid rgba(222,222,222,0.2)',
-                  borderRadius: '5px',
-                }}
-              >
-                <div style={{ display: 'flex' }}>
-                  <FontAwesomeIcon
-                    icon={faComment}
+              <div style={{}}>
+                <button
+                  type='button'
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '8vh',
+                    marginBottom: '3%',
+                    borderRadius: '5px',
+                    backgroundColor: '#fae100',
+                    border: '1px solid rgba(222,222,222,0.2)',
+                    borderRadius: '5px',
+                  }}
+                >
+                  <div
                     style={{
-                      fontSize: '20px',
-                      paddingLeft: '5%',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      width: '100%',
                     }}
-                  />
+                  >
+                    <FontAwesomeIcon
+                      icon={faComment}
+                      style={{
+                        fontSize: '20px',
+                        paddingLeft: '3%',
+                      }}
+                    />
 
-                  <div style={{ alignItems: 'center', paddingLeft: '10%' }}>
-                    카카오계정으로 가입
+                    <div
+                      style={{
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        paddingLeft: '3%',
+                        fontWeight: '500',
+                      }}
+                    >
+                      카카오계정으로 가입
+                    </div>
                   </div>
-                </div>
-              </button>
-            </div>
-            <p
-              style={{
-                fontSize: '12px',
-                paddingLeft: '3%',
-                paddingRight: '3%',
-              }}
-            >
-              소셜 로그인으로 가입 시{' '}
-              <a style={{ color: 'red' }}>이용약관,&nbsp;</a>
-              <a style={{ color: 'red' }}>개인정보처리방침,&nbsp;</a>
-              <a style={{ color: 'red' }}> 전자금융거래약관</a>에 동의함으로
-              처리됩니다.
-            </p>
-          </div>
-        </form>
+                </button>
+              </div>
+            </form>
+          </Modal.Body>
+          <p
+            style={{
+              fontSize: '12px',
+              paddingLeft: '3%',
+              paddingRight: '3%',
+            }}
+          >
+            소셜 로그인으로 가입 시{' '}
+            <a style={{ color: 'red' }}>이용약관,&nbsp;</a>
+            <a style={{ color: 'red' }}>개인정보처리방침,&nbsp;</a>
+            <a style={{ color: 'red' }}> 전자금융거래약관</a>에 동의함으로
+            처리됩니다.
+          </p>
+          <a
+            className='signuphover'
+            style={{
+              cursor: 'pointer',
+              marginBottom: '3%',
+              fontWeight: '400',
+              fontSize: '13px',
+              color: 'gray',
+
+              fontFamily: 'Pretendard',
+              fontStyle: 'normal',
+
+              lineHeight: '18px',
+            }}
+            onClick={() => {
+              props.setModal(false);
+            }}
+          >
+            로그인하기
+          </a>
+        </Modal.Dialog>
       </div>
+
     </div>
   );
 }

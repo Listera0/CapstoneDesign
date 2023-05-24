@@ -536,7 +536,7 @@ function TabContent(props) {
                           i={i}
                           ele={ele}
                           developerDetail={props.developerDetail}
-                          skill={props.skill}
+                          skillDetail={props.skillDetail}
                         />
                       );
                     })}
@@ -556,9 +556,7 @@ function Icons(props) {
     <div key={props.i} style={{}}>
       <div style={{ justifyContent: 'space-between', alignItems: 'center' }}>
         <p style={{ paddingLeft: '1%' }}>{props.icons2[props.ele]}</p>
-        <p style={{ textAlign: 'center' }}>
-          {props.developerDetail.skill[props.i]}
-        </p>
+        <p style={{ textAlign: 'center' }}>{props.skillDetail[props.i]}</p>
       </div>
     </div>
   );

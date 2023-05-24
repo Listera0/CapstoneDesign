@@ -1,10 +1,57 @@
 import Form from 'react-bootstrap/Form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 function SignUp(props) {
   const [firstSelectValue, setFirstSelectValue] = useState('');
   const [secondSelectValue, setSecondSelectValue] = useState('');
+
+  //비밀번호
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  //비밀번호 메시지
+  const [passwordMsg, setpasswordMsg] = useState('');
+  const [passwordConfirmMsg, setpasswordConfirmMsg] = useState('');
+  //유효성 검사
+  const [ispassword, setIspassword] = useState('');
+  const [ispasswordConfirm, setIspasswordConfirm] = useState('');
+  //비밀번호 보이기/숨기기
+  const [showPswd, setShowPswd] = useState(false);
+
+  //비밀번호 유효성 로직
+  const onchangePassword = (e) => {
+    const currentPassword = e.target.value;
+    setPassword(currentPassword);
+    const passwordEXP = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+    if (!passwordEXP.test(currentPassword)) {
+      setpasswordMsg('숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요!');
+      setIspassword(false);
+    } else {
+      setpasswordMsg('사용가능한 비밀번호 입니다!');
+      setIspassword(true);
+    }
+  };
+  //비밀번호 확인 로직
+  const onchangePasswordConfirm = (e) => {
+    const currentPasswordConfirm = e.target.value;
+    setPasswordConfirm(currentPasswordConfirm);
+    if (password !== currentPasswordConfirm) {
+      setpasswordConfirmMsg('비밀번호가 일치하지 않습니다.');
+      setIspasswordConfirm(false);
+    } else {
+      setpasswordConfirmMsg('비밀번호가 일치합니다.');
+      setIspasswordConfirm(true);
+    }
+  };
+  //전화번호 자동 하이폰
+  const autoHyphen = (event) => {
+    event.target.value = event.target.value
+      .replace(/[^0-9]/g, '')
+      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
+      .replace(/(\-{1,2})$/g, '');
+  };
 
   // 1번째 select 박스의 onChange 핸들러
   const handleFirstSelectChange = (event) => {
@@ -102,66 +149,11 @@ function SignUp(props) {
                     </span>
                   </div>
                 </li>
+
                 <li className='mb-2 mb-xl-3'>
                   <div style={{ textAlign: 'start', marginBottom: '1%' }}>
                     <span
-                      className='display-26 text-secondary me-2 font-weight-600'
-                      style={{
-                        textAlign: 'start',
-                        fontSize: '15px',
-                      }}
-                    >
-                      아이디
-                    </span>
-                  </div>
-                  <div
-                    className='col-lg-12 mb-4 mb-sm-5'
-                    style={{ textAlign: 'start' }}
-                  >
-                    <span className='col-lg-8'>
-                      <input
-                        type='text'
-                        style={{
-                          width: '70%',
-                          height: '5vh',
-                          borderRadius: '5px',
-                          border: '1px solid rgb(222,222,222)',
-                          outline: 'none',
-                          marginRight: '1%',
-                        }}
-                      ></input>
-                    </span>
-                    <span className='col-lg-4'>
-                      <button
-                        style={{
-                          border: '1px solid rgba(222,222,222)',
-                          borderRadius: '5px',
-                          padding: '5px 14px',
-                          fontWeight: '600',
-                          backgroundColor: 'rgba(151,150,167,1)',
-                          color: 'white',
-                        }}
-                      >
-                        중복확인
-                      </button>
-                    </span>
-                    <span
-                      style={{
-                        marginTop: '1%',
-                        display: 'block',
-                        textAlign: 'start',
-                        color: 'red',
-                        fontSize: '12px',
-                      }}
-                    >
-                      사용가능한 아이디입니다.
-                    </span>
-                  </div>
-                </li>
-                <li className='mb-2 mb-xl-3'>
-                  <div style={{ textAlign: 'start', marginBottom: '1%' }}>
-                    <span
-                      className='display-26 text-secondary me-2 font-weight-600'
+                      className='display-26 text-secondary me-2 font-weight-600 '
                       style={{
                         textAlign: 'start',
                         fontSize: '15px',
@@ -176,9 +168,12 @@ function SignUp(props) {
                   >
                     <span className='col-lg-8'>
                       <input
-                        type='password'
+                        id='password'
+                        value={password}
+                        onChange={onchangePassword}
+                        type={showPswd ? 'text' : 'password'}
                         style={{
-                          width: '80%',
+                          width: '70%',
                           height: '5vh',
                           borderRadius: '5px',
                           border: '1px solid rgb(222,222,222)',
@@ -186,6 +181,36 @@ function SignUp(props) {
                           marginRight: '1%',
                         }}
                       ></input>
+                    </span>
+                    <span className='col-lg-4'>
+                      <button
+                        style={{
+                          border: 'none',
+                          borderRadius: '5px',
+                          padding: '5px 14px',
+                          fontWeight: '600',
+                          color: 'gray',
+                          backgroundColor: 'rgba(255,255,255,1)',
+                        }}
+                        onClick={() => setShowPswd(!showPswd)}
+                      >
+                        {showPswd ? (
+                          <FontAwesomeIcon icon={faEye} />
+                        ) : (
+                          <FontAwesomeIcon icon={faEyeSlash} />
+                        )}
+                      </button>
+                    </span>
+                    <span
+                      style={{
+                        marginTop: '1%',
+                        display: 'block',
+                        textAlign: 'start',
+                        color: 'red',
+                        fontSize: '12px',
+                      }}
+                    >
+                      {passwordMsg}
                     </span>
                   </div>
                 </li>
@@ -207,9 +232,11 @@ function SignUp(props) {
                   >
                     <span className='col-lg-8'>
                       <input
-                        type='password'
+                        value={passwordConfirm}
+                        onChange={onchangePasswordConfirm}
+                        type={showPswd ? 'text' : 'password'}
                         style={{
-                          width: '80%',
+                          width: '70%',
                           height: '5vh',
                           borderRadius: '5px',
                           border: '1px solid rgb(222,222,222)',
@@ -217,6 +244,21 @@ function SignUp(props) {
                           marginRight: '1%',
                         }}
                       ></input>
+                    </span>
+                    <span className='col-lg-4'>
+                      <button
+                        style={{
+                          border: 'none',
+                          borderRadius: '5px',
+                          padding: '5px 14px',
+                          fontWeight: '600',
+                          color: 'gray',
+                          backgroundColor: 'rgba(255,255,255,1)',
+                        }}
+                        onClick={() => setShowPswd(!showPswd)}
+                      >
+                        {showPswd ? null : null}
+                      </button>
                     </span>
                     <span
                       style={{
@@ -227,7 +269,7 @@ function SignUp(props) {
                         fontSize: '12px',
                       }}
                     >
-                      비밀번호가 일치합니다.
+                      {passwordConfirmMsg}
                     </span>
                   </div>
                 </li>
@@ -250,6 +292,40 @@ function SignUp(props) {
                     <span className='col-lg-12'>
                       <input
                         type='text'
+                        style={{
+                          width: '80%',
+                          height: '5vh',
+                          borderRadius: '5px',
+                          border: '1px solid rgb(222,222,222)',
+                          outline: 'none',
+                          marginRight: '1%',
+                        }}
+                      ></input>
+                    </span>
+                  </div>
+                </li>
+                <li className='mb-2 mb-xl-3'>
+                  <div style={{ textAlign: 'start', marginBottom: '1%' }}>
+                    <span
+                      className='display-26 text-secondary me-2 font-weight-600'
+                      style={{
+                        textAlign: 'start',
+                        fontSize: '15px',
+                      }}
+                    >
+                      전화번호
+                    </span>
+                  </div>
+                  <div
+                    className='col-lg-12 mb-4 mb-sm-5'
+                    style={{ textAlign: 'start' }}
+                  >
+                    <span className='col-lg-12'>
+                      <input
+                        type='text'
+                        onInput={autoHyphen}
+                        maxlength='13'
+                        placeholder='전화번호를 입력하세요'
                         style={{
                           width: '80%',
                           height: '5vh',
@@ -331,6 +407,35 @@ function SignUp(props) {
                     }}
                   >
                     <RegionSelect></RegionSelect>
+                  </div>
+                </li>
+                <li className='mb-2 mb-xl-3'>
+                  <div style={{ textAlign: 'start', marginBottom: '1%' }}>
+                    <span
+                      className='display-26 text-secondary me-2 font-weight-600'
+                      style={{
+                        textAlign: 'start',
+                        fontSize: '15px',
+                      }}
+                    >
+                      스킬
+                    </span>
+                  </div>
+                  <div
+                    className='col-lg-5 mb-4 mb-sm-5'
+                    style={{
+                      display: 'flex',
+                    }}
+                  >
+                    <SkillSelect
+                      useState={useState}
+                      secondSelectValue={secondSelectValue}
+                      setSecondSelectValue={setSecondSelectValue}
+                      handleSecondSelectChange={handleSecondSelectChange}
+                      firstSelectValue={firstSelectValue}
+                      setFirstSelectValue={setFirstSelectValue}
+                      handleFirstSelectChange={handleFirstSelectChange}
+                    ></SkillSelect>
                   </div>
                 </li>
                 <li className='mb-2 mb-xl-3'>
@@ -428,6 +533,7 @@ function SignUp(props) {
     </div>
   );
 }
+
 function SelectBasicExample(props) {
   return (
     <>
@@ -567,6 +673,40 @@ function RegionSelect(props) {
         <option value='option15'>강원</option>
         <option value='option16'>제주</option>
         <option value='option17'>전국</option>
+      </Form.Select>
+    </>
+  );
+}
+function SkillSelect(props) {
+  return (
+    <>
+      <Form.Select
+        aria-label='Default select example'
+        value={props.firstSelectValue}
+        onChange={props.handleFirstSelectChange}
+      >
+        <option value='' data-image='C:\Users\82108\Desktop\python.jpg'>
+          선택하세요
+        </option>
+        <option value='option1'>Python</option>
+        <option value='option2'>C</option>
+        <option value='option3'>C++</option>
+        <option value='option4'>Java</option>
+        <option value='option5'>C#</option>
+        <option value='option6'>JavaScript</option>
+        <option value='option7'>TypeScript</option>6
+        <option value='option8'>Assembly</option>
+        <option value='option9'>Swift</option>
+        <option value='option10'>PHP</option>
+        <option value='option11'>Go</option>
+        <option value='option12'>R</option>
+        <option value='option13'>Ruby</option>
+        <option value='option14'>Rust</option>
+        <option value='option15'>Kotlin</option>
+        <option value='option16'>Vue.js</option>
+        <option value='option17'>jQuery</option>
+        <option value='option18'>Nuxt.js</option>
+        <option value='option19'>Next.js</option>
       </Form.Select>
     </>
   );
