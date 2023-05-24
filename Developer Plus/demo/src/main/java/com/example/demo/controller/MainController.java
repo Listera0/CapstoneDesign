@@ -15,7 +15,6 @@ import com.example.demo.dto.*;
 
 @RestController
 public class MainController {
-
     @Autowired
     DeveloperDao devRepository;
     @Autowired
