@@ -6,15 +6,16 @@ import { faN } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { useNavigate } from 'react-router-dom';
 function Login(props) {
   const outside = useRef();
-
+  const navigate = useNavigate();
   let API_KEY = '92ac45fc775ab8bb9b58554b33464200';
   let REDIRECTION = 'http://localhost:3000/KakaoLogin';
   let KakaoLoginAPI = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY}&redirect_uri=${REDIRECTION}&response_type=code`;
 
   const openKakaoLogin = () => {
-    window.open(KakaoLoginAPI, "_self");
+    window.open(KakaoLoginAPI, '_self');
   };
 
   const requestLogin = (_email, _password) => {
@@ -39,7 +40,6 @@ function Login(props) {
       className='modal show'
       style={{ display: 'block', position: 'initial' }}
     >
-      <input type="button" onClick={() => {openKakaoLogin()}} value="kakao"></input>
       <Modal.Dialog>
         <Modal.Header style={{ borderBottom: 'rgb(222,222,222)' }}>
           <h2 style={{ fontWeight: '700' }}>로그인</h2>
@@ -157,6 +157,9 @@ function Login(props) {
             </button>
             <div style={{}}>
               <button
+                onClick={() => {
+                  openKakaoLogin();
+                }}
                 type='button'
                 style={{
                   display: 'flex',
@@ -203,7 +206,7 @@ function Login(props) {
               className='signuphover'
               style={{ cursor: 'pointer', textAlign: 'center' }}
               onClick={() => {
-                setModal(true);
+                navigate('/SignUp');
               }}
             >
               Developer Plus Sign Up

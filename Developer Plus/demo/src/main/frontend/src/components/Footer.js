@@ -43,7 +43,7 @@ function Footer(props) {
               <li style={{ padding: '8px 12px' }}>
                 <a
                   onClick={() => {
-                    props.navigate('/viewDeveloper');
+                    props.navigate('/findDeveloper');
                   }}
                   style={{
                     color: 'black',
@@ -57,7 +57,7 @@ function Footer(props) {
               <li style={{ padding: '8px 12px' }}>
                 <a
                   onClick={() => {
-                    props.navigate('/viewDeveloper');
+                    props.navigate('/story');
                   }}
                   style={{
                     color: 'black',

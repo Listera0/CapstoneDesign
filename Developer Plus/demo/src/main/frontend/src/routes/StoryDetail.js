@@ -1,13 +1,24 @@
 import { data, projectData, developerData } from '../data.js';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-
+import axios from 'axios';
 function StoryDetail(props) {
   let [tab, setTab] = useState(0);
   let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
-  let storyDetail = props.story.find(function (x) {
-    return x.id == id;
-  });
+  const [storyDetails, setStoryDetails] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .post('/api/getStoryData', {
+          id: id,
+          orderBy: '',
+          limit: '',
+        })
+        .then((response) => setStoryDetails(response.data))
+        .catch((error) => console.log(error));
+    }, []);
+  }
+  let storyDetail = storyDetails[0];
   return (
     <section className='bg-light'>
       <div className='container' style={{ marginTop: '-3%' }}>

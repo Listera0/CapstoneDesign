@@ -38,18 +38,6 @@ function Story(props) {
           );
         })}
       </div>
-      <button
-        onClick={() => {
-          axios
-            .get('http://codingapple1.github.io/shop/data2.json')
-            .then((result) => {
-              let copy = [...props.story, ...result.data];
-              props.setStory(copy);
-            });
-        }}
-      >
-        더보기
-      </button>
     </div>
   );
 }

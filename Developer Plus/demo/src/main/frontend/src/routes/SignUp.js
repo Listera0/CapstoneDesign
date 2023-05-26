@@ -15,14 +15,19 @@ function SignUp(props) {
   let [_email, set_email] = useState('');
   let [_name, set_name] = useState('');
   let [_proId, set_proId] = useState('');
+  let [_has, set_has] = useState('');
+  let [_provider, set_provider] = useState('');
 
   useEffect(() => {
-    if(sessionStorage.getItem('has') == "true") {
+    if (sessionStorage.getItem('has') === 'true') {
+      set_has(sessionStorage.getItem('has'));
       set_email(sessionStorage.getItem('email'));
       set_name(sessionStorage.getItem('name'));
       set_proId(sessionStorage.getItem('proId'));
+      set_provider(sessionStorage.getItem('provider'))
+      sessionStorage.clear();
     }
-  },[]);
+  }, []);
 
   const requestSignUp = (_email, _password, _name) => {
     axios
@@ -30,21 +35,21 @@ function SignUp(props) {
         email: _email,
         password: _password,
         name: _name,
-        provider: sessionStorage.getItem('provider'),
-        providerId: sessionStorage.getItem('proId'),
+        provider: _provider,
+        providerId: _proId,
       })
-      .then((response) =>
-        {
-          if(response.data['result'] == "true") {
-            sessionStorage.clear();
-            alert("회원가입되었습니다.");
-            navigate("/Login");
-          }
-          else {
-            alert(response.data['message'] + ' email : ' + response.data['email']);
-            sessionStorage.clear();
-          }
-        })
+      .then((response) => {
+        if (response.data['result'] == 'true') {
+          sessionStorage.clear();
+          alert('회원가입되었습니다.');
+          navigate('/Login');
+        } else {
+          alert(
+            response.data['message'] + ' email : ' + response.data['email']
+          );
+          sessionStorage.clear();
+        }
+      })
       .catch((error) => console.log(error));
   };
 
@@ -153,7 +158,11 @@ function SignUp(props) {
                       <input
                         id='email'
                         type='email'
-                        value= {sessionStorage.getItem('has')  == 'true' ? _email : null}
+                        value={
+                          _has == 'true'
+                            ? _email
+                            : null
+                        }
                         style={{
                           width: '70%',
                           height: '5vh',
@@ -335,7 +344,9 @@ function SignUp(props) {
                       <input
                         id='name'
                         type='text'
-                        value={sessionStorage.getItem('has')  == 'true' ? _name : null}
+                        value={
+                          _has == 'true' ? _name : null
+                        }
                         style={{
                           width: '80%',
                           height: '5vh',
@@ -558,9 +569,13 @@ function SignUp(props) {
               </ul>
             </div>
             <button
-              onClick={()=> requestSignUp(document.getElementById('email').value,
-                                          document.getElementById('password').value,
-                                          document.getElementById('name').value)}
+              onClick={() =>
+                requestSignUp(
+                  document.getElementById('email').value,
+                  document.getElementById('password').value,
+                  document.getElementById('name').value
+                )
+              }
               style={{
                 width: '20%',
                 textAlign: 'center',
