@@ -4,9 +4,20 @@ import axios from 'axios';
 import { Nav } from 'react-bootstrap';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
+import { faBookmark as farBookmark } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import Card from 'react-bootstrap/Card';
+import styled from 'styled-components';
+let MobileDeveloper = styled.div`
+  width: 25%;
+  @media screen and (max-width: 768px) {
+    disply: inline;
+    width: 120%;
+    overflow-x: scroll;
+    white-space: nowrap;
+  }
+`;
 function ViewDeveloper(props) {
   const [allDevDto, setAllDevDto] = useState(['']);
   {
@@ -22,6 +33,17 @@ function ViewDeveloper(props) {
       props.changeGoodCount(props.goodCount + 1);
     }
   }, [props.goodCount]);
+  const [likeBool, setLikeBool] = useState(false);
+  const likeInput = (_location, _userId, _targetId) => {
+    axios
+      .post('/api/likeInput', {
+        location: _location,
+        userId: _userId,
+        targetId: _targetId,
+      })
+      .then((response) => setLikeBool(response.data))
+      .catch((error) => console.log(error));
+  };
   return (
     <div className='container'>
       <div
@@ -59,20 +81,17 @@ function ViewDeveloper(props) {
 }
 
 function DeveloperCard(props) {
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(
+    props.allDevDto[props.i].likeCount
+  );
   return (
-    <div
-      className='col-4 '
-      style={{
-        padding: '1%',
-        width: '25%',
-      }}
-    >
-      <div className='d-flex justify-content-around '>
-        <Card style={{ width: '18rem' }}>
+    <MobileDeveloper>
+      <div className='d-flex justify-content-around ' style={{}}>
+        <Card style={{}}>
           <div
-            className='col-div '
+            className='col-div'
             style={{
-              overflow: 'hidden',
               display: 'flex',
               alignItems: 'center',
             }}
@@ -87,7 +106,7 @@ function DeveloperCard(props) {
                 paddingTop: '3%',
                 cursor: 'pointer',
                 paddingLeft: '10%',
-                marginRight: '5%',
+                marginRight: '15%',
               }}
               src={`${process.env.PUBLIC_URL}/${
                 props.allDevDto[props.i].imgURL
@@ -97,17 +116,6 @@ function DeveloperCard(props) {
               <span style={{ fontSize: '18px' }}>
                 {props.allDevDto[props.i].name}
               </span>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <FontAwesomeIcon icon={faHeart} style={{ color: 'red' }} />{' '}
-                <div style={{ paddingLeft: '10%' }}>
-                  {props.allDevDto[props.i].likeCount}
-                </div>
-              </div>
             </Card.Text>
           </div>
 
@@ -167,14 +175,51 @@ function DeveloperCard(props) {
                 개 있습니다.
               </div>
             </Card.Text>
-
-            <button className='btn'>
-              <span> 1대1 대화 </span>
-            </button>
+            <hr></hr>
+            <div
+              style={{
+                display: 'flex',
+                fontSize: '10px',
+                justifyContent: 'space-around',
+              }}
+            >
+              <div style={{ fontSize: '15px' }}>
+                <span
+                  style={{
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                  }}
+                >
+                  대화하기
+                </span>
+              </div>
+              <div style={{ fontSize: '15px' }}>
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  style={{
+                    fontSize: '20px',
+                    color: '#f1928e',
+                  }}
+                  onClick={() => {
+                    setLiked(!liked);
+                    setLikeCount(liked ? likeCount - 1 : likeCount + 1);
+                    props.likeInput(
+                      'developer',
+                      props.resultDto[0].id,
+                      props.allDevDto[props.i].id
+                    );
+                  }}
+                />{' '}
+                {likeCount}
+              </div>
+              <div>
+                <FontAwesomeIcon icon={farBookmark} size='2x' />
+              </div>
+            </div>
           </Card.Body>
         </Card>
       </div>
-    </div>
+    </MobileDeveloper>
   );
 }
 

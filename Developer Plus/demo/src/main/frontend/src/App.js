@@ -124,7 +124,6 @@ function App() {
         .catch((error) => console.log(error));
     }, []);
   }
-
   const [rankingStoryDto, setRankingStoryDto] = useState(['']);
   {
     useEffect(() => {
@@ -164,6 +163,10 @@ function App() {
     console.log(list);
   };
   let [modal, setModal] = useState(true);
+  // const [liked, setLiked] = useState(rankingDevDto[i].userLike);
+  // const [likeCount, setLikeCount] = useState(
+  //   props.rankingDevDto[props.i].likeCount
+  // );
   return (
     <div className='App ' style={{ margin: '0' }}>
       {/* {showDataList(allDevDto)} */}
@@ -171,7 +174,7 @@ function App() {
       {/* {showDataList(allProjectDto)} */}
       {/* {showDataList(rankingDevDto)} */}
       {/* {showDataList(rankingStoryDto)} */}
-      {showDataList(resultDto)}
+      {/* {showDataList(resultDto)} */}
       {/* <Routes>
         <Route path='/FindDeveloper' element={<Filiter />}></Route>
         <Route path='/ViewDeveloper' element={<Filiter />}></Route>
@@ -489,10 +492,6 @@ function ProjectCard(props) {
   );
 }
 function DeveloperCard(props) {
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(
-    props.rankingDevDto[props.i].likeCount
-  );
   return (
     <MobileDeveloper>
       <div className='d-flex justify-content-around ' style={{}}>
@@ -609,8 +608,6 @@ function DeveloperCard(props) {
                     color: '#f1928e',
                   }}
                   onClick={() => {
-                    setLiked(!liked);
-                    setLikeCount(liked ? likeCount - 1 : likeCount + 1);
                     props.likeInput(
                       'developer',
                       props.resultDto[0].id,
@@ -618,7 +615,7 @@ function DeveloperCard(props) {
                     );
                   }}
                 />{' '}
-                {likeCount}
+                {props.rankingDevDto[props.i].likeCount}
               </div>
               <div>
                 <FontAwesomeIcon icon={farBookmark} size='2x' />
@@ -643,7 +640,7 @@ function NavBar(props) {
       >
         <div className='container-fluid'>
           <a
-            class='navbar-brand'
+            className='navbar-brand'
             onClick={() => {
               props.navigate('/');
             }}
@@ -652,7 +649,7 @@ function NavBar(props) {
             Developer Plus
           </a>
           <button
-            class='navbar-toggler'
+            className='navbar-toggler'
             type='button'
             data-bs-toggle='collapse'
             data-bs-target='#navbarSupportedContent'
@@ -660,7 +657,7 @@ function NavBar(props) {
             aria-expanded='false'
             aria-label='Toggle navigation'
           >
-            <span class='navbar-toggler-icon'></span>
+            <span className='navbar-toggler-icon'></span>
           </button>
           <div className='collapse navbar-collapse' id='navbarSupportedContent'>
             <ul className='navbar-nav m-auto'>
@@ -674,6 +671,7 @@ function NavBar(props) {
                   fontWeight: '700',
                   alignItems: 'center',
                   cursor: 'pointer',
+                  textAlign: 'center',
                 }}
               >
                 프로젝트{' '}
@@ -689,6 +687,7 @@ function NavBar(props) {
                   color: 'black',
                   fontWeight: '700',
                   cursor: 'pointer',
+                  textAlign: 'center',
                 }}
               >
                 개발자{' '}
@@ -703,6 +702,7 @@ function NavBar(props) {
                   color: 'black',
                   fontWeight: '700',
                   cursor: 'pointer',
+                  textAlign: 'center',
                 }}
               >
                 스토리{' '}
@@ -717,6 +717,7 @@ function NavBar(props) {
                   color: 'black',
                   fontWeight: '700',
                   cursor: 'pointer',
+                  textAlign: 'center',
                 }}
               >
                 통합검색{' '}
@@ -737,6 +738,7 @@ function NavBar(props) {
                   backgroundColor: 'black',
                   borderRadius: '5px',
                   cursor: 'pointer',
+                  textAlign: 'center',
                 }}
               >
                 로그인 | 회원가입{' '}
@@ -757,7 +759,7 @@ function NavBar(props) {
       >
         <div className='container-fluid'>
           <a
-            class='navbar-brand'
+            className='navbar-brand'
             onClick={() => {
               props.navigate('/');
             }}
@@ -765,7 +767,7 @@ function NavBar(props) {
             Developer Plus
           </a>
           <button
-            class='navbar-toggler'
+            className='navbar-toggler'
             type='button'
             data-bs-toggle='collapse'
             data-bs-target='#navbarSupportedContent'
@@ -773,7 +775,7 @@ function NavBar(props) {
             aria-expanded='false'
             aria-label='Toggle navigation'
           >
-            <span class='navbar-toggler-icon'></span>
+            <span className='navbar-toggler-icon'></span>
           </button>
           <div className='collapse navbar-collapse' id='navbarSupportedContent'>
             <ul className='navbar-nav m-auto'>
@@ -787,6 +789,7 @@ function NavBar(props) {
                   fontWeight: '700',
                   alignItems: 'center',
                   cursor: 'pointer',
+                  textAlign: 'center',
                 }}
               >
                 프로젝트{' '}
@@ -802,6 +805,7 @@ function NavBar(props) {
                   color: 'black',
                   fontWeight: '700',
                   cursor: 'pointer',
+                  textAlign: 'center',
                 }}
               >
                 개발자{' '}
@@ -816,6 +820,7 @@ function NavBar(props) {
                   color: 'black',
                   fontWeight: '700',
                   cursor: 'pointer',
+                  textAlign: 'center',
                 }}
               >
                 스토리{' '}
@@ -830,6 +835,7 @@ function NavBar(props) {
                   color: 'black',
                   fontWeight: '700',
                   cursor: 'pointer',
+                  textAlign: 'center',
                 }}
               >
                 통합검색{' '}
@@ -847,6 +853,7 @@ function NavBar(props) {
                   color: 'black',
                   fontWeight: '700',
                   cursor: 'pointer',
+                  textAlign: 'center',
                 }}
               >
                 글작성하기
@@ -861,6 +868,7 @@ function NavBar(props) {
                   color: 'black',
                   fontWeight: '700',
                   cursor: 'pointer',
+                  textAlign: 'center',
                 }}
               >
                 {props.resultDto[0].name}
@@ -873,6 +881,7 @@ function NavBar(props) {
                   color: 'black',
                   fontWeight: '700',
                   cursor: 'pointer',
+                  textAlign: 'center',
                 }}
               >
                 로그아웃

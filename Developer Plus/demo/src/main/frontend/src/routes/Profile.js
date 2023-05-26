@@ -260,33 +260,23 @@ function MainTabContent(props) {
   }
   if (props.maintab == 1) {
     return (
-      <div>
-        <p></p>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>
-                <FontAwesomeIcon icon={faBookmark} />
-              </th>
-              <th>제목</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{props.developerDetail.name}</td>
-              <td>Mark</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Jacob</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td colSpan={2}>Larry the Bird</td>
-            </tr>
-          </tbody>
-        </Table>
-      </div>
+      <ul class='nav nav-pills nav-justified'>
+        <li class='nav-item'>
+          <a class='nav-link active' aria-current='page' href='#'>
+            Active
+          </a>
+        </li>
+        <li class='nav-item'>
+          <a class='nav-link' href='#'>
+            Much longer nav link
+          </a>
+        </li>
+        <li class='nav-item'>
+          <a class='nav-link' href='#'>
+            Link
+          </a>
+        </li>
+      </ul>
     );
   }
 }

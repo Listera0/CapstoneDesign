@@ -23,6 +23,34 @@
   top: 0;
   z-index: 100;
 }
+input::placeholder {
+  color: #b1b1b1;
+}
+.flex-container {
+  display: inline-block;
+}
+
+.wrapper {
+  text-align: start;
+  flex-grow: 1;
+}
+.image-box {
+  width: 460px;
+  height: 230px;
+  object-fit: cover;
+  display: block;
+  margin: 20px auto;
+}
+
+.upload-btn {
+  border: 1px solid #ddd;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+input[type='file'] {
+  display: none;
+}
+
 .navbarmenu2 {
   display: flex;
   justify-content: space-between;

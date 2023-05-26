@@ -1,19 +1,41 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark } from '@fortawesome/free-solid-svg-icons';
 import { useParams } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
-
+import axios from 'axios';
 import { jobs, icons2 } from '../icons2';
 
 function FindDeveloperDetail(props) {
-  let [tab, setTab] = useState(0);
   let [maintab, setMainTab] = useState(0);
+  let { id } = useParams();
+  // let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
+  // let projectDetail = props.allProjectDto.find(function (x) {
+  //   return x.id == id;
+  // });
+  const [projectDetails, setProjectDetails] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .post('/api/getProjectData', {
+          id: id,
+          orderBy: '',
+          limit: '',
+        })
+        .then((response) => setProjectDetails(response.data))
+        .catch((error) => console.log(error));
+    }, []);
+  }
 
-  let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
-  let projectDetail = props.allProjectDto.find(function (x) {
-    return x.id == id;
-  });
+  let projectDetail = projectDetails[0];
+
+  let [tab, setTab] = useState(0);
+  let skillDetail =
+    projectDetail.skill != null ? projectDetail.skill.split(',') : '';
+  let jobDetail = projectDetail.job != null ? projectDetail.job.split(',') : '';
+
+  let careerDetail =
+    projectDetail.career != null ? projectDetail.career.split(',') : '';
 
   // let [req2, setReq2] = useState(projectDetail.requireJob);
   // console.log(req2);
@@ -37,6 +59,9 @@ function FindDeveloperDetail(props) {
             maintab={maintab}
             setTab={setTab}
             projectDetail={projectDetail}
+            skillDetail={skillDetail}
+            jobDetail={jobDetail}
+            careerDetail={careerDetail}
             // req2={req2}
             // setReq2={setReq2}
           ></MainTabContent>
@@ -111,8 +136,8 @@ function MainTabContent(props) {
         <TabContent
           tab={props.tab}
           projectDetail={props.projectDetail}
-          
           icons2={props.icons2}
+          skillDetail={props.skillDetail}
           i={props.i}
         />
       </div>
@@ -319,14 +344,15 @@ function TabContent(props) {
                   marginTop: '2%',
                 }}
               >
-                <div style={{ fontWeight: '600', marginRight: '10%' }}>
-                  {props.projectDetail.job.map((ele, i) => {
+                {/* <div style={{ fontWeight: '600', marginRight: '10%' }}>
+                  {props.careerDetail.map((ele, i) => {
                     return (
                       <Jobs
                         key={i}
                         jobs={jobs}
                         i={i}
                         ele={ele}
+                        careerDetail={props.careerDetail}
                         projectDetail={props.projectDetail}
                         job={props.job}
                         req2={props.req2}
@@ -334,7 +360,7 @@ function TabContent(props) {
                       />
                     );
                   })}
-                </div>{' '}
+                </div>{' '} */}
               </div>
             </div>
             <div style={{ textAlign: 'start' }}>
@@ -462,7 +488,7 @@ function TabContent(props) {
                       flexWrap: 'wrap',
                     }}
                   >
-                    {props.projectDetail.skill.map((ele, i) => {
+                    {props.skillDetail.map((ele, i) => {
                       return (
                         <Icons2
                           key={i}
@@ -470,6 +496,7 @@ function TabContent(props) {
                           i={i}
                           ele={ele}
                           projectDetail={props.projectDetail}
+                          skillDetail={props.skillDetail}
                           skill={props.skill}
                         ></Icons2>
                       );
@@ -489,7 +516,7 @@ function Icons2(props) {
     <div style={{ justifyContent: 'space-between', alignItems: 'center' }}>
       <p style={{ paddingLeft: '1%' }}>{props.icons2[props.ele]}</p>
       <p style={{ textAlign: 'center' }}>
-        {props.projectDetail.skill[props.i]}
+        {props.skillDetail[props.i]}
       </p>
     </div>
   );

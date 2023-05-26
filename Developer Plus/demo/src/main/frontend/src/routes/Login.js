@@ -189,15 +189,15 @@ function Login(props) {
                 </div>
               </button>
             </div>
-            <a
+            <p
               className='signuphover'
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', textAlign: 'center' }}
               onClick={() => {
                 setModal(true);
               }}
             >
               Developer Plus Sign Up
-            </a>
+            </p>
           </form>
         </Modal.Body>
       </Modal.Dialog>
@@ -419,7 +419,6 @@ function SignUpModal(props) {
           </a>
         </Modal.Dialog>
       </div>
-
     </div>
   );
 }
