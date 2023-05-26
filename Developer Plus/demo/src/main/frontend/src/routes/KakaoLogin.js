@@ -31,6 +31,7 @@ function KakaoLogin(props) {
               sessionStorage.setItem('email', res.data.email);
             }
             sessionStorage.setItem('name', res.data.name);
+            sessionStorage.setItem('provider', "Kakao");
             sessionStorage.setItem('proId', res.data.providerId);
             sessionStorage.setItem('has', "true");
             navigate("/SignUp");

@@ -1,12 +1,52 @@
 import Form from 'react-bootstrap/Form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faEyeSlash } from '@fortawesome/free-regular-svg-icons';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 function SignUp(props) {
   const [firstSelectValue, setFirstSelectValue] = useState('');
   const [secondSelectValue, setSecondSelectValue] = useState('');
+  const navigate = useNavigate();
+
+  let [_email, set_email] = useState('');
+  let [_name, set_name] = useState('');
+  let [_proId, set_proId] = useState('');
+
+  useEffect(() => {
+    if(sessionStorage.getItem('has') == "true") {
+      set_email(sessionStorage.getItem('email'));
+      set_name(sessionStorage.getItem('name'));
+      set_proId(sessionStorage.getItem('proId'));
+    }
+  },[]);
+
+  const requestSignUp = (_email, _password, _name) => {
+    axios
+      .post('/api/requestSignUp', {
+        email: _email,
+        password: _password,
+        name: _name,
+        provider: sessionStorage.getItem('provider'),
+        providerId: sessionStorage.getItem('proId'),
+      })
+      .then((response) =>
+        {
+          if(response.data['result'] == "true") {
+            sessionStorage.clear();
+            alert("회원가입되었습니다.");
+            navigate("/Login");
+          }
+          else {
+            alert(response.data['message'] + ' email : ' + response.data['email']);
+            sessionStorage.clear();
+          }
+        })
+      .catch((error) => console.log(error));
+  };
 
   //비밀번호
   const [password, setPassword] = useState('');
@@ -111,7 +151,9 @@ function SignUp(props) {
                   >
                     <span className='col-lg-8'>
                       <input
+                        id='email'
                         type='email'
+                        value= {sessionStorage.getItem('has')  == 'true' ? _email : null}
                         style={{
                           width: '70%',
                           height: '5vh',
@@ -291,7 +333,9 @@ function SignUp(props) {
                   >
                     <span className='col-lg-12'>
                       <input
+                        id='name'
                         type='text'
+                        value={sessionStorage.getItem('has')  == 'true' ? _name : null}
                         style={{
                           width: '80%',
                           height: '5vh',
@@ -514,6 +558,9 @@ function SignUp(props) {
               </ul>
             </div>
             <button
+              onClick={()=> requestSignUp(document.getElementById('email').value,
+                                          document.getElementById('password').value,
+                                          document.getElementById('name').value)}
               style={{
                 width: '20%',
                 textAlign: 'center',

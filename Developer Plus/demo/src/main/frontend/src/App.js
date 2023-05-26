@@ -33,6 +33,7 @@ import axios from 'axios';
 import Login from './routes/Login';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import KakaoLogin from './routes/KakaoLogin';
 library.add(fab);
 let MobileDeveloper = styled.div`
   width: 25%;
@@ -363,6 +364,7 @@ function App() {
         <Route path='/talk' element={<Talk />}></Route>
         <Route path='/SignUp' element={<SignUp />}></Route>
         <Route path='/write' element={<Write />}></Route>
+        <Route path='/KakaoLogin' element={<KakaoLogin />}></Route>
       </Routes>
       <Footer navigate={navigate}></Footer>
     </div>

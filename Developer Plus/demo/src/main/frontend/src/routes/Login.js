@@ -8,6 +8,15 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 function Login(props) {
   const outside = useRef();
+
+  let API_KEY = '92ac45fc775ab8bb9b58554b33464200';
+  let REDIRECTION = 'http://localhost:3000/KakaoLogin';
+  let KakaoLoginAPI = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY}&redirect_uri=${REDIRECTION}&response_type=code`;
+
+  const openKakaoLogin = () => {
+    window.open(KakaoLoginAPI, "_self");
+  };
+
   const requestLogin = (_email, _password) => {
     axios
       .post('/api/requestLogin', {
@@ -30,6 +39,7 @@ function Login(props) {
       className='modal show'
       style={{ display: 'block', position: 'initial' }}
     >
+      <input type="button" onClick={() => {openKakaoLogin()}} value="kakao"></input>
       <Modal.Dialog>
         <Modal.Header style={{ borderBottom: 'rgb(222,222,222)' }}>
           <h2 style={{ fontWeight: '700' }}>로그인</h2>
@@ -214,19 +224,6 @@ function Login(props) {
 }
 
 function SignUpModal(props) {
-  const requestSignUp = (_name, _email, _password) => {
-    axios
-      .post('/api/requestSignUp', {
-        name: _name,
-        email: _email,
-        password: _password,
-      })
-      .then((response) =>
-        console.log(response.data['message'] + ' id : ' + response.data['id'])
-      )
-      .catch((error) => console.log(error));
-  };
-
   return (
     <div
       style={{
