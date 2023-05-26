@@ -79,4 +79,13 @@ public class LoginDao {
 
         return answer;
     }
+
+    public boolean hasEmail (String email) {
+        String query = String.format("select * from developer where email=%d", email);
+        List<DeveloperDto> loginData = DPJdbcTemplate.query(query, new DevRowMapper());
+
+        if(loginData.size() >= 1)
+            return true;
+        return false;
+    }
 }
