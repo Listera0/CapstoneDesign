@@ -18,7 +18,6 @@ import org.springframework.jdbc.core.RowMapper;
 
 @Repository
 public class StoryDao {
-    
     @Autowired
     @Qualifier("DPTemplate")
     JdbcTemplate DPJdbcTemplate;

@@ -17,7 +17,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.lang.Nullable;
 
 class DevRowMapper implements RowMapper<DeveloperDto> {
-
     @Override
     @Nullable
     public DeveloperDto mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -37,6 +36,8 @@ class DevRowMapper implements RowMapper<DeveloperDto> {
         dto.setPhone(rs.getString("phone"));
         dto.setImgURL(rs.getString("imgURL"));
         dto.setPassword(rs.getString("password"));
+        dto.setProvider(rs.getString("provider"));
+        dto.setProviderId(rs.getLong("providerId"));
 
         return dto;
     }
@@ -44,8 +45,7 @@ class DevRowMapper implements RowMapper<DeveloperDto> {
 }
 
 @Repository
-public class DeveloperDao {
-    
+public class DeveloperDao { 
     @Autowired
     @Qualifier("DPTemplate")
     JdbcTemplate DPJdbcTemplate;

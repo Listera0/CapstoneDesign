@@ -26,6 +26,8 @@ public class DeveloperDto {
     private String email;
     private String phone;
     private String imgURL;
+    private String provider;
+    private long providerId;
 
     @Override
     public String toString()

@@ -11,7 +11,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.lang.Nullable;
 
-import com.example.demo.dto.LikeCount.*;
+import com.example.demo.dto.DeveloperLikeCountDto;
+import com.example.demo.dto.ProjectLikeCountDto;
+import com.example.demo.dto.StoryLikeCountDto;
 
 class DevLikeCountRowMapper implements RowMapper<DeveloperLikeCountDto> {
     @Override

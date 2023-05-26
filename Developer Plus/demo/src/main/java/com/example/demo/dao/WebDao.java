@@ -7,7 +7,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,20 +22,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 @Repository
-public class KakaoDao {
-    String Rest_Api_Key = "92ac45fc775ab8bb9b58554b33464200";
-    String Redirect_Url = "http://localhost:3000/SignUp";
-
-    @Autowired
-    LoginDao loginRepository;
-    @Autowired
-    DeveloperDao devRepository;
-
+public class WebDao {
     @Autowired
     @Qualifier("DPTemplate")
     JdbcTemplate DPJdbcTemplate;
-
+    
+    // 카카오에서 access token 가져오기
     public String[] getKaKaoAccessToken(String code) {
+        String restAPIKey = "92ac45fc775ab8bb9b58554b33464200";
+        String redirectUri = "http://localhost:3000/KakaoLogin";
 
         String access_Token = "";
         String refresh_Token = "";
@@ -52,8 +50,8 @@ public class KakaoDao {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
-            sb.append("&client_id=" + Rest_Api_Key); // TODO REST_API_KEY 입력
-            sb.append("&redirect_uri=" + Redirect_Url); // TODO 인가코드 받은 redirect_uri 입력
+            sb.append("&client_id=" + restAPIKey); // TODO REST_API_KEY 입력
+            sb.append("&redirect_uri=" + redirectUri); // TODO 인가코드 받은 redirect_uri 입력
             System.out.println("code = " + code);
             sb.append("&code=" + code);
             bw.write(sb.toString());
@@ -78,7 +76,11 @@ public class KakaoDao {
 
 
             // Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
-            JsonElement element = JsonParser.parseString(result);
+            // JsonParser parser = new JsonParser();
+            // JsonElement element =  parser.parse(result);
+            JsonElement element = JsonParser.parseString(result); 
+
+            System.out.println("element : " + element);
 
             access_Token = element.getAsJsonObject().get("access_token").getAsString();
             refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
@@ -100,15 +102,15 @@ public class KakaoDao {
         return arrTokens;
     }
 
-    public DeveloperDto createKakaoUser(String token) throws IOException {
-		
+    public DeveloperDto getUserData(String token) throws IOException {
+        DeveloperDto dto = new DeveloperDto();
+
         //1.유저 정보를 요청할 url
         String reqURL = "https://kapi.kakao.com/v2/user/me";
 
         //2.access_token을 이용하여 사용자 정보 조회
         URL url = new URL(reqURL);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
         conn.setRequestMethod("POST");
         conn.setDoOutput(true);
         conn.setRequestProperty("Authorization", "Bearer " + token); //전송할 header 작성, access_token전송
@@ -118,12 +120,12 @@ public class KakaoDao {
         System.out.println("responseCode : " + responseCode);
 
         //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
-        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
         String line = "";
         String result = "";
 
         while ((line = br.readLine()) != null) {
-            result += line;
+            result += new String(URLDecoder.decode(line, "UTF-8"));
         }
 
         System.out.println("response body : " + result);
@@ -131,34 +133,36 @@ public class KakaoDao {
         //Gson 라이브러리로 JSON파싱
         JsonElement element = JsonParser.parseString(result);
 
-        // Long id = element.getAsJsonObject().get("id").getAsLong();
+        dto.setProvider("Kakao");
+        Long id = element.getAsJsonObject().get("id").getAsLong();
+        dto.setProviderId(id);
         boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
         //사용자의 이름
         String nickname = element.getAsJsonObject().get("properties").getAsJsonObject().get("nickname").getAsString();
+        dto.setName(nickname);
         //사용자의 이메일
         String email = "";
         if (hasEmail) {
             email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
+            dto.setEmail(email);
        }	
-       	   //DB에 카카오로 로그인한 기록이 없다면 
-           //카카오톡에서 전달해준 유저 정보를 토대로 
-           //유저 객체 생성하고 DB에 저장
-           //이후 프론트에서 요청하는 api 스펙에 맞춰
-           //dto로 변환한 후에 return 해준다.
-	    if (!loginRepository.hasEmail(email)) {
-            DeveloperDto newDeveloper = new DeveloperDto();
-            newDeveloper.setEmail(email);
-            newDeveloper.setName(nickname);
+        
+        return dto;
+    }
 
-            return newDeveloper;
+    public Map<String, String> hasProviderId (String provider, long proId) {
+        String query = String.format("select * from developer where provider='%s' and providerId=%s",provider ,Long.toString(proId));
+        List<DeveloperDto> loginDataList = DPJdbcTemplate.query(query, new DevRowMapper());
+        Map<String, String> answer = new HashMap<String, String>();
 
-        } else {
-            //DB에 카카오로 로그인된 정보가 있다면 token 생성해서 리턴
-            String query = String.format("select * from developer where email=%d", email);
-            List<DeveloperDto> loginData = DPJdbcTemplate.query(query, new DevRowMapper());
-            DeveloperDto userDeveloper = loginData.get(0);
-
-            return userDeveloper;
+        if(loginDataList.size() >= 1) {
+            answer.put("result", "true");
+            answer.put("id", Integer.toString(loginDataList.get(0).getId()));
         }
+        else {
+            answer.put("result", "false");
+        }
+
+        return answer;
     }
 }

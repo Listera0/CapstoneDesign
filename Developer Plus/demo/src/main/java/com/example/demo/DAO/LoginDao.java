@@ -26,21 +26,21 @@ public class LoginDao {
         List<DeveloperDto> loginData = DPJdbcTemplate.query(query, new DevRowMapper());
 
         Map<String, String> answer = new HashMap<String, String>();
-        List<DeveloperDto> lastData = devRepository.getData("", "id desc", "1");
 
-        if(loginData.size() < 2)
+        if(loginData.size() < 1)
         {
-            int nextId = lastData.get(0).getId() + 1;
             // String result = loginRepository.insertToDatabase(nextId, request.get("name"), request.get("email"), request.get("password"));
 
-            String query2 = "insert into developer (id, name, email, password) values (?, ?, ?, ?)";
+            String query2 = "insert into developer (email, password, name, job, career, region, skill, introduce, urlGithub, urlInsta, imgURL, phone, provider, providerId) " +
+                                            "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try
             {
-                DPJdbcTemplate.update(query2, request.get("id"), request.get("name"), request.get("email"), request.get("password"));
+                DPJdbcTemplate.update(query2, request.get("email"), request.get("password"), request.get("name"), request.get("job"), request.get("career"), 
+                                            request.get("region"), request.get("skill"), request.get("introduce"), request.get("urlGithub"), request.get("urlInsta"), 
+                                            request.get("imgURL"), request.get("phone"), request.get("provider"), request.get("providerId"));
 
                 answer.put("result", "true");
                 answer.put("message", "회원가입에 성공하였습니다.");
-                answer.put("id", Integer.toString(nextId));
             }
             catch(DataAccessException  e)
             {
@@ -48,9 +48,12 @@ public class LoginDao {
                 answer.put("message", "회원가입에 실패하였습니다.");
             }
         }
-        answer.put("result", "false");
-        answer.put("message", "이미 존재하는 사용자 입니다.");
-
+        else{
+            answer.put("result", "false");
+            answer.put("message", "이미 존재하는 사용자 입니다.");
+            answer.put("email", request.get("email"));
+        }
+        
         return answer;
     }
 
