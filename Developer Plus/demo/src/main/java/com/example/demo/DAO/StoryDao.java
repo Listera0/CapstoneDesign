@@ -14,7 +14,26 @@ import com.example.demo.dto.*;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.lang.Nullable;
 
+
+class StoryRowMapper implements RowMapper<StoryDto> {
+    @Override
+    @Nullable
+    public StoryDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+        StoryDto dto = new StoryDto();
+        dto.setId(rs.getInt("id"));
+        dto.setTitle(rs.getString("title"));
+        dto.setImgURL(rs.getString("imgURL"));
+        dto.setName(rs.getString("name"));
+        dto.setContent(rs.getString("content"));
+        dto.setHashTag(rs.getString("hashTag"));
+        dto.setViewCount(rs.getInt("viewCount"));
+        dto.setLikeCount(rs.getInt("likeCount"));
+
+        return dto;
+    }
+}
 
 @Repository
 public class StoryDao {
@@ -35,42 +54,12 @@ public class StoryDao {
         if(limit != "")
             query += " limit " + limit;
 
-        return DPJdbcTemplate.query(query, 
-			new RowMapper<StoryDto>() 
-            {
-				public StoryDto mapRow(ResultSet rs, int rowNum) throws SQLException 
-                {
-					return new StoryDto(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("name"),
-                        rs.getString("content"),
-                        rs.getString("imgURL"),
-                        rs.getString("hashTag")
-                    );
-				}
-		    }
-        );
+        return DPJdbcTemplate.query(query, new StoryRowMapper());
     }
 
     public List<StoryDto> getDataAll()
     {
-        return DPJdbcTemplate.query("select * from story", 
-			new RowMapper<StoryDto>() 
-            {
-				public StoryDto mapRow(ResultSet rs, int rowNum) throws SQLException 
-                {
-					return new StoryDto(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("name"),
-                        rs.getString("content"),
-                        rs.getString("imgURL"),
-                        rs.getString("hashTag")
-                    );
-				}
-		    }
-        );
+        return DPJdbcTemplate.query("select * from story", new StoryRowMapper());
     }
 
     public String insertToDatabase(StoryDto dto)

@@ -14,7 +14,32 @@ import com.example.demo.dto.*;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.lang.Nullable;
 
+class ProjectRowMapper implements RowMapper<ProjectDto> {
+    @Override
+    @Nullable
+    public ProjectDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+        ProjectDto dto = new ProjectDto();
+        dto.setId(rs.getInt("id"));
+        dto.setTitle(rs.getString("title"));
+        dto.setImgURL(rs.getString("imgURL"));
+        dto.setRegion(rs.getString("region"));
+        dto.setName(rs.getString("name"));
+        dto.setJob(rs.getString("job"));
+        dto.setCareer(rs.getString("career"));
+        dto.setNowJob(rs.getString("nowJob"));
+        dto.setRequireJob(rs.getString("requireJob"));
+        dto.setStartDate(rs.getString("startDate"));
+        dto.setEndDate(rs.getString("endDate"));
+        dto.setContent(rs.getString("content"));
+        dto.setSkill(rs.getString("skill"));
+        dto.setViewCount(rs.getInt("viewCount"));
+        dto.setLikeCount(rs.getInt("likeCount"));
+
+        return dto;
+    }
+}
 
 @Repository
 public class ProjectDao {
@@ -36,61 +61,21 @@ public class ProjectDao {
         if(limit != "")
             query += " limit " + limit;
 
-        return DPJdbcTemplate.query(query, 
-			new RowMapper<ProjectDto>() 
-            {
-				public ProjectDto mapRow(ResultSet rs, int rowNum) throws SQLException 
-                {
-					return new ProjectDto(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("region"),
-                        rs.getString("name"),
-                        rs.getString("content"),
-                        rs.getString("job"),
-                        rs.getInt("requireJob"),
-                        rs.getInt("nowJob"),
-                        rs.getString("career"),
-                        rs.getString("imgURL"),
-                        rs.getString("hashTag")
-                    );
-				}
-		    }
-        );
+        return DPJdbcTemplate.query(query, new ProjectRowMapper());
     }
 
     public List<ProjectDto> getDataAll()
     {
-        return DPJdbcTemplate.query("select * from project", 
-			new RowMapper<ProjectDto>() 
-            {
-				public ProjectDto mapRow(ResultSet rs, int rowNum) throws SQLException 
-                {
-					return new ProjectDto(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("region"),
-                        rs.getString("name"),
-                        rs.getString("content"),
-                        rs.getString("job"),
-                        rs.getInt("requireJob"),
-                        rs.getInt("nowJob"),
-                        rs.getString("career"),
-                        rs.getString("imgURL"),
-                        rs.getString("hashTag")
-                    );
-				}
-		    }
-        );
+        return DPJdbcTemplate.query("select * from project", new ProjectRowMapper());
     }
 
     public String insertToDatabase(ProjectDto dto)
     {
-        String query = "insert into project (id, title, region, name, content, job, requireJob, nowJob, career, imgURL, hashTag) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "insert into project (id, title, region, name, content, job, requireJob, nowJob, career, imgURL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try
         {
             DPJdbcTemplate.update(query, dto.getId(), dto.getTitle(), dto.getRegion(), dto.getName(), dto.getContent(), dto.getJob(),
-                                        dto.getRequireJob(), dto.getNowJob(), dto.getCareer(), dto.getImgURL(), dto.getHashTag());
+                                        dto.getRequireJob(), dto.getNowJob(), dto.getCareer(), dto.getImgURL());
         }
         catch(DataAccessException  e)
         {

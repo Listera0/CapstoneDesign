@@ -41,7 +41,6 @@ class DevRowMapper implements RowMapper<DeveloperDto> {
 
         return dto;
     }
-    
 }
 
 @Repository
