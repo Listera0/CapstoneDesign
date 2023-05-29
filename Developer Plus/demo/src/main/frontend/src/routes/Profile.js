@@ -5,9 +5,11 @@ import { Nav } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import { icons2, jobs } from '../icons2.js';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 function Profile(props) {
   let { id } = useParams();
+  let navigate = useNavigate(); //페이지 이동
   const [userDetail, setUserDetail] = useState(['']);
   {
     useEffect(() => {
@@ -82,6 +84,7 @@ function Profile(props) {
             jobDetail={jobDetail}
             careerDetail={careerDetail}
             skillDetail={skillDetail}
+            navigate={navigate}
           ></MainTabContent>
         </div>
       </div>
@@ -145,11 +148,28 @@ function MainTabContent(props) {
                     <li className='mb-2 mb-xl-3 display-28'>
                       <p
                         className='display-26 text-secondary me-2 font-weight-600'
-                        style={{ textAlign: 'start' }}
+                        style={{ textAlign: 'start', fontSize: '15px' }}
                       >
                         참여중인 프로젝트 {props.developerDetail.projectCount}개
                         있습니다
                       </p>{' '}
+                    </li>
+                    <li className='mb-2 mb-xl-3 display-28'>
+                      <button
+                        onClick={() => {
+                          props.navigate('/profileDetail');
+                        }}
+                        style={{
+                          border: '1px solid rgb(222,222,222)',
+                          borderRadius: '5px',
+                          backgroundColor: '#9796a7',
+                          color: 'white',
+                          fontWeight: '600',
+                          padding: '8px 14px',
+                        }}
+                      >
+                        프로필 작성하기
+                      </button>
                     </li>
                   </ul>
                 </div>

@@ -30,12 +30,6 @@ function FindDeveloperDetail(props) {
   let projectDetail = projectDetails[0];
 
   let [tab, setTab] = useState(0);
-  let skillDetail =
-    projectDetail.skill != null ? projectDetail.skill.split(',') : '';
-  let jobDetail = projectDetail.job != null ? projectDetail.job.split(',') : '';
-
-  let careerDetail =
-    projectDetail.career != null ? projectDetail.career.split(',') : '';
 
   // let [req2, setReq2] = useState(projectDetail.requireJob);
   // console.log(req2);
@@ -59,9 +53,7 @@ function FindDeveloperDetail(props) {
             maintab={maintab}
             setTab={setTab}
             projectDetail={projectDetail}
-            skillDetail={skillDetail}
-            jobDetail={jobDetail}
-            careerDetail={careerDetail}
+
             // req2={req2}
             // setReq2={setReq2}
           ></MainTabContent>
@@ -322,6 +314,14 @@ function TabContent(props) {
     );
   }
   if (props.tab == 1) {
+    let jobDetail =
+      props.projectDetail.job != null ? props.projectDetail.job.split(',') : '';
+
+    let careerDetail =
+      props.projectDetail.career != null
+        ? props.projectDetail.career.split(',')
+        : '';
+
     return (
       <div className='col-lg-12 mb-4 mb-sm-5'>
         <div>
@@ -361,6 +361,11 @@ function TabContent(props) {
                     );
                   })}
                 </div>{' '} */}
+                <Jobs
+                  jobDetail={jobDetail}
+                  careerDetail={careerDetail}
+                  projectDetail={props.projectDetail}
+                ></Jobs>
               </div>
             </div>
             <div style={{ textAlign: 'start' }}>
@@ -415,25 +420,69 @@ function TabContent(props) {
     );
   }
   function Jobs(props) {
+    const [jobsState, setJobsState] = useState(
+      Array(props.careerDetail.length).fill(0)
+    );
+
+    const countJob = (index) => {
+      setJobsState((jobsState) => {
+        const newJobsState = [...jobsState];
+        if (newJobsState[index] === 0) {
+          newJobsState[index] += 1;
+        } else if (newJobsState[index] > 0) {
+          newJobsState[index] -= 1;
+        }
+        return newJobsState;
+      });
+    };
     return (
       <div key={props.i} style={{}}>
         <div>
           <div
             style={{ display: 'flex', marginBottom: '2%', textAlign: 'start' }}
           >
-            <div style={{ fontWeight: '600', marginRight: '10%' }}>
-              {props.projectDetail.job[props.i]}{' '}
+            <div
+              style={{
+                fontWeight: '600',
+                marginRight: '10%',
+              }}
+            >
+              {props.jobDetail.map((job, index) => (
+                <div key={index} style={{ marginBottom: '10%' }}>
+                  {job}
+                </div>
+              ))}
             </div>
+            <div></div>
+            <div style={{ fontWeight: '600', marginRight: '10%' }}>
+              {props.careerDetail.map((ele, i) => (
+                <div
+                  style={{
+                    marginBottom: '10%',
+                    display: 'flex',
+                  }}
+                >
+                  <div key={i} style={{}}>
+                    {jobsState[i]}/{ele}
+                  </div>
+                  <div style={{ width: '100%', marginLeft: '5%' }}>
+                    {jobsState[i] == ele ? (
+                      <button disabled>마감</button>
+                    ) : (
+                      <button onClick={() => countJob(i)}>지원</button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
             <div
               style={{
                 marginRight: '10%',
                 textAlign: 'start',
               }}
-            >
-              {props.projectDetail.requireJob[props.i]}/
-              {props.projectDetail.nowJob[props.i]}
-            </div>
-            <div style={{ textAlign: 'start' }}>
+            ></div>
+            {/* <div style={{ textAlign: 'start' }}>
               {props.projectDetail.requireJob[props.i] ==
               props.projectDetail.nowJob[props.i] ? (
                 <button style={{}} disabled>
@@ -448,13 +497,18 @@ function TabContent(props) {
                   지원
                 </button>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
     );
   }
+
   if (props.tab == 2) {
+    let skillDetail =
+      props.projectDetail.career != null
+        ? props.projectDetail.career.split(',')
+        : '';
     return (
       <div className='col-lg-12 mb-4 mb-sm-5'>
         <div>
@@ -488,17 +542,16 @@ function TabContent(props) {
                       flexWrap: 'wrap',
                     }}
                   >
-                    {props.skillDetail.map((ele, i) => {
+                    {skillDetail.map((ele, i) => {
                       return (
                         <Icons2
                           key={i}
                           icons2={icons2}
                           i={i}
                           ele={ele}
-                          projectDetail={props.projectDetail}
-                          skillDetail={props.skillDetail}
-                          skill={props.skill}
-                        ></Icons2>
+                          developerDetail={props.developerDetail}
+                          skillDetail={skillDetail}
+                        />
                       );
                     })}
                   </div>
@@ -515,9 +568,7 @@ function Icons2(props) {
   return (
     <div style={{ justifyContent: 'space-between', alignItems: 'center' }}>
       <p style={{ paddingLeft: '1%' }}>{props.icons2[props.ele]}</p>
-      <p style={{ textAlign: 'center' }}>
-        {props.skillDetail[props.i]}
-      </p>
+      <p style={{ textAlign: 'center' }}>{props.skillDetail[props.i]}</p>
     </div>
   );
 }
