@@ -29,6 +29,32 @@ function SignUp(props) {
     }
   }, []);
 
+  const [checkEmail, setCheckEmail] = useState('');
+
+  const emailDuplicate = (_email) => {
+    axios
+      .get(`/api/emailDuplicate?email=${_email}`)
+      .then((response) => {
+        if(_provider != '') {
+          if(response.data['result'] == "true") {
+            if(response.data['provider'] == _provider) {
+              setCheckEmail(response.data['message']);
+            }
+            else {
+              setCheckEmail("사용 가능한 이메일 입니다.");
+            }
+          }
+          else {
+            setCheckEmail(response.data['message']);
+          }
+        }
+        else {
+          setCheckEmail(response.data['message']);
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+
   const requestSignUp = (_email, _password, _name) => {
     axios
       .post('/api/requestSignUp', {
@@ -175,6 +201,11 @@ function SignUp(props) {
                     </span>
                     <span className='col-lg-4'>
                       <button
+                        onClick={() =>
+                          emailDuplicate(
+                            document.getElementById('email').value
+                          )
+                        }
                         style={{
                           border: '1px solid rgb(222,222,222)',
                           borderRadius: '5px',
@@ -196,7 +227,7 @@ function SignUp(props) {
                         fontSize: '12px',
                       }}
                     >
-                      사용가능한 이메일입니다.
+                      {checkEmail}
                     </span>
                   </div>
                 </li>

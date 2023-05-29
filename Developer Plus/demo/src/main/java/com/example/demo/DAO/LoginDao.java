@@ -29,15 +29,16 @@ public class LoginDao {
 
         if(loginData.size() < 1)
         {
-            // String result = loginRepository.insertToDatabase(nextId, request.get("name"), request.get("email"), request.get("password"));
-
-            String query2 = "insert into developer (email, password, name, job, career, region, skill, introduce, urlGithub, urlInsta, imgURL, phone, provider, providerId) " +
-                                            "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try
             {
-                DPJdbcTemplate.update(query2, request.get("email"), request.get("password"), request.get("name"), request.get("job"), request.get("career"), 
-                                            request.get("region"), request.get("skill"), request.get("introduce"), request.get("urlGithub"), request.get("urlInsta"), 
-                                            request.get("imgURL"), request.get("phone"), request.get("provider"), request.get("providerId"));
+                if(request.get("provider") == "") {
+                    String query2 = "insert into developer (email, password, name) values (?, ?, ?)";
+                    DPJdbcTemplate.update(query2, request.get("email"), request.get("password"), request.get("name"));
+                }
+                else {
+                    String query2 = "insert into developer (email, password, name, provider, providerId) values (?, ?, ?, ?, ?)";
+                    DPJdbcTemplate.update(query2, request.get("email"), request.get("password"), request.get("name"), request.get("provider"), request.get("providerId"));
+                }
 
                 answer.put("result", "true");
                 answer.put("message", "회원가입에 성공하였습니다.");
@@ -45,13 +46,31 @@ public class LoginDao {
             catch(DataAccessException  e)
             {
                 answer.put("result", "false");
-                answer.put("message", "회원가입에 실패하였습니다.");
+                answer.put("message", "회원가입에 실패하였습니다. ?");
             }
         }
         else{
-            answer.put("result", "false");
-            answer.put("message", "이미 존재하는 사용자 입니다.");
-            answer.put("email", request.get("email"));
+            if(loginData.get(0).getProvider() != "") {
+                try
+                {
+                    String query3 = String.format("update developer set provider = '%s', providerId = %s where email = '%s'", request.get("provider"), request.get("providerId"), request.get("email"));
+                    System.out.println(query3);
+                    DPJdbcTemplate.update(query3);
+
+                    answer.put("result", "true");
+                    answer.put("message", request.get("provider") + " 회원가입에 성공하였습니다.");
+                }
+                catch(DataAccessException  e)
+                {
+                    answer.put("result", "false");
+                    answer.put("message", request.get("provider") + " 회원가입에 실패하였습니다.");
+                }
+            }
+            else {
+                answer.put("result", "false");
+                answer.put("message", "이미 존재하는 사용자 입니다.");
+                answer.put("email", request.get("email"));
+            }
         }
         
         return answer;
@@ -83,12 +102,22 @@ public class LoginDao {
         return answer;
     }
 
-    public boolean hasEmail (String email) {
-        String query = String.format("select * from developer where email=%d", email);
+    public Map<String, String> hasEmail (String email) {
+        String query = String.format("select * from developer where email = '%s'", email);
         List<DeveloperDto> loginData = DPJdbcTemplate.query(query, new DevRowMapper());
+        Map<String, String> answer = new HashMap<String, String>();
 
-        if(loginData.size() >= 1)
-            return true;
-        return false;
+        if(loginData.size() >= 1) {
+            answer.put("result", "true");
+            if(loginData.get(0).getProvider() != "") {
+                answer.put("provider", loginData.get(0).getProvider());
+                answer.put("message", "이미 존재하는 사용자입니다.");
+            }
+        }
+        else{
+            answer.put("result", "false");
+            answer.put("message", "사용가능한 이메일 입니다.");
+        }
+        return answer;
     }
 }

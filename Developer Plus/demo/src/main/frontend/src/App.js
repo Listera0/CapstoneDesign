@@ -54,6 +54,12 @@ function App() {
 
   const [resultDto, setResultDto] = useState(['']);
   const [view, setView] = useState(false);
+
+  const [isLogin, setIsLogin] = useState(false); //로그인 관리
+  const [devLikeCountData, setDevLikeCountData] = useState(['']);
+  const [storyLikeCountData, setStoryLikeCountData] = useState(['']);
+  const [projectLikeCountData, setProjectLikeCountData] = useState(['']);
+
   const getDto = (location, _id, _orderBy, _limit) => {
     axios
       .post('/api/get' + location + 'Data', {
@@ -66,7 +72,25 @@ function App() {
       .catch((error) => console.log(error));
   };
 
-  const [isLogin, setIsLogin] = useState(false); //로그인 관리
+  const getLikeCount = (_location, _id) => {
+    axios
+      .post('/api/userLikeCount', {
+        location: _location,
+        userId: _id,
+      })
+      .then((response) => {
+        if(_location == "developer") {
+          setDevLikeCountData(response.data);
+        }
+        else if(_location == "story") {
+          setStoryLikeCountData(response.data);
+        }
+        else if(_location == "project") {
+          setProjectLikeCountData(response.data);
+        }
+      })
+      .catch((error) => console.log(error));
+  };
 
   useEffect(() => {
     if (sessionStorage.getItem('id') === null) {
@@ -76,14 +100,20 @@ function App() {
       // 로그인 상태 변경
       setIsLogin(true);
       getDto('Dev', sessionStorage.getItem('id'), '', '');
+      getLikeCount("developer", sessionStorage.getItem('id'));
+      // 아래 두개는 데이터베이스 완성시 추가
+      // getLikeCount("story", sessionStorage.getItem('id'));
+      // getLikeCount("project", sessionStorage.getItem('id'));
     }
   });
+
   const [session, setsession] = useState(sessionStorage.getItem('id'));
   const handleClick = () => {
     sessionStorage.removeItem('id');
     setsession(null);
     window.location.reload();
   };
+
   const [allDevDto, setAllDevDto] = useState(['']);
   {
     useEffect(() => {
@@ -93,6 +123,7 @@ function App() {
         .catch((error) => console.log(error));
     }, []);
   }
+
   const [allStoryDto, setAllStoryDto] = useState(['']);
   {
     useEffect(() => {
@@ -102,6 +133,7 @@ function App() {
         .catch((error) => console.log(error));
     }, []);
   }
+
   const [allProjectDto, setAllProjectDto] = useState(['']);
   {
     useEffect(() => {
@@ -125,6 +157,7 @@ function App() {
         .catch((error) => console.log(error));
     }, []);
   }
+  
   const [rankingStoryDto, setRankingStoryDto] = useState(['']);
   {
     useEffect(() => {
@@ -296,6 +329,8 @@ function App() {
                           resultDto={resultDto}
                           setLikeBool={setLikeBool}
                           likeBool={likeBool}
+                          devLikeCountData={devLikeCountData}
+                          isLogin={isLogin}
                         ></DeveloperCard>
                       </>
                     );
@@ -494,6 +529,28 @@ function ProjectCard(props) {
   );
 }
 function DeveloperCard(props) {
+  const [likeCountDetail, setLikeCountDetail] = useState('');
+  {
+    useEffect(() => {
+      let flag = false;
+      for(let k = 0; k < props.devLikeCountData.length; k++) {
+        if(props.devLikeCountData[k].targetId == props.rankingDevDto[props.i].id) {
+          setLikeCountDetail(props.devLikeCountData[k].like);
+          flag = true;
+          break;
+        }
+      }
+      if(flag == false) {
+        setLikeCountDetail(false);
+      }
+    });
+  };
+
+  const showLikeCount = () => {
+    likeCountDetail == true ? props.rankingDevDto[props.i].likeCount-- : props.rankingDevDto[props.i].likeCount++;
+    likeCountDetail == true ? setLikeCountDetail(false) : setLikeCountDetail(true);
+  };
+
   return (
     <MobileDeveloper>
       <div className='d-flex justify-content-around ' style={{}}>
@@ -610,11 +667,8 @@ function DeveloperCard(props) {
                     color: '#f1928e',
                   }}
                   onClick={() => {
-                    props.likeInput(
-                      'developer',
-                      props.resultDto[0].id,
-                      props.rankingDevDto[props.i].id
-                    );
+                    props.likeInput('developer',  props.resultDto[0].id, props.rankingDevDto[props.i].id);
+                    if(props.isLogin) {showLikeCount()}
                   }}
                 />{' '}
                 {props.rankingDevDto[props.i].likeCount}

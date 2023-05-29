@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -37,6 +39,18 @@ public class MainController {
     @RequestMapping(value="/api/requestSignUp", method = RequestMethod.POST)
     public Map<String, String> requestSignUp(@RequestBody Map<String, String> request) {
         return loginRepository.requestSignUp(request);
+    }
+
+    // 중복 이메일 확인 요청
+    @RequestMapping(value="/api/emailDuplicate", method = RequestMethod.GET)
+    public Map<String, String> emailDuplicate(@RequestParam("email")String email) throws IOException {
+        return loginRepository.hasEmail(email);
+    }
+
+    // 유저의 좋아요 기록 가져오기
+    @RequestMapping(value="/api/userLikeCount", method = RequestMethod.POST)
+    public List<LikeCountDto> userLikeCount(@RequestBody Map<String, String> request) {
+        return likeCountRepository.userLikeCount(request.get("location"), request.get("userId"));
     }
 
     // 좋아요 버튼 기능
