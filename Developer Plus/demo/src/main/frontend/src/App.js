@@ -34,6 +34,8 @@ import Login from './routes/Login';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import KakaoLogin from './routes/KakaoLogin';
+import ProfileDetail from './routes/ProfileDetail';
+
 library.add(fab);
 let MobileDeveloper = styled.div`
   width: 25%;
@@ -197,22 +199,8 @@ function App() {
     console.log(list);
   };
   let [modal, setModal] = useState(true);
-  // const [liked, setLiked] = useState(rankingDevDto[i].userLike);
-  // const [likeCount, setLikeCount] = useState(
-  //   props.rankingDevDto[props.i].likeCount
-  // );
   return (
     <div className='App ' style={{ margin: '0' }}>
-      {/* {showDataList(allDevDto)} */}
-      {/* {showDataList(allStoryDto)} */}
-      {/* {showDataList(allProjectDto)} */}
-      {/* {showDataList(rankingDevDto)} */}
-      {/* {showDataList(rankingStoryDto)} */}
-      {/* {showDataList(resultDto)} */}
-      {/* <Routes>
-        <Route path='/FindDeveloper' element={<Filiter />}></Route>
-        <Route path='/ViewDeveloper' element={<Filiter />}></Route>
-      </Routes> */}
       <NavBar
         navigate={navigate}
         isLogin={isLogin}
@@ -400,6 +388,7 @@ function App() {
         <Route path='/SignUp' element={<SignUp />}></Route>
         <Route path='/write' element={<Write />}></Route>
         <Route path='/KakaoLogin' element={<KakaoLogin />}></Route>
+        <Route path='/profileDetail' element={<ProfileDetail />}></Route>
       </Routes>
       <Footer navigate={navigate}></Footer>
     </div>
