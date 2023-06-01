@@ -116,6 +116,29 @@ function Write() {
 }
 
 function MainTabContent(props) {
+  const [imageUrlList] = useState([
+    process.env.PUBLIC_URL + '/c1.jpg',
+    process.env.PUBLIC_URL + '/c2.png',
+    process.env.PUBLIC_URL + '/c3.jpg',
+    process.env.PUBLIC_URL + '/main1.jpg',
+    process.env.PUBLIC_URL + '/main2.jpg',
+    process.env.PUBLIC_URL + '/main3.jpg',
+    process.env.PUBLIC_URL + '/main4.jpg',
+    process.env.PUBLIC_URL + '/main5.jpg',
+    // 필요한 만큼 사진의 URL을 추가하세요.
+  ]);
+  const thumbnailStyle = {
+    maxWidth: '100%',
+    maxHeight: '230px',
+    objectFit: 'cover', // 가로 너비에 맞게 비율을 유지하도록 자동 조정
+  };
+  const [selectedImageUrl, setSelectedImageUrl] = useState('');
+  const [defaultImageUrl, setdefaultImageUrl] = useState(
+    `${process.env.PUBLIC_URL}/main1.jpg`
+  );
+  const handleThumbnailClick = (imageUrl) => {
+    setSelectedImageUrl(imageUrl);
+  };
   if (props.maintab == 0) {
     return (
       <>
@@ -205,83 +228,46 @@ function MainTabContent(props) {
           <div className='flex-container'>
             <div className='wrapper' style={{ display: 'flex' }}>
               <div>
-                <img
-                  id='preview-image'
-                  src='https://i0.wp.com/adventure.co.kr/wp-content/uploads/2020/09/no-image.jpg'
-                  className='image-box'
+                {selectedImageUrl ? (
+                  <img
+                    src={selectedImageUrl}
+                    alt='뷰 사진'
+                    style={thumbnailStyle}
+                  />
+                ) : (
+                  <img
+                    src={defaultImageUrl}
+                    alt='기본 썸네일'
+                    style={thumbnailStyle}
+                  />
+                )}
+                <div
+                  className='wrap-vertical'
                   style={{
-                    maxWidth: '100%',
-                    maxHeight: '230px',
-                    objectFit: 'cover',
+                    display: 'flex',
+                    whiteSpace: 'nowrap',
+                    overflow: 'auto',
                   }}
-                  alt='Preview'
-                />
-
-                <div style={{ justifyContent: 'space-between' }}>
-                  <label
-                    htmlFor='file'
-                    style={{
-                      cursor: 'pointer',
-                      marginBottom: '5%',
-                      width: '100%',
-                    }}
-                  >
-                    <input
-                      id='file'
-                      type='file'
-                      accept='image/*'
-                      onChange={props.handleImageChange}
+                >
+                  {/* 썸네일 이미지 */}
+                  {imageUrlList.map((imageUrl, index) => (
+                    <img
+                      key={index}
+                      src={imageUrl}
+                      alt={`썸네일 이미지 ${index + 1}`}
+                      style={{
+                        maxWidth: '50%',
+                        maxHeight: '150px',
+                        objectFit: 'cover',
+                        marginLeft: '1%',
+                        marginTop: '3%',
+                        marginBottom: '3%',
+                      }}
+                      onClick={() => handleThumbnailClick(imageUrl)}
                     />
-                    <p
-                      style={{
-                        textAlign: 'center',
-                        cursor: 'pointer',
-                        marginBottom: '3%',
-                        fontWeight: '400',
-                        fontSize: '12px',
-                        color: '#9796a7',
-                        fontFamily: 'Pretendard',
-                        fontStyle: 'normal',
-                        lineHeight: '18px',
-                        padding: '7px 20px',
-                        border: '1px solid #9796a7',
-                        backgroundColor: '#fff',
-                        borderRadius: '4px',
-                        marginBottom: '3%',
-                        width: '50%',
-                      }}
-                    >
-                      이미지 업로드
-                    </p>
-                    <p
-                      style={{
-                        marginBottom: '3%',
-                        fontWeight: '400',
-                        fontSize: '13px',
-                        color: '#b1b1b1',
-                        fontFamily: 'Pretendard',
-                        fontStyle: 'normal',
-                        lineHeight: '18px',
-                        textAlign: 'start',
-                      }}
-                    >
-                      ❗ 이미지 크기는 460X230으로 해주세요
-                    </p>
-                    <p
-                      style={{
-                        marginBottom: '3%',
-                        fontWeight: '400',
-                        fontSize: '13px',
-                        color: '#b1b1b1',
-                        fontFamily: 'Pretendard',
-                        fontStyle: 'normal',
-                        lineHeight: '18px',
-                        textAlign: 'start',
-                      }}
-                    >
-                      ❗ 저작권에 위배되지 않는 파일만 업로드해주세요.
-                    </p>
-                  </label>
+                  ))}
+
+                  {/* 뷰 사진 */}
                 </div>
               </div>
             </div>
@@ -508,83 +494,46 @@ function MainTabContent(props) {
           <div className='flex-container'>
             <div className='wrapper' style={{ display: 'flex' }}>
               <div>
-                <img
-                  id='preview-image'
-                  src='https://i0.wp.com/adventure.co.kr/wp-content/uploads/2020/09/no-image.jpg'
-                  className='image-box'
+                {selectedImageUrl ? (
+                  <img
+                    src={selectedImageUrl}
+                    alt='뷰 사진'
+                    style={thumbnailStyle}
+                  />
+                ) : (
+                  <img
+                    src={defaultImageUrl}
+                    alt='기본 썸네일'
+                    style={thumbnailStyle}
+                  />
+                )}
+                <div
+                  className='wrap-vertical'
                   style={{
-                    maxWidth: '100%',
-                    maxHeight: '230px',
-                    objectFit: 'cover',
+                    display: 'flex',
+                    whiteSpace: 'nowrap',
+                    overflow: 'auto',
                   }}
-                  alt='Preview'
-                />
-
-                <div style={{ justifyContent: 'space-between' }}>
-                  <label
-                    htmlFor='file'
-                    style={{
-                      cursor: 'pointer',
-                      marginBottom: '5%',
-                      width: '100%',
-                    }}
-                  >
-                    <input
-                      id='file'
-                      type='file'
-                      accept='image/*'
-                      onChange={props.handleImageChange}
+                >
+                  {/* 썸네일 이미지 */}
+                  {imageUrlList.map((imageUrl, index) => (
+                    <img
+                      key={index}
+                      src={imageUrl}
+                      alt={`썸네일 이미지 ${index + 1}`}
+                      style={{
+                        maxWidth: '50%',
+                        maxHeight: '150px',
+                        objectFit: 'cover',
+                        marginLeft: '1%',
+                        marginTop: '3%',
+                        marginBottom: '3%',
+                      }}
+                      onClick={() => handleThumbnailClick(imageUrl)}
                     />
-                    <p
-                      style={{
-                        textAlign: 'center',
-                        cursor: 'pointer',
-                        marginBottom: '3%',
-                        fontWeight: '400',
-                        fontSize: '12px',
-                        color: '#9796a7',
-                        fontFamily: 'Pretendard',
-                        fontStyle: 'normal',
-                        lineHeight: '18px',
-                        padding: '7px 20px',
-                        border: '1px solid #9796a7',
-                        backgroundColor: '#fff',
-                        borderRadius: '4px',
-                        marginBottom: '3%',
-                        width: '50%',
-                      }}
-                    >
-                      이미지 업로드
-                    </p>
-                    <p
-                      style={{
-                        marginBottom: '3%',
-                        fontWeight: '400',
-                        fontSize: '13px',
-                        color: '#b1b1b1',
-                        fontFamily: 'Pretendard',
-                        fontStyle: 'normal',
-                        lineHeight: '18px',
-                        textAlign: 'start',
-                      }}
-                    >
-                      ❗ 이미지 크기는 460X230으로 해주세요
-                    </p>
-                    <p
-                      style={{
-                        marginBottom: '3%',
-                        fontWeight: '400',
-                        fontSize: '13px',
-                        color: '#b1b1b1',
-                        fontFamily: 'Pretendard',
-                        fontStyle: 'normal',
-                        lineHeight: '18px',
-                        textAlign: 'start',
-                      }}
-                    >
-                      ❗ 저작권에 위배되지 않는 파일만 업로드해주세요.
-                    </p>
-                  </label>
+                  ))}
+
+                  {/* 뷰 사진 */}
                 </div>
               </div>
             </div>

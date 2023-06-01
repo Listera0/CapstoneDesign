@@ -317,9 +317,9 @@ function TabContent(props) {
     let jobDetail =
       props.projectDetail.job != null ? props.projectDetail.job.split(',') : '';
 
-    let careerDetail =
-      props.projectDetail.career != null
-        ? props.projectDetail.career.split(',')
+    let requireJobDetail =
+      props.projectDetail.requireJob != null
+        ? props.projectDetail.requireJob.split(',')
         : '';
 
     return (
@@ -363,7 +363,7 @@ function TabContent(props) {
                 </div>{' '} */}
                 <Jobs
                   jobDetail={jobDetail}
-                  careerDetail={careerDetail}
+                  requireJobDetail={requireJobDetail}
                   projectDetail={props.projectDetail}
                 ></Jobs>
               </div>
@@ -421,7 +421,7 @@ function TabContent(props) {
   }
   function Jobs(props) {
     const [jobsState, setJobsState] = useState(
-      Array(props.careerDetail.length).fill(0)
+      Array(props.requireJobDetail.length).fill(0)
     );
 
     const countJob = (index) => {
@@ -455,7 +455,7 @@ function TabContent(props) {
             </div>
             <div></div>
             <div style={{ fontWeight: '600', marginRight: '10%' }}>
-              {props.careerDetail.map((ele, i) => (
+              {props.requireJobDetail.map((ele, i) => (
                 <div
                   style={{
                     marginBottom: '10%',
@@ -506,8 +506,8 @@ function TabContent(props) {
 
   if (props.tab == 2) {
     let skillDetail =
-      props.projectDetail.career != null
-        ? props.projectDetail.career.split(',')
+      props.projectDetail.skill != null
+        ? props.projectDetail.skill.split(',')
         : '';
     return (
       <div className='col-lg-12 mb-4 mb-sm-5'>
