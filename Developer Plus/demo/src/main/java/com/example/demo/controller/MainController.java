@@ -27,6 +27,8 @@ public class MainController {
     LoginDao loginRepository;
     @Autowired
     LikeCountDao likeCountRepository;
+    @Autowired
+    ChatDao chatRepository;
 
 
     // 로그인 요청
@@ -57,6 +59,24 @@ public class MainController {
     @RequestMapping(value="/api/likeInput", method = RequestMethod.POST)
     public Boolean likeInput(@RequestBody Map<String, String> request) {
         return likeCountRepository.likeInput(request.get("location"), request.get("userId"), request.get("targetId"));
+    }
+
+    // 스토리에 댓글 입력
+    @RequestMapping(value="/api/insertChat", method = RequestMethod.POST)
+    public void insertChat(@RequestBody Map<String, String> request) {
+        chatRepository.insertChat(request.get("userId"), request.get("targetId"), request.get("content"));
+    }
+
+    // 스토리 댓글 삭제
+    @RequestMapping(value="/api/deleteChat", method = RequestMethod.POST)
+    public void deleteChat(@RequestBody Map<String, String> request) {
+        chatRepository.getChatHistory(request.get("targetId"));
+    }
+
+    // 대상 스토리의 댓글 전부 가져오기
+    @RequestMapping(value="/api/getChatHistory", method = RequestMethod.POST)
+    public List<ChatDto> getChatHistory(@RequestBody Map<String, String> request) {
+        return chatRepository.getChatHistory(request.get("targetId"));
     }
 
     // 모든 Developer 데이터 가져오기

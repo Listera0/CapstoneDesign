@@ -33,4 +33,15 @@ public class MainConfig {
     public JdbcTemplate LKJdbcTemplate(@Qualifier("LK") DataSource dataSource){
         return new JdbcTemplate(dataSource);
     }
+
+    @Bean(name = "CH")
+    @ConfigurationProperties(prefix = "spring.datasource.chat")
+    public DataSource CHDatasource(){
+        return DataSourceBuilder.create().build();
+    }
+ 
+    @Bean(name = "CHTemplate")
+    public JdbcTemplate CHJdbcTemplate(@Qualifier("CH") DataSource dataSource){
+        return new JdbcTemplate(dataSource);
+    }
 }
