@@ -40,10 +40,13 @@ library.add(fab);
 let MobileDeveloper = styled.div`
   width: 25%;
   @media screen and (max-width: 768px) {
-    disply: inline;
-    width: 120%;
-    overflow-x: scroll;
-    white-space: nowrap;
+    width: 100%;
+  }
+`;
+let Scroll = styled.div`
+  @media screen and (max-width: 768px) {
+    display: flex;
+    overflow-x: auto;
   }
 `;
 function App() {
@@ -81,13 +84,11 @@ function App() {
         userId: _id,
       })
       .then((response) => {
-        if(_location == "developer") {
+        if (_location == 'developer') {
           setDevLikeCountData(response.data);
-        }
-        else if(_location == "story") {
+        } else if (_location == 'story') {
           setStoryLikeCountData(response.data);
-        }
-        else if(_location == "project") {
+        } else if (_location == 'project') {
           setProjectLikeCountData(response.data);
         }
       })
@@ -102,7 +103,7 @@ function App() {
       // 로그인 상태 변경
       setIsLogin(true);
       getDto('Dev', sessionStorage.getItem('id'), '', '');
-      getLikeCount("developer", sessionStorage.getItem('id'));
+      getLikeCount('developer', sessionStorage.getItem('id'));
       // 아래 두개는 데이터베이스 완성시 추가
       // getLikeCount("story", sessionStorage.getItem('id'));
       // getLikeCount("project", sessionStorage.getItem('id'));
@@ -159,7 +160,7 @@ function App() {
         .catch((error) => console.log(error));
     }, []);
   }
-  
+
   const [rankingStoryDto, setRankingStoryDto] = useState(['']);
   {
     useEffect(() => {
@@ -522,27 +523,33 @@ function DeveloperCard(props) {
   {
     useEffect(() => {
       let flag = false;
-      for(let k = 0; k < props.devLikeCountData.length; k++) {
-        if(props.devLikeCountData[k].targetId == props.rankingDevDto[props.i].id) {
+      for (let k = 0; k < props.devLikeCountData.length; k++) {
+        if (
+          props.devLikeCountData[k].targetId == props.rankingDevDto[props.i].id
+        ) {
           setLikeCountDetail(props.devLikeCountData[k].like);
           flag = true;
           break;
         }
       }
-      if(flag == false) {
+      if (flag == false) {
         setLikeCountDetail(false);
       }
     });
-  };
+  }
 
   const showLikeCount = () => {
-    likeCountDetail == true ? props.rankingDevDto[props.i].likeCount-- : props.rankingDevDto[props.i].likeCount++;
-    likeCountDetail == true ? setLikeCountDetail(false) : setLikeCountDetail(true);
+    likeCountDetail == true
+      ? props.rankingDevDto[props.i].likeCount--
+      : props.rankingDevDto[props.i].likeCount++;
+    likeCountDetail == true
+      ? setLikeCountDetail(false)
+      : setLikeCountDetail(true);
   };
 
   return (
     <MobileDeveloper>
-      <div className='d-flex justify-content-around ' style={{}}>
+      <Scroll>
         <Card style={{}}>
           <div
             className='col-div'
@@ -656,8 +663,14 @@ function DeveloperCard(props) {
                     color: '#f1928e',
                   }}
                   onClick={() => {
-                    props.likeInput('developer',  props.resultDto[0].id, props.rankingDevDto[props.i].id);
-                    if(props.isLogin) {showLikeCount()}
+                    props.likeInput(
+                      'developer',
+                      props.resultDto[0].id,
+                      props.rankingDevDto[props.i].id
+                    );
+                    if (props.isLogin) {
+                      showLikeCount();
+                    }
                   }}
                 />{' '}
                 {props.rankingDevDto[props.i].likeCount}
@@ -668,7 +681,7 @@ function DeveloperCard(props) {
             </div>
           </Card.Body>
         </Card>
-      </div>
+      </Scroll>
     </MobileDeveloper>
   );
 }
