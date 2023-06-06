@@ -200,6 +200,7 @@ function App() {
     console.log(list);
   };
   let [modal, setModal] = useState(true);
+
   return (
     <div className='App ' style={{ margin: '0' }}>
       <NavBar
@@ -347,7 +348,14 @@ function App() {
         ></Route>
         <Route
           path='/Story'
-          element={<Story allStoryDto={allStoryDto} navigate={navigate} />}
+          element={
+            <Story
+              allStoryDto={allStoryDto}
+              navigate={navigate}
+              // setChatDetail={setChatDetail}
+              // chatDetail={chatDetail}
+            />
+          }
         ></Route>
         <Route
           path='/FindDeveloper'
@@ -375,7 +383,14 @@ function App() {
 
         <Route
           path='/ViewStoryDetail/:id'
-          element={<StoryDetail story={story} />}
+          element={
+            <StoryDetail
+              story={story}
+              // setChatDetail={setChatDetail}
+              // chatDetail={chatDetail}
+              // getChatHistory={getChatHistory}
+            />
+          }
         ></Route>
         <Route
           path='/profile/:id'

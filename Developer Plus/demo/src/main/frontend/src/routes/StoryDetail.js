@@ -18,6 +18,42 @@ function StoryDetail(props) {
   let [tab, setTab] = useState(0);
   let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
   const [storyDetails, setStoryDetails] = useState(['']);
+  const [chatDetail, setChatDetail] = useState(['']);
+  const getChatHistory = (_targetId) => {
+    axios
+      .post('/api/getChatHistory', {
+        targetId: _targetId,
+      })
+      .then((response) => {
+        setChatDetail(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const insertChat = (_userId, _targetId, _content) => {
+    axios
+      .post('/api/insertChat', {
+        userId: _userId,
+        targetId: _targetId,
+        content: _content,
+      })
+      .then()
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const deleteChat = (_targetId) => {
+    axios
+      .post('/api/deleteChat', {
+        targetId: _targetId,
+      })
+      .then()
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
     axios
@@ -53,7 +89,7 @@ function StoryDetail(props) {
       setIsLogin(true);
       getDto('Dev', sessionStorage.getItem('id'), '', '');
     }
-  },[]);
+  }, []);
   return (
     <section className='bg-light'>
       <div className='container' style={{ marginTop: '-3%' }}>
@@ -140,6 +176,9 @@ function StoryDetail(props) {
             modal={modal}
             setModal={setModal}
             navigate={navigate}
+            getChatHistory={getChatHistory}
+            setChatDetail={setChatDetail}
+            chatDetail={chatDetail}
           />
         </div>
       </div>
@@ -148,6 +187,18 @@ function StoryDetail(props) {
 }
 
 function TabContent(props) {
+  const insertChat = (_userId, _targetId, _content) => {
+    axios
+      .post('/api/insertChat', {
+        userId: _userId,
+        targetId: _targetId,
+        content: _content,
+      })
+      .then((response) => {})
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const [comment, setComment] = useState('');
   const [feedComment, setFeedComment] = useState([]);
 
@@ -190,28 +241,39 @@ function TabContent(props) {
               onChange={handleCommentChange}
               value={comment}
             ></textarea>
-            <button type='submit' className='comment_btn'>
+            <button
+              type='submit'
+              className='comment_btn'
+              onClick={() => {
+                insertChat(
+                  props.resultDto[0].id,
+                  props.storyDetail.id,
+                  document.getElementById('comment_box').value
+                );
+                props.getChatHistory(props.storyDetail.id);
+                console.log(props.setChatDetail);
+              }}
+            >
               등록
             </button>
           </div>
         </form>
-        {feedComment.map((comment, index) => (
+        {props.chatDetail.map((comment, index) => (
           <NewComment
             key={index}
             resultDto={props.resultDto}
             comment={comment}
+            chatDetail={props.chatDetail}
           />
         ))}
       </div>
     );
   function NewComment(props) {
-    console.log(props.comment);
     return (
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <p style={{ fontSize: '15px' }}>{props.resultDto[0].name}</p>
-          <p>{props.comment}</p>
-
+          <p>{props.chatDetail.content}</p>
           <ul style={{ listStyle: 'none' }}>
             <li>
               <a href=''>삭제</a>

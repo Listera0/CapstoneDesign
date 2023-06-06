@@ -40,9 +40,6 @@ public class ChatDao {
     @Qualifier("CHTemplate")
     JdbcTemplate CHJdbcTemplate;
 
-    @Autowired
-    ChatDto chatRepository;
-
     public List<ChatDto> getChatHistory(String targetId) {
         String query1 = String.format("select * from chat where targetId=%s", targetId);
 

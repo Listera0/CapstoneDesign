@@ -20,6 +20,13 @@ function ProfileDetail() {
     const value = event.target.value;
     setSecondSelectValue(value);
   };
+  //전화번호 자동 하이폰
+  const autoHyphen = (event) => {
+    event.target.value = event.target.value
+      .replace(/[^0-9]/g, '')
+      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
+      .replace(/(\-{1,2})$/g, '');
+  };  
   return (
     <div className='container'>
       <div className='row'>
@@ -49,6 +56,40 @@ function ProfileDetail() {
             <br></br>
             <div className='row align-items-center' style={{ border: 'none' }}>
               <ul className='list-unstyled mb-1-9'>
+                <li className='mb-2 mb-xl-3'>
+                  <div style={{ textAlign: 'start', marginBottom: '1%' }}>
+                    <span
+                      className='display-26 text-secondary me-2 font-weight-600'
+                      style={{
+                        textAlign: 'start',
+                        fontSize: '15px',
+                      }}
+                    >
+                      전화번호
+                    </span>
+                  </div>
+                  <div
+                    className='col-lg-12 mb-4 mb-sm-5'
+                    style={{ textAlign: 'start' }}
+                  >
+                    <span className='col-lg-12'>
+                      <input
+                        type='text'
+                        onInput={autoHyphen}
+                        maxlength='13'
+                        placeholder='전화번호를 입력하세요'
+                        style={{
+                          width: '80%',
+                          height: '5vh',
+                          borderRadius: '5px',
+                          border: '1px solid rgb(222,222,222)',
+                          outline: 'none',
+                          marginRight: '1%',
+                        }}
+                      ></input>
+                    </span>
+                  </div>
+                </li>
                 <li className='mb-2 mb-xl-3'>
                   <div style={{ textAlign: 'start', marginBottom: '1%' }}>
                     <span
