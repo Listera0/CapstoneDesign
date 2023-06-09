@@ -48,7 +48,17 @@ public class MainController {
     public Map<String, String> emailDuplicate(@RequestParam("email")String email) throws IOException {
         return loginRepository.hasEmail(email);
     }
+    // 스토리 작성
+    @RequestMapping(value="/api/insertStory", method = RequestMethod.POST)
+    public String insertStory(@RequestBody Map<String, String> request) {
+        return storyRepository.insertToDatabase(request);
+    }
 
+    // 프로젝트 작성
+    @RequestMapping(value="/api/insertProject", method = RequestMethod.POST)
+    public String insertProject(@RequestBody Map<String, String> request) {
+        return projectRepository.insertToDatabase(request);
+    }
     // 유저의 좋아요 기록 가져오기
     @RequestMapping(value="/api/userLikeCount", method = RequestMethod.POST)
     public List<LikeCountDto> userLikeCount(@RequestBody Map<String, String> request) {
@@ -64,13 +74,13 @@ public class MainController {
     // 스토리에 댓글 입력
     @RequestMapping(value="/api/insertChat", method = RequestMethod.POST)
     public void insertChat(@RequestBody Map<String, String> request) {
-        chatRepository.insertChat(request.get("userId"), request.get("targetId"), request.get("content"));
+        chatRepository.insertChat(request);
     }
 
     // 스토리 댓글 삭제
     @RequestMapping(value="/api/deleteChat", method = RequestMethod.POST)
     public void deleteChat(@RequestBody Map<String, String> request) {
-        chatRepository.getChatHistory(request.get("targetId"));
+        chatRepository.deleteChat(request);
     }
 
     // 대상 스토리의 댓글 전부 가져오기
@@ -113,5 +123,16 @@ public class MainController {
     @RequestMapping(value="/api/getProjectData", method = RequestMethod.POST)
     public List<ProjectDto> getProjectData(@RequestBody Map<String, String> request) {
         return projectRepository.getData(request.get("id"), request.get("orderBy"), request.get("limit"));
+    }
+    // 프로젝트 조회수 기능
+    @RequestMapping(value="/api/viewInputProject", method = RequestMethod.POST)
+    public String addViewCountProject(@RequestBody Map<String, String> request) {
+        return projectRepository.addViewCount(request);
+    }
+
+    // 스토리 조회수 기능
+    @RequestMapping(value="/api/viewInputStory", method = RequestMethod.POST)
+    public String addViewCountStory(@RequestBody Map<String, String> request) {
+        return storyRepository.addViewCount(request);
     }
 }

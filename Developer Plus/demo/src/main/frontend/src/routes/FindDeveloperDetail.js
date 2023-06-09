@@ -80,12 +80,7 @@ function MainTabContent(props) {
                 style={{ alignItems: 'center' }}
               >
                 <img
-                  src={
-                    process.env.PUBLIC_URL +
-                    '/' +
-                    props.projectDetail.imgURL +
-                    '.jpg'
-                  }
+                  src={process.env.PUBLIC_URL + props.projectDetail.imgURL}
                   width='100%'
                   style={{ textAlign: 'center' }}
                 ></img>
@@ -453,7 +448,22 @@ function TabContent(props) {
                 </div>
               ))}
             </div>
-            <div></div>
+            <div
+              style={{
+                fontWeight: '600',
+                marginRight: '10%',
+              }}
+            >
+              {props.projectDetail.jobDetail}
+            </div>
+            <div
+              style={{
+                fontWeight: '600',
+                marginRight: '10%',
+              }}
+            >
+              {props.projectDetail.nowJob}
+            </div>
             <div style={{ fontWeight: '600', marginRight: '10%' }}>
               {props.requireJobDetail.map((ele, i) => (
                 <div
@@ -463,10 +473,10 @@ function TabContent(props) {
                   }}
                 >
                   <div key={i} style={{}}>
-                    {jobsState[i]}/{ele}
+                    {jobsState[i]}/{props.projectDetail.requireJob}
                   </div>
-                  <div style={{ width: '100%', marginLeft: '5%' }}>
-                    {jobsState[i] == ele ? (
+                  <div>
+                    {jobsState[i] == props.projectDetail.requireJob ? (
                       <button disabled>마감</button>
                     ) : (
                       <button onClick={() => countJob(i)}>지원</button>

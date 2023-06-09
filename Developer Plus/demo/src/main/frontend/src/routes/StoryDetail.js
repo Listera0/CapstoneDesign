@@ -18,7 +18,35 @@ function StoryDetail(props) {
   let [tab, setTab] = useState(0);
   let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
   const [storyDetails, setStoryDetails] = useState(['']);
+  const [allDevDto, setAllDevDto] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .get('/api/getAllDevData')
+        .then((response) => {
+          setAllDevDto(response.data);
+          console.log(response.data);
+        })
+        .catch((error) => console.log(error));
+    }, []);
+  }
+
   const [chatDetail, setChatDetail] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .post('/api/getChatHistory', {
+          targetId: id,
+        })
+        .then((response) => {
+          setChatDetail(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }, [chatDetail]);
+  }
+
   const getChatHistory = (_targetId) => {
     axios
       .post('/api/getChatHistory', {
@@ -32,22 +60,13 @@ function StoryDetail(props) {
         console.log(error);
       });
   };
-  const insertChat = (_userId, _targetId, _content) => {
-    axios
-      .post('/api/insertChat', {
-        userId: _userId,
-        targetId: _targetId,
-        content: _content,
-      })
-      .then()
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  const deleteChat = (_targetId) => {
+
+  const deleteChat = (_id, _targetId, _chatCount) => {
     axios
       .post('/api/deleteChat', {
+        id: _id,
         targetId: _targetId,
+        chatCount: _chatCount,
       })
       .then()
       .catch((error) => {
@@ -55,6 +74,7 @@ function StoryDetail(props) {
       });
   };
 
+  let storyDetail = storyDetails[0];
   useEffect(() => {
     axios
       .post('/api/getStoryData', {
@@ -64,9 +84,8 @@ function StoryDetail(props) {
       })
       .then((response) => setStoryDetails(response.data))
       .catch((error) => console.log(error));
-  }, []);
+  }, [storyDetails]);
 
-  let storyDetail = storyDetails[0];
   const getDto = (location, _id, _orderBy, _limit) => {
     axios
       .post('/api/get' + location + 'Data', {
@@ -90,6 +109,7 @@ function StoryDetail(props) {
       getDto('Dev', sessionStorage.getItem('id'), '', '');
     }
   }, []);
+
   return (
     <section className='bg-light'>
       <div className='container' style={{ marginTop: '-3%' }}>
@@ -115,7 +135,7 @@ function StoryDetail(props) {
                 <div className='row align-items-center'>
                   <div className='col-lg-12 mb-4 mb-lg-0'>
                     <img
-                      src={process.env.PUBLIC_URL + '/' + 'c1.jpg'}
+                      src={process.env.PUBLIC_URL + storyDetail.imgURL}
                       width='100%'
                       style={{ textAlign: 'center' }}
                     ></img>
@@ -171,6 +191,7 @@ function StoryDetail(props) {
             tab={tab}
             story={props.story}
             storyDetail={storyDetail}
+            storyDetails={storyDetails}
             isLogin={isLogin}
             resultDto={resultDto}
             modal={modal}
@@ -179,6 +200,8 @@ function StoryDetail(props) {
             getChatHistory={getChatHistory}
             setChatDetail={setChatDetail}
             chatDetail={chatDetail}
+            allDevDto={allDevDto}
+            deleteChat={deleteChat}
           />
         </div>
       </div>
@@ -187,14 +210,15 @@ function StoryDetail(props) {
 }
 
 function TabContent(props) {
-  const insertChat = (_userId, _targetId, _content) => {
+  const insertChat = (_userId, _targetId, _content, _chatCount) => {
     axios
       .post('/api/insertChat', {
         userId: _userId,
         targetId: _targetId,
         content: _content,
+        chatCount: _chatCount,
       })
-      .then((response) => {})
+      .then()
       .catch((error) => {
         console.log(error);
       });
@@ -248,10 +272,11 @@ function TabContent(props) {
                 insertChat(
                   props.resultDto[0].id,
                   props.storyDetail.id,
-                  document.getElementById('comment_box').value
+                  document.getElementById('comment_box').value,
+                  props.storyDetails[0].chatCount
                 );
                 props.getChatHistory(props.storyDetail.id);
-                console.log(props.setChatDetail);
+                // console.log(props.setChatDetail);
               }}
             >
               등록
@@ -260,23 +285,45 @@ function TabContent(props) {
         </form>
         {props.chatDetail.map((comment, index) => (
           <NewComment
-            key={index}
+            index={index}
             resultDto={props.resultDto}
             comment={comment}
             chatDetail={props.chatDetail}
+            id={props.id}
+            allDevDto={props.allDevDto}
+            deleteChat={props.deleteChat}
+            storyDetail={props.storyDetail}
+            storyDetails={props.storyDetails}
           />
         ))}
       </div>
     );
   function NewComment(props) {
+    {
+      // console.log(
+      //   props.allDevDto[props.chatDetail[props.index].userId - 1]?.name
+      // );
+    }
     return (
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <p style={{ fontSize: '15px' }}>{props.resultDto[0].name}</p>
-          <p>{props.chatDetail.content}</p>
+          <p style={{ fontSize: '15px' }}>
+            {props.allDevDto[props.chatDetail[props.index].userId - 1]?.name}
+          </p>
+          <p>{props.chatDetail[props.index].content}</p>
           <ul style={{ listStyle: 'none' }}>
             <li>
-              <a href=''>삭제</a>
+              <button
+                onClick={() => {
+                  props.deleteChat(
+                    props.chatDetail[props.index].id,
+                    props.chatDetail[props.index].targetId,
+                    props.storyDetails[0].chatCount
+                  );
+                }}
+              >
+                삭제
+              </button>
             </li>
           </ul>
         </div>

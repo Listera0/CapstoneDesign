@@ -3,7 +3,7 @@ package com.example.demo.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,6 +27,7 @@ class ProjectRowMapper implements RowMapper<ProjectDto> {
         dto.setRegion(rs.getString("region"));
         dto.setName(rs.getString("name"));
         dto.setJob(rs.getString("job"));
+        dto.setJobDetail(rs.getString("jobDetail"));
         dto.setCareer(rs.getString("career"));
         dto.setNowJob(rs.getString("nowJob"));
         dto.setRequireJob(rs.getString("requireJob"));
@@ -68,19 +69,30 @@ public class ProjectDao {
     {
         return DPJdbcTemplate.query("select * from project", new ProjectRowMapper());
     }
-
-    public String insertToDatabase(ProjectDto dto)
+    public String insertToDatabase(Map<String, String> request)
     {
-        String query = "insert into project (id, title, region, name, content, job, requireJob, nowJob, career, imgURL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "insert into project (title, imgURL, region, name, job, jobDetail,career, nowJob, requireJob, startDate, endDate, content, skill) " +
+                                     "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         try
         {
-            DPJdbcTemplate.update(query, dto.getId(), dto.getTitle(), dto.getRegion(), dto.getName(), dto.getContent(), dto.getJob(),
-                                        dto.getRequireJob(), dto.getNowJob(), dto.getCareer(), dto.getImgURL());
+            DPJdbcTemplate.update(query,    request.get("title"), request.get("imgURL"), request.get("region"), request.get("name"), 
+                                            request.get("job"),request.get("jobDetail") ,request.get("career"), request.get("nowJob"), request.get("requireJob"), 
+                                            request.get("startDate"), request.get("endDate"), request.get("content"), request.get("skill"));
         }
         catch(DataAccessException  e)
         {
             return "Failed Insert";
         }
         return "Success Insert";
+    }
+    public String addViewCount(Map<String, String> request) {
+        String query = String.format("update project set viewCount = ? where id = %s", request.get("id"));
+        try {
+            DPJdbcTemplate.update(query, Integer.parseInt(request.get("viewCount")) + 1);
+            return "success";
+        }
+        catch(DataAccessException e) {
+            return "error";
+        }
     }
 }

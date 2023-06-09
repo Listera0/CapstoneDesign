@@ -56,12 +56,7 @@ function ViewDeveloperDetail(props) {
                 <div className='row align-items-center'>
                   <div className='col-lg-6 mb-4 mb-lg-0'>
                     <img
-                      src={
-                        process.env.PUBLIC_URL +
-                        '/' +
-                        developerDetail.id +
-                        '.jpg'
-                      }
+                      src={process.env.PUBLIC_URL + developerDetail.imgURL}
                       width='70%'
                       style={{ paddingTop: '3%', paddingBottom: '3%' }}
                     ></img>
@@ -114,7 +109,7 @@ function ViewDeveloperDetail(props) {
                         </p>{' '}
                       </li>
                     </ul>
-                    <div className='subdiv'>
+                    {/* <div className='subdiv'>
                       <div className='col-6 ' style={{ fontSize: '15px' }}>
                         <span>👍</span>
                         {developerDetail.likeCount}
@@ -132,7 +127,7 @@ function ViewDeveloperDetail(props) {
                           대화하기{' '}
                         </button>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -194,106 +189,71 @@ function TabContent(props) {
             Profile
           </span>
           <div style={{ padding: '3%' }}>
-            <span style={{ textAlign: 'start' }}>
-              <p
+            <div style={{ textAlign: 'start' }}>
+              <span
                 className='display-26 text-secondary me-2 font-weight-600'
                 style={{
                   textAlign: 'start',
                   fontSize: '18px',
+                  marginBottom: '10%',
                 }}
               >
                 [주 능력]
-              </p>
-              <p
+              </span>
+              <div
                 style={{
                   textAlign: 'start',
-                  fontSize: '15px',
-                  marginTop: '2%',
+                  display: 'flex',
+                  justifyContent: 'start',
+                  marginTop: '3%',
+                }}
+              >
+                <span
+                  style={{
+                    fontWeight: '600',
+                    marginRight: '10%',
+                  }}
+                >
+                  직무
+                </span>{' '}
+                <p>{props.developerDetail.job}</p>
+              </div>
+              <div
+                style={{
+                  textAlign: 'start',
+                  display: 'flex',
+                  justifyContent: 'start',
                 }}
               >
                 <span style={{ fontWeight: '600', marginRight: '10%' }}>
-                  직무
-                </span>{' '}
-                {props.jobDetail[0]}
-              </p>
-            </span>
-            <div style={{ textAlign: 'start' }}>
-              <p
+                  분야
+                </span>
+                <p>{props.developerDetail.jobDetail}</p>
+              </div>
+              <div
                 style={{
                   textAlign: 'start',
-                  fontSize: '15px',
-                  marginTop: '2%',
+                  display: 'flex',
+                  justifyContent: 'start',
                 }}
               >
                 <span style={{ fontWeight: '600', marginRight: '10%' }}>
                   경력
                 </span>{' '}
-                {props.careerDetail[0]}
-              </p>
-            </div>
-            <div style={{ textAlign: 'start' }}>
-              <span
-                className='display-26 text-secondary me-2 font-weight-600'
+                <p>{props.developerDetail.career}</p>
+              </div>
+              <div
                 style={{
                   textAlign: 'start',
-                  fontSize: '18px',
-                  marginBottom: '10%',
-                }}
-              >
-                [부 능력]
-              </span>
-              <p
-                style={{
-                  textAlign: 'start',
-                  fontSize: '15px',
-                  marginTop: '2%',
-                }}
-              >
-                <span style={{ fontWeight: '600', marginRight: '10%' }}>
-                  직무
-                </span>{' '}
-                {props.jobDetail[1]}
-              </p>
-            </div>
-            <div style={{ textAlign: 'start' }}>
-              <p
-                style={{
-                  textAlign: 'start',
-                  fontSize: '15px',
-                  marginTop: '2%',
-                }}
-              >
-                <span style={{ fontWeight: '600', marginRight: '10%' }}>
-                  경력
-                </span>{' '}
-                {props.careerDetail[1]}
-              </p>
-            </div>
-            <div style={{ textAlign: 'start' }}>
-              <span
-                className='display-26 text-secondary me-2 font-weight-600'
-                style={{
-                  textAlign: 'start',
-                  fontSize: '18px',
-                  marginBottom: '10%',
-                }}
-              >
-                [지역]
-              </span>
-            </div>
-            <div style={{ textAlign: 'start' }}>
-              <p
-                style={{
-                  textAlign: 'start',
-                  fontSize: '15px',
-                  marginTop: '2%',
+                  display: 'flex',
+                  justifyContent: 'start',
                 }}
               >
                 <span style={{ fontWeight: '600', marginRight: '10%' }}>
                   지역
                 </span>{' '}
-                {props.developerDetail.region}
-              </p>
+                <p>{props.developerDetail.region}</p>
+              </div>
             </div>
           </div>
         </div>

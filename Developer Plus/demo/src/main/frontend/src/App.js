@@ -64,7 +64,15 @@ function App() {
   const [devLikeCountData, setDevLikeCountData] = useState(['']);
   const [storyLikeCountData, setStoryLikeCountData] = useState(['']);
   const [projectLikeCountData, setProjectLikeCountData] = useState(['']);
-
+  const viewInput = (location, _id, _viewCount) => {
+    axios
+      .post('/api/viewInput' + location, {
+        id: _id,
+        viewCount: _viewCount,
+      })
+      .then()
+      .catch((error) => console.log(error));
+  };
   const getDto = (location, _id, _orderBy, _limit) => {
     axios
       .post('/api/get' + location + 'Data', {
@@ -167,7 +175,7 @@ function App() {
       axios
         .post('/api/getStoryData', {
           id: '',
-          orderBy: 'id desc',
+          orderBy: 'likeCount desc',
           limit: '3',
         })
         .then((response) => setRankingStoryDto(response.data))
@@ -179,7 +187,11 @@ function App() {
   {
     useEffect(() => {
       axios
-        .post('/api/getProjectData', { id: '', orderBy: 'id ', limit: '3' })
+        .post('/api/getProjectData', {
+          id: '',
+          orderBy: 'likeCount desc',
+          limit: '3',
+        })
         .then((response) => setRankingProjectDto(response.data))
         .catch((error) => console.log(error));
     }, []);
@@ -246,6 +258,7 @@ function App() {
                         navigate={navigate}
                         rankingStoryDto={rankingStoryDto}
                         allStoryDto={allStoryDto}
+                        viewInput={viewInput}
                       ></StoryCard>
                     );
                   })}
@@ -275,6 +288,7 @@ function App() {
                         navigate={navigate}
                         rankingProjectDto={rankingProjectDto}
                         allProjectDto={allProjectDto}
+                        viewInput={viewInput}
                       ></ProjectCard>
                     );
                   })}
@@ -386,6 +400,7 @@ function App() {
           element={
             <StoryDetail
               story={story}
+              allDevDto={allDevDto}
               // setChatDetail={setChatDetail}
               // chatDetail={chatDetail}
               // getChatHistory={getChatHistory}
@@ -398,7 +413,10 @@ function App() {
             <Profile developer={developer} setDeveloper={setDeveloper} />
           }
         ></Route>
-        <Route path='/serach' element={<Serach />}></Route>
+        <Route
+          path='/serach'
+          element={<Serach allDevDto={allDevDto} />}
+        ></Route>
         <Route path='/login' element={<Login navigate={navigate} />}></Route>
         <Route path='/talk' element={<Talk />}></Route>
         <Route path='/SignUp' element={<SignUp />}></Route>
@@ -426,6 +444,11 @@ function StoryCard(props) {
             className='col-div '
             style={{ overflow: 'hidden' }}
             onClick={() => {
+              props.viewInput(
+                'Story',
+                props.rankingStoryDto[props.i].id,
+                props.rankingStoryDto[props.i].viewCount
+              );
               props.navigate(
                 `/ViewStoryDetail/${props.rankingStoryDto[props.i].id}`
               );
@@ -433,7 +456,9 @@ function StoryCard(props) {
           >
             <img
               className='col-img'
-              src={process.env.PUBLIC_URL + '/main' + (props.i + 1) + '.jpg'}
+              src={
+                process.env.PUBLIC_URL + props.rankingStoryDto[props.i].imgURL
+              }
               width='100vw'
             ></img>
           </div>
@@ -452,15 +477,16 @@ function StoryCard(props) {
                 justifyContent: 'space-between',
               }}
             >
-              <div>
-                <FontAwesomeIcon icon={farEye} size='2x' />
+              <div style={{ fontSize: '15px' }}>
+                <FontAwesomeIcon icon={farEye} style={{ fontSize: '20px' }} />{' '}
+                {props.rankingStoryDto[props.i].viewCount}
               </div>
               <div>
                 <FontAwesomeIcon icon={farCommentDots} size='2x' />
               </div>
               <div style={{ fontSize: '15px' }}>
                 <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />{' '}
-                {props.rankingStoryDto[props.i].id}
+                {props.rankingStoryDto[props.i].likeCount}
               </div>
               <div>
                 <FontAwesomeIcon icon={farBookmark} size='2x' />
@@ -487,6 +513,11 @@ function ProjectCard(props) {
             className='col-div '
             style={{ overflow: 'hidden' }}
             onClick={() => {
+              props.viewInput(
+                'Project',
+                props.rankingProjectDto[props.i].id,
+                props.rankingProjectDto[props.i].viewCount
+              );
               props.navigate(
                 `/FindDeveloperDetail/${props.rankingProjectDto[props.i].id}`
               );
@@ -494,7 +525,9 @@ function ProjectCard(props) {
           >
             <img
               className='col-img'
-              src={process.env.PUBLIC_URL + '/main' + (props.i + 1) + '.jpg'}
+              src={
+                process.env.PUBLIC_URL + props.rankingProjectDto[props.i].imgURL
+              }
               width='100vw'
             ></img>
           </div>
@@ -513,15 +546,16 @@ function ProjectCard(props) {
                 justifyContent: 'space-between',
               }}
             >
-              <div>
-                <FontAwesomeIcon icon={farEye} size='2x' />
+              <div style={{ fontSize: '15px' }}>
+                <FontAwesomeIcon icon={farEye} style={{ fontSize: '20px' }} />{' '}
+                {props.rankingProjectDto[props.i].viewCount}
               </div>
               <div>
                 <FontAwesomeIcon icon={farCommentDots} size='2x' />
               </div>
               <div style={{ fontSize: '15px' }}>
                 <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />{' '}
-                {props.rankingProjectDto[props.i].id}
+                {props.rankingProjectDto[props.i].likeCount}
               </div>
               <div>
                 <FontAwesomeIcon icon={farBookmark} size='2x' />
@@ -585,9 +619,9 @@ function DeveloperCard(props) {
                 paddingLeft: '10%',
                 marginRight: '15%',
               }}
-              src={`${process.env.PUBLIC_URL}/${
+              src={`${process.env.PUBLIC_URL}${
                 props.rankingDevDto[props.i].imgURL
-              }.jpg`}
+              }`}
             ></img>
             <Card.Text className='col-content' style={{ paddingTop: '3%' }}>
               <span style={{ fontSize: '18px' }}>
@@ -608,7 +642,9 @@ function DeveloperCard(props) {
                 }}
               >
                 [직무]
-                <div style={{ paddingLeft: '5%' }}>{props.jobDetail[0]}</div>
+                <div style={{ paddingLeft: '5%' }}>
+                  {props.rankingDevDto[props.i].job}
+                </div>
               </div>
               <div
                 style={{
@@ -619,8 +655,10 @@ function DeveloperCard(props) {
                   fontWeight: '600',
                 }}
               >
-                [전문분야]
-                <div style={{ paddingLeft: '5%' }}>{props.jobDetail[1]}</div>
+                [분야]
+                <div style={{ paddingLeft: '5%' }}>
+                  {props.rankingDevDto[props.i].jobDetail}
+                </div>
               </div>
               <div
                 style={{
@@ -632,7 +670,9 @@ function DeveloperCard(props) {
                 }}
               >
                 [경력]
-                <div style={{ paddingLeft: '5%' }}>{props.careerDetail[0]}</div>
+                <div style={{ paddingLeft: '5%' }}>
+                  {props.rankingDevDto[props.i].career}
+                </div>
               </div>
             </Card.Text>
             <Card.Text className='col-content'>
@@ -836,6 +876,7 @@ function NavBar(props) {
             onClick={() => {
               props.navigate('/');
             }}
+            style={{ fontWeight: '700', cursor: 'pointer' }}
           >
             Developer Plus
           </a>

@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.dto.*;
@@ -24,6 +23,7 @@ class DevRowMapper implements RowMapper<DeveloperDto> {
         dto.setId(rs.getInt("id"));
         dto.setName(rs.getString("name"));
         dto.setJob(rs.getString("job"));
+        dto.setJobDetail(rs.getString("jobDetail"));
         dto.setCareer(rs.getString("career"));
         dto.setRegion(rs.getString("region"));
         dto.setProjectCount(rs.getInt("projectCount"));
@@ -69,21 +69,5 @@ public class DeveloperDao {
     {
         String query = "select * from developer";
         return DPJdbcTemplate.query(query, new DevRowMapper());
-    }
-
-    public String insertToDatabase(DeveloperDto dto)
-    {
-        String query = "insert into developer (id, password, name, job, career, region, projectCount, urlGithub, urlInsta, introduce, skill, likeCount, email, phone, imgURL) " + 
-                                        "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try
-        {
-            DPJdbcTemplate.update(query, dto.getId(), dto.getPassword(), dto.getName(), dto.getJob(), dto.getCareer(), dto.getRegion(), dto.getProjectCount(), dto.getUrlGithub(), 
-                                        dto.getUrlInsta(), dto.getIntroduce(), dto.getSkill(), dto.getLikeCount(), dto.getEmail(), dto.getPhone(), dto.getImgURL());
-        }
-        catch(DataAccessException  e)
-        {
-            return "Fail";
-        }
-        return "Success";
     }
 }

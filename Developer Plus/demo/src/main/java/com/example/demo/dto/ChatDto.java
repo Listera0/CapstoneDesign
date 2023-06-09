@@ -11,7 +11,7 @@ import lombok.Setter;
 public class ChatDto {
 
     // 데이터 베이스 구조
-    private int index;
+    private int id;
     private int userId;
     private int targetId;
     private String content;

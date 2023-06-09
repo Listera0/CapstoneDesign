@@ -42,7 +42,6 @@ const icons2 = {
 
   python: (
     <FontAwesomeIcon
-
       icon=' fa-brands fa-python '
       style={{
         fontSize: '80px',
@@ -70,6 +69,12 @@ const icons2 = {
       icon='fa-brands fa-bootstrap'
       style={{ fontSize: '80px' }}
     />
+  ),
+  미입력: (
+    <img
+      src={process.env.PUBLIC_URL + '/ximg' + '.png'}
+      style={{ width: '80px', height: '80px' }}
+    ></img>
   ),
 };
 const jobs = {

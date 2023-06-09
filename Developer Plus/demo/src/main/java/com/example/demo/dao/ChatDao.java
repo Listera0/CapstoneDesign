@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +21,7 @@ class ChatRowMapper implements RowMapper<ChatDto> {
     @Nullable
     public ChatDto mapRow(ResultSet rs, int rowNum) throws SQLException {
         ChatDto dto = new ChatDto();
-        dto.setIndex(rs.getInt("index"));
+        dto.setId(rs.getInt("id"));
         dto.setUserId(rs.getInt("userId"));
         dto.setTargetId(rs.getInt("targetId"));
         dto.setContent(rs.getString("content"));
@@ -47,16 +48,20 @@ public class ChatDao {
         return result;
     }
 
-    public void insertChat(String userId, String targetId, String content) {
+    public void insertChat(Map<String, String> request) {
         String query1 = "insert into chat (userId, targetId, content, date) values (?, ?, ?, ?)";
+        String query2 = String.format("update story set chatCount=? where id=%s", request.get("targetId"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
-        CHJdbcTemplate.update(query1, userId, targetId, content, LocalDate.now().format(formatter));
+        DPJdbcTemplate.update(query2, Integer.parseInt( request.get("chatCount")) + 1);
+        CHJdbcTemplate.update(query1, request.get("userId"), request.get("targetId"), request.get("content"), LocalDate.now().format(formatter));
     }
 
-    public void deleteChat(String index) {
-        String query = String.format("delete from chat where index=%s", index);
+    public void deleteChat(Map<String, String> request) {
+        String query1 = String.format("delete from chat where id='%s'", request.get("id"));
+        String query2 = String.format("update story set chatCount=? where id=%s", request.get("targetId"));
 
-        CHJdbcTemplate.update(query);
+        DPJdbcTemplate.update(query2, Integer.parseInt( request.get("chatCount")) - 1);
+        CHJdbcTemplate.update(query1);
     }
 }

@@ -15,6 +15,7 @@ public class DeveloperDto {
     private String password;
     private String name;
     private String job;
+    private String jobDetail;
     private String career;
     private String region;
     private int projectCount;

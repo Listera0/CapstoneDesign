@@ -108,9 +108,9 @@ function DeveloperCard(props) {
                 paddingLeft: '10%',
                 marginRight: '15%',
               }}
-              src={`${process.env.PUBLIC_URL}/${
+              src={`${process.env.PUBLIC_URL}${
                 props.allDevDto[props.i].imgURL
-              }.jpg`}
+              }`}
             ></img>
             <Card.Text className='col-content' style={{ paddingTop: '3%' }}>
               <span style={{ fontSize: '18px' }}>
@@ -131,7 +131,9 @@ function DeveloperCard(props) {
                 }}
               >
                 [직무]
-                <div style={{ paddingLeft: '5%' }}>{props.jobDetail[0]}</div>
+                <div style={{ paddingLeft: '5%' }}>
+                  {props.allDevDto[props.i].job}
+                </div>
               </div>
               <div
                 style={{
@@ -142,8 +144,10 @@ function DeveloperCard(props) {
                   fontWeight: '600',
                 }}
               >
-                [전문분야]
-                <div style={{ paddingLeft: '5%' }}>{props.jobDetail[1]}</div>
+                [분야]
+                <div style={{ paddingLeft: '5%' }}>
+                  {props.allDevDto[props.i].jobDetail}
+                </div>
               </div>
               <div
                 style={{
@@ -155,7 +159,9 @@ function DeveloperCard(props) {
                 }}
               >
                 [경력]
-                <div style={{ paddingLeft: '5%' }}>{props.careerDetail[0]}</div>
+                <div style={{ paddingLeft: '5%' }}>
+                  {props.allDevDto[props.i].career}
+                </div>
               </div>
             </Card.Text>
             <Card.Text className='col-content'>

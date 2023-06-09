@@ -3,7 +3,7 @@ package com.example.demo.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,7 +30,7 @@ class StoryRowMapper implements RowMapper<StoryDto> {
         dto.setHashTag(rs.getString("hashTag"));
         dto.setViewCount(rs.getInt("viewCount"));
         dto.setLikeCount(rs.getInt("likeCount"));
-
+        dto.setLikeCount(rs.getInt("chatCount"));
         return dto;
     }
 }
@@ -62,17 +62,27 @@ public class StoryDao {
         return DPJdbcTemplate.query("select * from story", new StoryRowMapper());
     }
 
-    public String insertToDatabase(StoryDto dto)
+    public String insertToDatabase(Map<String, String> request)
     {
-        String query = "insert into story (id, title, name, content, imgURL, hashTag) values (?, ?, ?, ?, ?, ?)";
+        String query = "insert into story (title, imgURL, name, content, hashTag) values (?, ?, ?, ?, ?)";
         try
         {
-            DPJdbcTemplate.update(query, dto.getId(), dto.getTitle(), dto.getName(), dto.getContent(), dto.getImgURL(), dto.getHashTag());
+            DPJdbcTemplate.update(query, request.get("title"), request.get("imgURL"), request.get("name"), request.get("content"), request.get("hashTag"));
         }
         catch(DataAccessException  e)
         {
             return "Failed Insert";
         }
         return "Success Insert";
+    }
+    public String addViewCount(Map<String, String> request) {
+        String query = String.format("update story set viewCount = ? where id = %s", request.get("id"));
+        try {
+            DPJdbcTemplate.update(query, Integer.parseInt(request.get("viewCount")) + 1);
+            return "success";
+        }
+        catch(DataAccessException e) {
+            return "error";
+        }
     }
 }

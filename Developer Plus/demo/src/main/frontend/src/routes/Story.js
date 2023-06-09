@@ -16,6 +16,15 @@ function Story(props) {
         .catch((error) => console.log(error));
     }, []);
   }
+  const viewInput = (location, _id, _viewCount) => {
+    axios
+      .post('/api/viewInput' + location, {
+        id: _id,
+        viewCount: _viewCount,
+      })
+      .then()
+      .catch((error) => console.log(error));
+  };
   return (
     <div className='container'>
       <div
@@ -34,6 +43,7 @@ function Story(props) {
               i={i}
               allStoryDto={allStoryDto}
               navigate={props.navigate}
+              viewInput={viewInput}
             ></StoryCard>
           );
         })}
@@ -41,7 +51,6 @@ function Story(props) {
     </div>
   );
 }
-
 function StoryCard(props) {
   return (
     <div
@@ -57,6 +66,11 @@ function StoryCard(props) {
             className='col-div '
             style={{ overflow: 'hidden' }}
             onClick={() => {
+              props.viewInput(
+                'Story',
+                props.allStoryDto[props.i].id,
+                props.allStoryDto[props.i].viewCount
+              );
               props.navigate(
                 `/ViewStoryDetail/${props.allStoryDto[props.i].id}`
               );
@@ -64,7 +78,7 @@ function StoryCard(props) {
           >
             <img
               className='col-img'
-              src={process.env.PUBLIC_URL + '/main' + (props.i + 1) + '.jpg'}
+              src={process.env.PUBLIC_URL + props.allStoryDto[props.i].imgURL}
               width='100vw'
             ></img>
           </div>
@@ -83,15 +97,16 @@ function StoryCard(props) {
                 justifyContent: 'space-between',
               }}
             >
-              <div>
-                <FontAwesomeIcon icon={farEye} size='2x' />
+              <div style={{ fontSize: '15px' }}>
+                <FontAwesomeIcon icon={farEye} style={{ fontSize: '20px' }} />{' '}
+                {props.allStoryDto[props.i].viewCount}
               </div>
               <div>
                 <FontAwesomeIcon icon={farCommentDots} size='2x' />
               </div>
               <div style={{ fontSize: '15px' }}>
                 <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />{' '}
-                {props.allStoryDto[props.i].id}
+                {props.allStoryDto[props.i].likeCount}
               </div>
               <div>
                 <FontAwesomeIcon icon={farBookmark} size='2x' />

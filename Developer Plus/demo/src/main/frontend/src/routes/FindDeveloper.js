@@ -7,6 +7,15 @@ import axios from 'axios';
 import Card from 'react-bootstrap/Card';
 import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
 function FindDeveloper(props) {
+  const viewInput = (location, _id, _viewCount) => {
+    axios
+      .post('/api/viewInput' + location, {
+        id: _id,
+        viewCount: _viewCount,
+      })
+      .then()
+      .catch((error) => console.log(error));
+  };
   let [goodCount, changeGoodCount] = useState([0, 0, 0]);
   const [allProjectDto, setAllProjectDto] = useState(['']);
   {
@@ -35,6 +44,7 @@ function FindDeveloper(props) {
               i={i}
               allProjectDto={allProjectDto}
               navigate={props.navigate}
+              viewInput={viewInput}
             ></ProjectCard>
           );
         })}
@@ -58,6 +68,11 @@ function ProjectCard(props) {
             className='col-div '
             style={{ overflow: 'hidden' }}
             onClick={() => {
+              props.viewInput(
+                'Project',
+                props.allProjectDto[props.i].id,
+                props.allProjectDto[props.i].viewCount
+              );
               props.navigate(
                 `/FindDeveloperDetail/${props.allProjectDto[props.i].id}`
               );
@@ -65,7 +80,7 @@ function ProjectCard(props) {
           >
             <img
               className='col-img'
-              src={process.env.PUBLIC_URL + '/main' + (props.i + 1) + '.jpg'}
+              src={process.env.PUBLIC_URL + props.allProjectDto[props.i].imgURL}
               width='100vw'
             ></img>
           </div>
@@ -84,15 +99,16 @@ function ProjectCard(props) {
                 justifyContent: 'space-between',
               }}
             >
-              <div>
-                <FontAwesomeIcon icon={farEye} size='2x' />
+              <div style={{ fontSize: '15px' }}>
+                <FontAwesomeIcon icon={farEye} style={{ fontSize: '20px' }} />{' '}
+                {props.allProjectDto[props.i].viewCount}
               </div>
               <div>
                 <FontAwesomeIcon icon={farCommentDots} size='2x' />
               </div>
               <div style={{ fontSize: '15px' }}>
                 <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />{' '}
-                {props.allProjectDto[props.i].id}
+                {props.allProjectDto[props.i].likeCount}
               </div>
               <div>
                 <FontAwesomeIcon icon={farBookmark} size='2x' />

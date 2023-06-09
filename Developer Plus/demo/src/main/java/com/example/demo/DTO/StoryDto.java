@@ -21,6 +21,7 @@ public class StoryDto {
 
     private int viewCount;
     private int likeCount;
+    private int chatCount;
 
     @Override
     public String toString()

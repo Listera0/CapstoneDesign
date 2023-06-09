@@ -20,6 +20,7 @@ public class ProjectDto {
 
     // 프론트 엔드 [초보] 1 / 10
     private String job;
+    private String jobDetail;
     private String career;
     private String nowJob;
     private String requireJob;

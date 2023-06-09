@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark } from '@fortawesome/free-solid-svg-icons';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
@@ -40,10 +40,12 @@ const mkdStr = `
 # 3. 그외 자유기재
 <span style='color:gray'>(ex 대학생분들만 지원해주시면 감사하겠습니다.)</span>
 `;
+
 const storymkdStr = `
 스토리는 별도의 가이드라인없이 작성해주시면 됩니다.
 `;
 function Write() {
+  let navigate = useNavigate(); //페이지 이동
   const [value, setValue] = useState(mkdStr);
 
   let [tab, setTab] = useState(0);
@@ -58,6 +60,90 @@ function Write() {
       };
       reader.readAsDataURL(file);
     }
+  };
+  const insertStory = (_title, _imgURL, _name, _content, _hashTag) => {
+    axios
+      .post('/api/insertStory', {
+        title: _title,
+        imgURL: _imgURL,
+        name: _name,
+        content: _content,
+        hashTag: _hashTag,
+      })
+      .then((response) => console.log(response.data))
+      .catch((error) => console.log(error));
+  };
+
+  const insertProject = (
+    _title,
+    _imgURL,
+    _region,
+    _name,
+    _job,
+    _jobDetail,
+    _career,
+    _nowJob,
+    _requireJob,
+    _startDate,
+    _endDate,
+    _content,
+    _skill
+  ) => {
+    axios
+      .post('/api/insertProject', {
+        title: _title,
+        imgURL: _imgURL,
+        region: _region,
+        name: _name,
+        job: _job,
+        jobDetail: _jobDetail,
+        career: _career,
+        nowJob: _nowJob,
+        requireJob: _requireJob,
+        startDate: _startDate,
+        endDate: _endDate,
+        content: _content,
+        skill: _skill,
+      })
+      .then((response) => console.log(response.data))
+      .catch((error) => console.log(error));
+  };
+  const [allDevDto, setAllDevDto] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .get('/api/getAllDevData')
+        .then((response) => {
+          setAllDevDto(response.data);
+          console.log(response.data);
+        })
+        .catch((error) => console.log(error));
+    }, []);
+  }
+  const [RegionSelectValue, setRegionSelectValue] = useState('');
+  const handleRegionSelectChange = (event) => {
+    const value = event.target.value;
+    setRegionSelectValue(value);
+  };
+  const [firstSelectValue, setFirstSelectValue] = useState('');
+  const handleFirstSelectChange = (event) => {
+    const value = event.target.value;
+    setFirstSelectValue(value);
+  };
+  const [secondSelectValue, setSecondSelectValue] = useState('');
+  const handleSecondSelectChange = (event) => {
+    const value = event.target.value;
+    setSecondSelectValue(value);
+  };
+  const [skillSelectValue, setSkillSelectValue] = useState('');
+  const handleSkillSelectChange = (event) => {
+    const value = event.target.value;
+    setSkillSelectValue(value);
+  };
+  const [careerSelectValue, setCareerSelectValue] = useState('');
+  const handleCareerSelectChange = (event) => {
+    const value = event.target.value;
+    setCareerSelectValue(value);
   };
 
   return (
@@ -107,6 +193,25 @@ function Write() {
             setTab={setTab}
             // selectedImage={selectedImage}
             handleImageChange={handleImageChange}
+            allDevDto={allDevDto}
+            insertStory={insertStory}
+            insertProject={insertProject}
+            navigate={navigate}
+            firstSelectValue={firstSelectValue}
+            setFirstSelectValue={setFirstSelectValue}
+            handleFirstSelectChange={handleFirstSelectChange}
+            secondSelectValue={secondSelectValue}
+            setSecondSelectValue={setSecondSelectValue}
+            handleSecondSelectChange={handleSecondSelectChange}
+            RegionSelectValue={RegionSelectValue}
+            setRegionSelectValue={setRegionSelectValue}
+            handleRegionSelectChange={handleRegionSelectChange}
+            skillSelectValue={skillSelectValue}
+            setSkillSelectValue={setSkillSelectValue}
+            handleSkillSelectChange={handleSkillSelectChange}
+            careerSelectValue={careerSelectValue}
+            setCareerSelectValue={setCareerSelectValue}
+            handleCareerSelectChange={handleCareerSelectChange}
             // upLoadimage={upLoadimage}
           ></MainTabContent>
         </div>
@@ -139,6 +244,15 @@ function MainTabContent(props) {
   const handleThumbnailClick = (imageUrl) => {
     setSelectedImageUrl(imageUrl);
   };
+  const editorRef = useRef();
+  const [countPeople, setCountPeople] = useState(0);
+  const handleIncreseButton = () => {
+    setCountPeople(countPeople + 1);
+  };
+  const handleDiscreseButton = () => {
+    setCountPeople(countPeople - 1);
+  };
+  const [countPeopleMap, setCountPeopleMap] = useState([]);
   if (props.maintab == 0) {
     return (
       <>
@@ -195,6 +309,7 @@ function MainTabContent(props) {
               placeholder='3~20글자로 적어주세요'
               maxLength={20}
               minLength={3}
+              id='projectTitle'
             ></input>
           </span>
         </div>
@@ -303,7 +418,11 @@ function MainTabContent(props) {
               display: 'flex',
             }}
           >
-            <RegionSelect></RegionSelect>
+            <RegionSelect
+              RegionSelectValue={props.RegionSelectValue}
+              setRegionSelectValue={props.setRegionSelectValue}
+              handleRegionSelectChange={props.handleRegionSelectChange}
+            ></RegionSelect>
           </div>
         </div>
         <div>
@@ -329,9 +448,105 @@ function MainTabContent(props) {
               textAlign: 'start',
             }}
           >
-            ❗모집인원을 설정해주세요 (3~4명 추천)
+            ❗모집인원을 설정해주세요 (3~4명 추천 , 최대 10명)
           </p>
         </div>
+
+        <li className='mb-2 mb-xl-3' style={{ listStyle: 'none' }}>
+          <div
+            className='col-lg-12 mb-4 mb-sm-5'
+            style={{
+              display: 'flex',
+            }}
+          >
+            <div className='col-lg-5' style={{ paddingRight: '1%' }}>
+              <SelectBasicExample
+                useState={useState}
+                firstSelectValue={props.firstSelectValue}
+                setFirstSelectValue={props.setFirstSelectValue}
+                handleFirstSelectChange={props.handleFirstSelectChange}
+                secondSelectValue={props.secondSelectValue}
+                setSecondSelectValue={props.setSecondSelectValue}
+                handleSecondSelectChange={props.handleSecondSelectChange}
+              />
+            </div>
+            <div className='col-lg-5' style={{ paddingRight: '1%' }}>
+              <SelectTwo
+                useState={useState}
+                secondSelectValue={props.secondSelectValue}
+                setSecondSelectValue={props.setSecondSelectValue}
+                handleSecondSelectChange={props.handleSecondSelectChange}
+                firstSelectValue={props.firstSelectValue}
+                setFirstSelectValue={props.setFirstSelectValue}
+                handleFirstSelectChange={props.handleFirstSelectChange}
+              />
+            </div>
+          </div>
+          <div
+            className='col-lg-12 mb-4 mb-sm-5'
+            style={{
+              display: 'flex',
+            }}
+          >
+            <div className='col-lg-5' style={{ paddingRight: '1%' }}>
+              <CareerSelect
+                careerSelectValue={props.careerSelectValue}
+                setCareerSelectValue={props.setCareerSelectValue}
+                handleCareerSelectChange={props.handleCareerSelectChange}
+              ></CareerSelect>
+            </div>
+
+            <div
+              className='col-lg-2'
+              style={{
+                paddingLeft: '10%',
+                display: 'flex',
+                alignItems: 'center',
+                textAlign: 'center',
+                justifyContent: 'center',
+                fontSize: '20px',
+              }}
+            >
+              <p
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  {
+                    countPeople >= 10 ? (
+                      <button disabled>+</button>
+                    ) : (
+                      handleIncreseButton()
+                    );
+                  }
+                }}
+              >
+                +
+              </p>
+              <p
+                style={{
+                  textAlign: 'center',
+                  padding: '0% 50%',
+                  color: 'rgb(148,178,249)',
+                }}
+              >
+                {countPeople}
+              </p>
+              <p
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  {
+                    countPeople <= 0 ? (
+                      <button disabled>-</button>
+                    ) : (
+                      handleDiscreseButton()
+                    );
+                  }
+                }}
+              >
+                -
+              </p>
+            </div>
+          </div>
+        </li>
         <p
           style={{
             fontSize: '1.125rem',
@@ -358,6 +573,7 @@ function MainTabContent(props) {
         </p>
 
         <Editor
+          ref={editorRef}
           className='editor'
           initialValue={mkdStr}
           previewStyle='vertical'
@@ -397,7 +613,11 @@ function MainTabContent(props) {
             display: 'flex',
           }}
         >
-          <SkillSelect></SkillSelect>
+          <SkillSelect
+            skillSelectValue={props.skillSelectValue}
+            setSkillSelectValue={props.setSkillSelectValue}
+            handleSkillSelectChange={props.handleSkillSelectChange}
+          ></SkillSelect>
         </div>
         <a
           style={{
@@ -412,7 +632,23 @@ function MainTabContent(props) {
             textAlign: 'center',
           }}
           onClick={() => {
-            props.setModal(false);
+            // console.log(props.secondSelectValue + ',');
+            props.insertProject(
+              document.getElementById('projectTitle').value,
+              selectedImageUrl,
+              props.RegionSelectValue,
+              props.allDevDto[sessionStorage.getItem('id') - 1].name,
+              props.firstSelectValue,
+              props.secondSelectValue,
+              props.careerSelectValue,
+              '0',
+              countPeople,
+              '',
+              '',
+              editorRef.current.getInstance().getMarkdown(),
+              props.skillSelectValue
+            );
+            props.navigate('/findDeveloper');
           }}
         >
           프로젝트 글 작성하기
@@ -458,6 +694,7 @@ function MainTabContent(props) {
                 marginRight: '1%',
                 padding: '25px 5px',
               }}
+              id='title'
               placeholder='3~20글자로 적어주세요'
               maxLength={20}
               minLength={3}
@@ -551,7 +788,8 @@ function MainTabContent(props) {
         </p>
 
         <Editor
-          className='editor'
+          ref={editorRef}
+          id='editor'
           initialValue={storymkdStr}
           previewStyle='vertical'
           height='600px'
@@ -598,6 +836,7 @@ function MainTabContent(props) {
                 marginRight: '1%',
                 padding: '25px 5px',
               }}
+              id='hashTag'
               placeholder='검색태그를 적어주세요'
               maxLength={20}
               minLength={3}
@@ -617,7 +856,14 @@ function MainTabContent(props) {
             textAlign: 'center',
           }}
           onClick={() => {
-            props.setModal(false);
+            props.insertStory(
+              document.getElementById('title').value,
+              selectedImageUrl,
+              props.allDevDto[sessionStorage.getItem('id') - 1].name,
+              editorRef.current.getInstance().getMarkdown(),
+              document.getElementById('hashTag').value
+            );
+            props.navigate('/Story');
           }}
         >
           스토리 글 작성하기
@@ -626,8 +872,8 @@ function MainTabContent(props) {
     );
   }
 }
-
-function RegionSelect(props) {
+function PlusButton(props) {}
+function SelectBasicExample(props) {
   return (
     <>
       <Form.Select
@@ -635,24 +881,137 @@ function RegionSelect(props) {
         value={props.firstSelectValue}
         onChange={props.handleFirstSelectChange}
       >
-        <option value=''>선택하세요</option>
-        <option value='option1'>서울</option>
-        <option value='option2'>인천</option>
-        <option value='option3'>경기</option>
-        <option value='option4'>세종</option>
-        <option value='option5'>충남</option>
-        <option value='option6'>충북</option>
-        <option value='option7'>광주</option>
-        <option value='option8'>전남</option>
-        <option value='option9'>전북</option>
-        <option value='option10'>대구</option>
-        <option value='option11'>경북</option>
-        <option value='option12'>부산</option>
-        <option value='option13'>울산</option>
-        <option value='option14'>경남</option>
-        <option value='option15'>강원</option>
-        <option value='option16'>제주</option>
-        <option value='option17'>전국</option>
+        <option value='선택하세요'>선택하세요</option>
+        <option value='기획,'>기획</option>
+        <option value='디자인,'>디자인</option>
+        <option value='프론트엔드개발,'>프론트엔드개발</option>
+        <option value='벡엔드개발,'>벡엔드개발</option>
+        <option value='사업,'>사업</option>
+        <option value='기타,'>기타</option>
+      </Form.Select>
+    </>
+  );
+}
+function SelectTwo(props) {
+  return (
+    <Form.Select
+      aria-label='Default select example'
+      value={props.secondSelectValue}
+      onChange={props.handleSecondSelectChange}
+    >
+      {props.firstSelectValue === '기획,' && (
+        <>
+          <option value='전체'>전체</option>
+          <option value='UX/UI기획'>UX/UI기획</option>
+          <option value='게임기획'>게임기획</option>
+          <option value='프로젝트 매니저'>프로젝트 매니저</option>
+          <option value='하드웨어(제품) 기획'>하드웨어(제품) 기획</option>
+          <option value='(기획)기타'>(기획)기타</option>
+        </>
+      )}
+      {props.firstSelectValue === '디자인,' && (
+        <>
+          <option value='전체'>전체</option>
+          <option value='그래픽디자인'>그래픽디자인</option>
+          <option value='UX/UI디자인'>UX/UI디자인</option>
+          <option value='3D디자인'>3D디자인</option>
+          <option value='하드웨어(제품)디자인'>하드웨어(제품)디자인</option>
+          <option value='디자인(기타)'>디자인(기타)</option>
+        </>
+      )}
+      {props.firstSelectValue === '프론트엔드개발,' && (
+        <>
+          <option value='전체'>전체</option>
+          <option value='IOS'>IOS</option>
+          <option value='안드로이드'>안드로이드</option>
+          <option value='웹프론트엔드'>웹프론트엔드</option>
+          <option value='웹퍼블리셔'>웹퍼블리셔</option>
+          <option value='크로스플랫폼'>크로스플랫폼</option>
+          <option value='임베디드SW'>임베디드SW</option>
+        </>
+      )}
+      {props.firstSelectValue === '벡엔드개발,' && (
+        <>
+          <option value='전체'>전체</option>
+          <option value='웹서버'>웹서버</option>
+          <option value='블록체인'>블록체인</option>
+          <option value='AI'>AI</option>
+          <option value='DB/빅데이터/DS'>DB/빅데이터/DS</option>
+          <option value='게임서버'>게임서버</option>
+        </>
+      )}
+      {props.firstSelectValue === '사업,' && (
+        <>
+          <option value='전체'>전체</option>
+          <option value='사업기획'>사업기획</option>
+          <option value='마케팅'>마케팅</option>
+          <option value='재무/회계'>재무/회계</option>
+          <option value='영업'>영업</option>
+          <option value='전략/컨설팅'>전략/컨설팅</option>
+          <option value='투자/고문'>투자/고문</option>
+          <option value='사업(기타)'>사업(기타)</option>
+        </>
+      )}
+      {props.firstSelectValue === '기타,' && (
+        <>
+          <option value='전체'>전체</option>
+          <option value='DBA'>DBA</option>
+          <option value='데이터 엔지니어'>데이터 엔지니어</option>
+          <option value='데이터'>데이터 사이언티스트</option>
+          <option value='데이터 사이언티스트'>보안 엔지니어</option>
+          <option value='소프트웨어 개발자'>소프트웨어 개발자</option>
+          <option value='게임 개발자'>게임 개발자</option>
+          <option value='하드웨어 개발자'>하드웨어 개발자</option>
+          <option value='머신러닝 개발자'>머신러닝 개발자</option>
+          <option value='클라우드엔지니어'>클라우드엔지니어</option>
+          <option value='QA'>QA</option>
+        </>
+      )}
+    </Form.Select>
+  );
+}
+function CareerSelect(props) {
+  return (
+    <>
+      <Form.Select
+        aria-label='Default select example'
+        value={props.careerSelectValue}
+        onChange={props.handleCareerSelectChange}
+      >
+        <option value='선택하세요'>선택하세요</option>
+        <option value='초보'>초보</option>
+        <option value='중수'>중수</option>
+        <option value='고수'>고수</option>
+      </Form.Select>
+    </>
+  );
+}
+function RegionSelect(props) {
+  return (
+    <>
+      <Form.Select
+        aria-label='Default select example'
+        value={props.RegionSelectValue}
+        onChange={props.handleRegionSelectChange}
+      >
+        <option value='선택하세요'>선택하세요</option>
+        <option value='서울'>서울</option>
+        <option value='인천'>인천</option>
+        <option value='경기'>경기</option>
+        <option value='세종'>세종</option>
+        <option value='충남'>충남</option>
+        <option value='충북'>충북</option>
+        <option value='광주'>광주</option>
+        <option value='전남'>전남</option>
+        <option value='전북'>전북</option>
+        <option value='대구'>대구</option>
+        <option value='경북'>경북</option>
+        <option value='부산'>부산</option>
+        <option value='울산'>울산</option>
+        <option value='경남'>경남</option>
+        <option value='강원'>강원</option>
+        <option value='제주'>제주</option>
+        <option value='전국'>전국</option>
       </Form.Select>
     </>
   );
@@ -663,31 +1022,29 @@ function SkillSelect(props) {
     <>
       <Form.Select
         aria-label='Default select example'
-        value={props.firstSelectValue}
-        onChange={props.handleFirstSelectChange}
+        value={props.skillSelectValue}
+        onChange={props.handleSkillSelectChange}
       >
-        <option value='' data-image='C:\Users\82108\Desktop\python.jpg'>
-          선택하세요
-        </option>
-        <option value='option1'>Python</option>
-        <option value='option2'>C</option>
-        <option value='option3'>C++</option>
-        <option value='option4'>Java</option>
-        <option value='option5'>C#</option>
-        <option value='option6'>JavaScript</option>
-        <option value='option7'>TypeScript</option>6
-        <option value='option8'>Assembly</option>
-        <option value='option9'>Swift</option>
-        <option value='option10'>PHP</option>
-        <option value='option11'>Go</option>
-        <option value='option12'>R</option>
-        <option value='option13'>Ruby</option>
-        <option value='option14'>Rust</option>
-        <option value='option15'>Kotlin</option>
-        <option value='option16'>Vue.js</option>
-        <option value='option17'>jQuery</option>
-        <option value='option18'>Nuxt.js</option>
-        <option value='option19'>Next.js</option>
+        <option value=''>선택하세요</option>
+        <option value='Python'>Python</option>
+        <option value='C'>C</option>
+        <option value='C++'>C++</option>
+        <option value='Java'>Java</option>
+        <option value='C'>C#</option>
+        <option value='JavaScript'>JavaScript</option>
+        <option value='TypeScript'>TypeScript</option>6
+        <option value='Assembly'>Assembly</option>
+        <option value='Swift'>Swift</option>
+        <option value='PHP'>PHP</option>
+        <option value='Go'>Go</option>
+        <option value='R'>R</option>
+        <option value='Ruby'>Ruby</option>
+        <option value='Rust'>Rust</option>
+        <option value='Kotlin'>Kotlin</option>
+        <option value='Vue'>Vue.js</option>
+        <option value='jQuery'>jQuery</option>
+        <option value='Nuxt.js'>Nuxt.js</option>
+        <option value='Next.js'>Next.js</option>
       </Form.Select>
     </>
   );
