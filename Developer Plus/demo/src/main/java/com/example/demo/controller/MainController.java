@@ -37,6 +37,11 @@ public class MainController {
         return loginRepository.requestLogin(request.get("email"), request.get("password"));
     }
 
+    @RequestMapping(value="/test/", method = RequestMethod.POST)
+    public void test() {
+        likeCountRepository.test();
+    }
+
     // 회원가입 요청
     @RequestMapping(value="/api/requestSignUp", method = RequestMethod.POST)
     public Map<String, String> requestSignUp(@RequestBody Map<String, String> request) {

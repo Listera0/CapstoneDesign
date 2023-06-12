@@ -882,12 +882,12 @@ function SelectBasicExample(props) {
         onChange={props.handleFirstSelectChange}
       >
         <option value='선택하세요'>선택하세요</option>
-        <option value='기획,'>기획</option>
-        <option value='디자인,'>디자인</option>
-        <option value='프론트엔드개발,'>프론트엔드개발</option>
-        <option value='벡엔드개발,'>벡엔드개발</option>
-        <option value='사업,'>사업</option>
-        <option value='기타,'>기타</option>
+        <option value='기획'>기획</option>
+        <option value='디자인'>디자인</option>
+        <option value='프론트엔드개발'>프론트엔드개발</option>
+        <option value='벡엔드개발'>벡엔드개발</option>
+        <option value='사업'>사업</option>
+        <option value='기타'>기타</option>
       </Form.Select>
     </>
   );
@@ -899,7 +899,7 @@ function SelectTwo(props) {
       value={props.secondSelectValue}
       onChange={props.handleSecondSelectChange}
     >
-      {props.firstSelectValue === '기획,' && (
+      {props.firstSelectValue === '기획' && (
         <>
           <option value='전체'>전체</option>
           <option value='UX/UI기획'>UX/UI기획</option>
@@ -909,7 +909,7 @@ function SelectTwo(props) {
           <option value='(기획)기타'>(기획)기타</option>
         </>
       )}
-      {props.firstSelectValue === '디자인,' && (
+      {props.firstSelectValue === '디자인' && (
         <>
           <option value='전체'>전체</option>
           <option value='그래픽디자인'>그래픽디자인</option>
@@ -919,7 +919,7 @@ function SelectTwo(props) {
           <option value='디자인(기타)'>디자인(기타)</option>
         </>
       )}
-      {props.firstSelectValue === '프론트엔드개발,' && (
+      {props.firstSelectValue === '프론트엔드개발' && (
         <>
           <option value='전체'>전체</option>
           <option value='IOS'>IOS</option>
@@ -930,7 +930,7 @@ function SelectTwo(props) {
           <option value='임베디드SW'>임베디드SW</option>
         </>
       )}
-      {props.firstSelectValue === '벡엔드개발,' && (
+      {props.firstSelectValue === '벡엔드개발' && (
         <>
           <option value='전체'>전체</option>
           <option value='웹서버'>웹서버</option>
@@ -940,7 +940,7 @@ function SelectTwo(props) {
           <option value='게임서버'>게임서버</option>
         </>
       )}
-      {props.firstSelectValue === '사업,' && (
+      {props.firstSelectValue === '사업' && (
         <>
           <option value='전체'>전체</option>
           <option value='사업기획'>사업기획</option>
@@ -952,7 +952,7 @@ function SelectTwo(props) {
           <option value='사업(기타)'>사업(기타)</option>
         </>
       )}
-      {props.firstSelectValue === '기타,' && (
+      {props.firstSelectValue === '기타' && (
         <>
           <option value='전체'>전체</option>
           <option value='DBA'>DBA</option>
@@ -1016,23 +1016,33 @@ function RegionSelect(props) {
     </>
   );
 }
-
 function SkillSelect(props) {
+  const handleSearchInputChange = (event) => {
+    const value = event.target.value;
+    props.setSkillSelectValue(value);
+  };
+
   return (
     <>
+      <Form.Control
+        type='text'
+        placeholder='검색어를 입력하세요'
+        value={props.skillSelectValue}
+        onChange={handleSearchInputChange}
+      />
       <Form.Select
         aria-label='Default select example'
         value={props.skillSelectValue}
         onChange={props.handleSkillSelectChange}
       >
         <option value=''>선택하세요</option>
-        <option value='Python'>Python</option>
+        <option value='python'>python</option>
         <option value='C'>C</option>
         <option value='C++'>C++</option>
-        <option value='Java'>Java</option>
-        <option value='C'>C#</option>
-        <option value='JavaScript'>JavaScript</option>
-        <option value='TypeScript'>TypeScript</option>6
+        <option value='java'>java</option>
+        <option value='C#'>C#</option>
+        <option value='javaScript'>javaScript</option>
+        <option value='TypeScript'>TypeScript</option>
         <option value='Assembly'>Assembly</option>
         <option value='Swift'>Swift</option>
         <option value='PHP'>PHP</option>
@@ -1049,4 +1059,5 @@ function SkillSelect(props) {
     </>
   );
 }
+
 export default Write;

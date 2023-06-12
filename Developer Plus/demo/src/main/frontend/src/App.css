@@ -112,9 +112,8 @@ input[type='file'] {
   color: black;
 }
 .container {
-  margin-top: 3%;
-  padding-right: 10%;
-  padding-left: 10%;
+  padding-right: 5%;
+  padding-left: 5%;
 }
 .main_bg {
   width: 100%;
@@ -443,7 +442,6 @@ button span {
   width: 100%;
   height: auto;
   object-fit: cover;
-  
 }
 .content {
   font-size: 12px;

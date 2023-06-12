@@ -5,7 +5,9 @@ import { useParams } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
 import axios from 'axios';
 import { jobs, icons2 } from '../icons2';
-
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Viewer } from '@toast-ui/react-editor';
+import { useRef } from 'react';
 function FindDeveloperDetail(props) {
   let [maintab, setMainTab] = useState(0);
   let { id } = useParams();
@@ -34,20 +36,20 @@ function FindDeveloperDetail(props) {
   // let [req2, setReq2] = useState(projectDetail.requireJob);
   // console.log(req2);
   return (
-    <section className='bg-light' style={{ marginTop: '-6%' }}>
+    <div className='bg-light' style={{ marginTop: '-6%' }}>
       <div className='container' style={{ paddingTop: '3%' }}>
         <div className='row'>
           <h2
             style={{
               textAlign: 'center',
               paddingTop: '5%',
-              paddingLeft: '5%',
+
               fontWeight: '600',
             }}
           >
             {projectDetail.title}
           </h2>
-
+          <p style={{ textAlign: 'center' }}>{projectDetail.name}</p>
           <MainTabContent
             tab={tab}
             maintab={maintab}
@@ -59,380 +61,328 @@ function FindDeveloperDetail(props) {
           ></MainTabContent>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 function MainTabContent(props) {
   return (
     <>
-      <div className='col-lg-12 mb-4 mb-sm-5'>
-        <div className='card card-style1 border-0'>
-          <div
-            className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'
-            style={{ display: 'flex' }}
-          >
-            <div
-              className='row align-items-center'
-              style={{ border: 'none', display: 'flex' }}
-            >
-              <div
-                className='col-lg-12 mb-4 mb-lg-0'
-                style={{ alignItems: 'center' }}
-              >
-                <img
-                  src={process.env.PUBLIC_URL + props.projectDetail.imgURL}
-                  width='100%'
-                  style={{ textAlign: 'center' }}
-                ></img>
-              </div>
-            </div>
+      <div className='col-lg-12'>
+        <div className='row ' style={{ border: 'none', display: 'flex' }}>
+          <div className='col-lg-12 ' style={{ alignItems: 'center' }}>
+            <img
+              src={process.env.PUBLIC_URL + props.projectDetail.imgURL}
+              width='100%'
+              style={{ textAlign: 'center' }}
+            ></img>
           </div>
         </div>
-        <Nav fill variant='tabs' defaultActiveKey='link0'>
-          <Nav.Item>
-            <Nav.Link
-              onClick={() => {
-                props.setTab(0);
-              }}
-              eventKey='link0'
-            >
-              정보
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link
-              onClick={() => {
-                props.setTab(1);
-              }}
-              eventKey='link1'
-            >
-              모집현황
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link
-              onClick={() => {
-                props.setTab(2);
-              }}
-              eventKey='link2'
-            >
-              기술/언어
-            </Nav.Link>
-          </Nav.Item>
-        </Nav>
-        <TabContent
-          tab={props.tab}
-          projectDetail={props.projectDetail}
-          icons2={props.icons2}
-          skillDetail={props.skillDetail}
-          i={props.i}
-        />
       </div>
+
+      <TabContent
+        tab={props.tab}
+        projectDetail={props.projectDetail}
+        icons2={props.icons2}
+        skillDetail={props.skillDetail}
+        i={props.i}
+      />
     </>
   );
 }
 function TabContent(props) {
+  const editorRef = useRef();
+  let markdown = props.projectDetail.content;
+  console.log(markdown);
+  let skillDetail =
+    props.projectDetail.skill != null
+      ? props.projectDetail.skill.split(',')
+      : [];
   if (props.tab == 0) {
     return (
-      <div className='row'>
-        <div className='col-lg-8 mb-4 mb-sm-5' style={{ display: 'flex' }}>
-          <div className='card card-style1 border-0'>
-            <div className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'>
-              <div className='row align-items-center'>
-                <div className='col-lg-12 px-xl-10'>
-                  <div style={{ padding: '3%' }}>
-                    <div style={{ textAlign: 'start' }}>
-                      <span
-                        className='display-26 text-secondary me-2 font-weight-600'
-                        style={{
-                          textAlign: 'start',
-                          fontSize: '18px',
-                          marginBottom: '10%',
-                        }}
-                      >
-                        [소개]
-                      </span>
-                      <div
-                        style={{
-                          fontSize: '15px',
-                          marginTop: '2%',
-                        }}
-                      >
-                        {props.projectDetail.content}
-                        <span
-                          style={{ fontWeight: '600', marginRight: '10%' }}
-                        ></span>{' '}
-                      </div>
-                    </div>
-                    <div style={{ textAlign: 'start', marginTop: '3%' }}>
-                      <span
-                        className='display-26 text-secondary me-2 font-weight-600'
-                        style={{
-                          textAlign: 'start',
-                          fontSize: '18px',
-                        }}
-                      >
-                        [참고링크]
-                      </span>
-                      <p
-                        style={{
-                          textAlign: 'start',
-                          fontSize: '15px',
-                          marginTop: '3%',
-                        }}
-                      >
-                        <span style={{ fontWeight: '600', marginRight: '10%' }}>
-                          <FontAwesomeIcon icon={['fab', 'github']} size='2x' />
-                        </span>{' '}
-                        <span
-                          onClick={() => {}}
-                          style={{ cursor: 'pointer', fontWeight: '600' }}
-                        >
-                          깃허브
-                        </span>
-                      </p>
-                    </div>
-                    <p
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          height: 'auto',
+        }}
+      >
+        <div
+          className='col-lg-12 '
+          style={{ display: 'block', width: '70%', marginLeft: '5%' }}
+        >
+          <span
+            className=' text-secondary me-2 font-weight-600'
+            style={{
+              textAlign: 'start',
+              fontSize: '25px',
+              marginBottom: '10%',
+            }}
+          >
+            [소개]
+          </span>
+
+          <div
+            style={{
+              fontSize: '15px',
+              marginTop: '2%',
+              width: '80%',
+            }}
+          >
+            <span style={{ fontWeight: '600', marginRight: '10%' }}>
+              {props.projectDetail.content && (
+                <Viewer initialValue={props.projectDetail?.content} />
+              )}
+            </span>{' '}
+          </div>
+          <hr style={{ width: '90%' }}></hr>
+          <br></br>
+          <span
+            className=' text-secondary me-2 font-weight-600'
+            style={{
+              textAlign: 'start',
+              fontSize: '25px',
+              marginBottom: '10%',
+            }}
+          >
+            [모집현황]
+          </span>
+          <div
+            style={{
+              fontSize: '15px',
+              marginTop: '2%',
+              width: '80%',
+            }}
+          >
+            <Jobs projectDetail={props.projectDetail}></Jobs>
+          </div>
+          <hr style={{ width: '90%' }}></hr>
+          <br></br>
+          <span
+            className=' text-secondary me-2 font-weight-600'
+            style={{
+              textAlign: 'start',
+              fontSize: '25px',
+              marginBottom: '10%',
+            }}
+          >
+            [사용스킬]
+          </span>
+          <div
+            style={{
+              fontSize: '15px',
+              marginTop: '2%',
+              width: '50%',
+            }}
+          >
+            <div className='col-lg-12 mb-4 mb-sm-5'>
+              <div>
+                <div style={{ padding: '3%' }}>
+                  <div style={{ textAlign: 'start' }}>
+                    <div
                       style={{
                         textAlign: 'start',
                         fontSize: '15px',
                         marginTop: '2%',
                       }}
                     >
-                      <span style={{ fontWeight: '600', marginRight: '10%' }}>
-                        <FontAwesomeIcon
-                          icon={['fab', 'instagram']}
-                          size='2x'
-                        />
-                      </span>{' '}
-                      <span
-                        onClick={() => {}}
-                        style={{ cursor: 'pointer', fontWeight: '600' }}
-                      >
-                        인스타그램
-                      </span>
-                    </p>
+                      <div style={{ fontWeight: '600', marginRight: '10%' }}>
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            marginTop: '5%',
+                            marginLeft: '10%',
+                            marginRight: '10%',
+                            flexWrap: 'wrap',
+                            fontSize: '18px',
+                          }}
+                        >
+                          {skillDetail.map((ele, i) => {
+                            return (
+                              <Icons2
+                                key={i}
+                                icons2={icons2}
+                                i={i}
+                                ele={ele}
+                                developerDetail={props.developerDetail}
+                                skillDetail={skillDetail}
+                              />
+                            );
+                          })}
+                        </div>
+                      </div>{' '}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-
-        <div className='col-lg-4 mb-4 mb-sm-5'>
-          <div className='card card-style1 border-0'>
-            <div
-              className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'
+          <div style={{ textAlign: 'start', marginTop: '3%' }}>
+            <span
+              className='display-26 text-secondary me-2 font-weight-600'
               style={{
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                textAlign: 'start',
+                fontSize: '18px',
               }}
             >
-              <div className='row align-items-center'>
-                <div
-                  style={{
-                    textAlign: 'start',
-                    paddingTop: '5%',
-                    paddingLeft: '5%',
-                    fontWeight: '600',
-                  }}
-                >
-                  <div
-                    style={{
-                      textAlign: 'start',
-                      paddingTop: '5%',
-                      paddingLeft: '5%',
-                      fontWeight: '600',
-                    }}
-                  >
-                    리더정보
-                    <div
-                      style={{
-                        textAlign: 'start',
-                        paddingTop: '5%',
-
-                        fontWeight: '600',
-                      }}
-                    >
-                      {props.projectDetail.name}
-                    </div>
-                    <hr></hr>
-                  </div>
-
-                  <div
-                    style={{
-                      textAlign: 'start',
-                      paddingTop: '5%',
-                      paddingLeft: '5%',
-                      fontWeight: '600',
-                    }}
-                  >
-                    프로젝트지역
-                    <p
-                      style={{
-                        textAlign: 'start',
-                        paddingTop: '5%',
-                        fontWeight: '600',
-                      }}
-                    >
-                      {props.projectDetail.region}
-                    </p>
-                    <hr></hr>
-                  </div>
-                  <div
-                    style={{
-                      textAlign: 'start',
-                      paddingTop: '5%',
-                      paddingLeft: '5%',
-                      fontWeight: '600',
-                    }}
-                  >
-                    프로젝트기간
-                    <p
-                      style={{
-                        textAlign: 'start',
-                        paddingTop: '5%',
-                        fontWeight: '600',
-                      }}
-                    >
-                      {props.projectDetail.startDate}~
-                      {props.projectDetail.endDate}
-                    </p>
-                    <hr></hr>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-  if (props.tab == 1) {
-    let jobDetail =
-      props.projectDetail.job != null ? props.projectDetail.job.split(',') : '';
-
-    let requireJobDetail =
-      props.projectDetail.requireJob != null
-        ? props.projectDetail.requireJob.split(',')
-        : '';
-
-    return (
-      <div className='col-lg-12 mb-4 mb-sm-5'>
-        <div>
-          <div style={{ padding: '3%' }}>
-            <div style={{ textAlign: 'start' }}>
-              <span
-                className='display-26 text-secondary me-2 font-weight-600'
-                style={{
-                  textAlign: 'start',
-                  fontSize: '18px',
-                  marginBottom: '10%',
-                }}
-              >
-                [모집현황]
-              </span>
-              <div
-                style={{
-                  textAlign: 'start',
-                  fontSize: '15px',
-                  marginTop: '2%',
-                }}
-              >
-                {/* <div style={{ fontWeight: '600', marginRight: '10%' }}>
-                  {props.careerDetail.map((ele, i) => {
-                    return (
-                      <Jobs
-                        key={i}
-                        jobs={jobs}
-                        i={i}
-                        ele={ele}
-                        careerDetail={props.careerDetail}
-                        projectDetail={props.projectDetail}
-                        job={props.job}
-                        req2={props.req2}
-                        setReq2={props.setReq2}
-                      />
-                    );
-                  })}
-                </div>{' '} */}
-                <Jobs
-                  jobDetail={jobDetail}
-                  requireJobDetail={requireJobDetail}
-                  projectDetail={props.projectDetail}
-                ></Jobs>
-              </div>
-            </div>
-            <div style={{ textAlign: 'start' }}>
-              <span
-                className='display-26 text-secondary me-2 font-weight-600'
-                style={{
-                  textAlign: 'start',
-                  fontSize: '18px',
-                  marginBottom: '10%',
-                }}
-              >
-                [링크]
-              </span>
-              <div
-                style={{
-                  textAlign: 'start',
-                  fontSize: '15px',
-                  marginTop: '2%',
-                }}
-              >
-                <span style={{ fontWeight: '600', marginRight: '10%' }}>
-                  <FontAwesomeIcon icon={['fab', 'github']} size='2x' />
-                </span>{' '}
-                <span
-                  onClick={() => {}}
-                  style={{ cursor: 'pointer', fontWeight: '600' }}
-                >
-                  깃허브
-                </span>
-              </div>
-            </div>
-            <div
+              [참고링크]
+            </span>
+            <p
               style={{
                 textAlign: 'start',
                 fontSize: '15px',
-                marginTop: '2%',
+                marginTop: '3%',
               }}
             >
               <span style={{ fontWeight: '600', marginRight: '10%' }}>
-                <FontAwesomeIcon icon={['fab', 'instagram']} size='2x' />
+                <FontAwesomeIcon icon={['fab', 'github']} size='2x' />
               </span>{' '}
               <span
                 onClick={() => {}}
                 style={{ cursor: 'pointer', fontWeight: '600' }}
               >
-                인스타그램
+                깃허브
               </span>
+            </p>
+          </div>
+          <p
+            style={{
+              textAlign: 'start',
+              fontSize: '15px',
+              marginTop: '2%',
+            }}
+          >
+            <span style={{ fontWeight: '600', marginRight: '10%' }}>
+              <FontAwesomeIcon icon={['fab', 'instagram']} size='2x' />
+            </span>{' '}
+            <span
+              onClick={() => {}}
+              style={{ cursor: 'pointer', fontWeight: '600' }}
+            >
+              인스타그램
+            </span>
+          </p>
+        </div>
+
+        <div
+          style={{
+            width: '20%',
+            marginRight: '5%',
+            position: 'sticky',
+            top: '0',
+          }}
+        >
+          <div
+            style={{
+              border: '1px solid #ddd',
+              padding: '20px',
+              top: '100px',
+              position: 'sticky',
+            }}
+          >
+            <div
+              style={{
+                fontWeight: '600',
+              }}
+            >
+              <div
+                style={{
+                  textAlign: 'start',
+                  paddingTop: '5%',
+                  paddingLeft: '5%',
+                  fontWeight: '600',
+                }}
+              >
+                리더정보
+                <div
+                  style={{
+                    textAlign: 'start',
+                    paddingTop: '5%',
+
+                    fontWeight: '600',
+                  }}
+                >
+                  {props.projectDetail.name}
+                </div>
+                <hr></hr>
+              </div>
+
+              <div
+                style={{
+                  textAlign: 'start',
+                  paddingTop: '5%',
+                  paddingLeft: '5%',
+                  fontWeight: '600',
+                }}
+              >
+                프로젝트지역
+                <p
+                  style={{
+                    textAlign: 'start',
+                    paddingTop: '5%',
+                    fontWeight: '600',
+                  }}
+                >
+                  {props.projectDetail.region}
+                </p>
+                <hr></hr>
+              </div>
+              <div
+                style={{
+                  textAlign: 'start',
+                  paddingTop: '5%',
+                  paddingLeft: '5%',
+                  fontWeight: '600',
+                }}
+              >
+                프로젝트기간
+                <p
+                  style={{
+                    textAlign: 'start',
+                    paddingTop: '5%',
+                    fontWeight: '600',
+                  }}
+                >
+                  {props.projectDetail.startDate}~{props.projectDetail.endDate}
+                </p>
+                <hr></hr>
+              </div>
             </div>
           </div>
         </div>
       </div>
     );
   }
-  function Jobs(props) {
-    const [jobsState, setJobsState] = useState(
-      Array(props.requireJobDetail.length).fill(0)
-    );
 
-    const countJob = (index) => {
-      setJobsState((jobsState) => {
-        const newJobsState = [...jobsState];
-        if (newJobsState[index] === 0) {
-          newJobsState[index] += 1;
-        } else if (newJobsState[index] > 0) {
-          newJobsState[index] -= 1;
-        }
-        return newJobsState;
-      });
-    };
+  function Jobs(props) {
+    const [countNowJob, setCountNowJob] = useState(props.projectDetail.nowJob);
+    console.log(props.projectDetail.nowJob);
+
     return (
       <div key={props.i} style={{}}>
         <div>
+          <div style={{ display: 'flex' }}>
+            <div
+              style={{
+                fontWeight: '600',
+                marginRight: '10%',
+                marginBottom: '3%',
+                fontSize: '18px',
+              }}
+            >
+              [직무]
+            </div>
+            <div
+              style={{
+                fontWeight: '600',
+                marginRight: '10%',
+                marginBottom: '3%',
+                fontSize: '18px',
+              }}
+            >
+              {props.projectDetail.job}
+            </div>
+          </div>
           <div
             style={{ display: 'flex', marginBottom: '2%', textAlign: 'start' }}
           >
@@ -440,18 +390,18 @@ function TabContent(props) {
               style={{
                 fontWeight: '600',
                 marginRight: '10%',
+                marginBottom: '3%',
+                fontSize: '18px',
               }}
             >
-              {props.jobDetail.map((job, index) => (
-                <div key={index} style={{ marginBottom: '10%' }}>
-                  {job}
-                </div>
-              ))}
+              [분야]
             </div>
             <div
               style={{
                 fontWeight: '600',
                 marginRight: '10%',
+                marginBottom: '3%',
+                fontSize: '18px',
               }}
             >
               {props.projectDetail.jobDetail}
@@ -460,30 +410,11 @@ function TabContent(props) {
               style={{
                 fontWeight: '600',
                 marginRight: '10%',
+                marginBottom: '3%',
+                fontSize: '18px',
               }}
             >
-              {props.projectDetail.nowJob}
-            </div>
-            <div style={{ fontWeight: '600', marginRight: '10%' }}>
-              {props.requireJobDetail.map((ele, i) => (
-                <div
-                  style={{
-                    marginBottom: '10%',
-                    display: 'flex',
-                  }}
-                >
-                  <div key={i} style={{}}>
-                    {jobsState[i]}/{props.projectDetail.requireJob}
-                  </div>
-                  <div>
-                    {jobsState[i] == props.projectDetail.requireJob ? (
-                      <button disabled>마감</button>
-                    ) : (
-                      <button onClick={() => countJob(i)}>지원</button>
-                    )}
-                  </div>
-                </div>
-              ))}
+              {countNowJob}/{props.projectDetail.requireJob}
             </div>
 
             <div
@@ -491,30 +422,33 @@ function TabContent(props) {
                 marginRight: '10%',
                 textAlign: 'start',
               }}
-            ></div>
-            {/* <div style={{ textAlign: 'start' }}>
-              {props.projectDetail.requireJob[props.i] ==
-              props.projectDetail.nowJob[props.i] ? (
+            >
+              {' '}
+            </div>
+            <div style={{ textAlign: 'start' }}>
+              {props.projectDetail.requireJob === props.projectDetail.nowJob ? (
                 <button style={{}} disabled>
                   마감
                 </button>
               ) : (
                 <button
                   onClick={() => {
-                    props.req2 = props.req2[props.i] + 1;
+                    setCountNowJob(
+                      countNowJob === 0 ? countNowJob === 1 : countNowJob === 0
+                    );
                   }}
                 >
-                  지원
+                  {countNowJob === 0 ? '취소' : '지원'}
                 </button>
               )}
-            </div> */}
+            </div>
           </div>
         </div>
       </div>
     );
   }
 
-  if (props.tab == 2) {
+  function Skills(props) {
     let skillDetail =
       props.projectDetail.skill != null
         ? props.projectDetail.skill.split(',')
@@ -545,11 +479,8 @@ function TabContent(props) {
                   <div
                     style={{
                       display: 'flex',
-                      justifyContent: 'space-between',
+                      justifyContent: 'start',
                       marginTop: '5%',
-                      marginLeft: '10%',
-                      marginRight: '10%',
-                      flexWrap: 'wrap',
                     }}
                   >
                     {skillDetail.map((ele, i) => {
@@ -576,7 +507,7 @@ function TabContent(props) {
 }
 function Icons2(props) {
   return (
-    <div style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+    <div style={{ justifyContent: 'start' }}>
       <p style={{ paddingLeft: '1%' }}>{props.icons2[props.ele]}</p>
       <p style={{ textAlign: 'center' }}>{props.skillDetail[props.i]}</p>
     </div>

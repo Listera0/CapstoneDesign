@@ -80,4 +80,11 @@ public class LikeCountDao {
 
         return result;
     }
+
+    public void test() {
+        String query = String.format("select * from developer");
+        List<DeveloperDto> result = LKJdbcTemplate.query(query, new DevRowMapper());
+
+        System.out.println(result);
+    }
 }
