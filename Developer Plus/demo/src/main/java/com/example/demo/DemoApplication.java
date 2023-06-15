@@ -14,3 +14,6 @@ public class DemoApplication {
 
 // cd .\src\main\frontend\
 // npm start
+// cp -r "C:\Users\82108\Desktop\Capstone\CapstoneDesign\Developer Plus\demo\src\main\frontend\build\*" "C:\Users\82108\Desktop\Capstone\CapstoneDesign\Developer Plus\demo\src\main\resources\static\"
+
+//./mvnw spring-boot:run

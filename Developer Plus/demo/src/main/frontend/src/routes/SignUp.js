@@ -113,7 +113,6 @@ function SignUp(props) {
       setIspasswordConfirm(true);
     }
   };
- 
 
   // 1번째 select 박스의 onChange 핸들러
   const handleFirstSelectChange = (event) => {
@@ -203,17 +202,31 @@ function SignUp(props) {
                         중복확인
                       </button>
                     </span>
-                    <span
-                      style={{
-                        marginTop: '1%',
-                        display: 'block',
-                        textAlign: 'start',
-                        color: 'red',
-                        fontSize: '12px',
-                      }}
-                    >
-                      {checkEmail}
-                    </span>
+                    {checkEmail === true ? (
+                      <span
+                        style={{
+                          marginTop: '1%',
+                          display: 'block',
+                          textAlign: 'start',
+                          color: 'rgb(148,178,249)',
+                          fontSize: '12px',
+                        }}
+                      >
+                        {checkEmail}
+                      </span>
+                    ) : (
+                      <span
+                        style={{
+                          marginTop: '1%',
+                          display: 'block',
+                          textAlign: 'start',
+                          color: 'red',
+                          fontSize: '12px',
+                        }}
+                      >
+                        {checkEmail}
+                      </span>
+                    )}
                   </div>
                 </li>
 
@@ -373,7 +386,6 @@ function SignUp(props) {
                     </span>
                   </div>
                 </li>
-                
               </ul>
             </div>
             <button

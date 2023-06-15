@@ -3,7 +3,7 @@ package com.example.demo.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -69,5 +69,17 @@ public class DeveloperDao {
     {
         String query = "select * from developer";
         return DPJdbcTemplate.query(query, new DevRowMapper());
+    }
+    public String updateUser(Map<String, String> request) {
+        String query = String.format("update developer set imgURL = '%s', job = '%s', jobDetail = '%s', career = '%s', region = '%s', skill = '%s', " +
+                                                            "introduce = '%s', urlGithub = '%s', urlInsta = '%s', phone = '%s' where id = %s", 
+                                                            request.get("imgURL"), request.get("job"), request.get("jobDetail"), request.get("career"),
+                                                            request.get("region"), request.get("skill"), request.get("introduce"), request.get("urlGithub"),
+                                                            request.get("urlInsta"),request.get("phone"), request.get("id"));
+
+        DPJdbcTemplate.update(query);
+
+
+        return "";
     }
 }

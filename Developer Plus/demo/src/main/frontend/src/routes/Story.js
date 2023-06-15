@@ -94,23 +94,23 @@ function StoryCard(props) {
               style={{
                 display: 'flex',
                 fontSize: '10px',
-                justifyContent: 'space-between',
+                justifyContent: 'end',
               }}
             >
-              <div style={{ fontSize: '15px' }}>
+              <div style={{ fontSize: '15px', marginRight: '7%' }}>
                 <FontAwesomeIcon icon={farEye} style={{ fontSize: '20px' }} />{' '}
                 {props.allStoryDto[props.i].viewCount}
               </div>
-              <div>
+              {/* <div>
                 <FontAwesomeIcon icon={farCommentDots} size='2x' />
-              </div>
+              </div> */}
               <div style={{ fontSize: '15px' }}>
                 <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />{' '}
                 {props.allStoryDto[props.i].likeCount}
               </div>
-              <div>
+              {/* <div>
                 <FontAwesomeIcon icon={farBookmark} size='2x' />
-              </div>
+              </div> */}
             </div>
           </Card.Body>
         </Card>

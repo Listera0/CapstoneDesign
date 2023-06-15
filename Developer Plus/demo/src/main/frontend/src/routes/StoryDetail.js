@@ -1,7 +1,7 @@
 import { data, projectData, developerData } from '../data.js';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios, { all } from 'axios';
 import CloseButton from 'react-bootstrap/CloseButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faN } from '@fortawesome/free-solid-svg-icons';
@@ -30,7 +30,21 @@ function StoryDetail(props) {
         .catch((error) => console.log(error));
     }, []);
   }
-
+  const [userDetail, setUserDetail] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .post('/api/getDevData', {
+          id: id,
+          orderBy: '',
+          limit: '',
+        })
+        .then((response) => setUserDetail(response.data))
+        .catch((error) => console.log(error));
+    }, []);
+  }
+  console.log(userDetail);
+  let developerDetail = userDetail[1];
   const [chatDetail, setChatDetail] = useState(['']);
   {
     useEffect(() => {
@@ -202,6 +216,7 @@ function StoryDetail(props) {
             chatDetail={chatDetail}
             allDevDto={allDevDto}
             deleteChat={deleteChat}
+            developerDetail={developerDetail}
           />
         </div>
       </div>
@@ -241,7 +256,8 @@ function TabContent(props) {
     setFeedComment(updatedComments);
     setComment('');
   };
-
+  console.log(props.developerDetail);
+  console.log(props.resultDto[0].name);
   if (props.isLogin == true)
     return (
       <div className='comment_object' style={{ backgroundColor: '#f7f7f7' }}>
@@ -306,24 +322,52 @@ function TabContent(props) {
     }
     return (
       <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <p style={{ fontSize: '15px' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <p style={{ fontSize: '15px', marginRight: '10px' }}>
             {props.allDevDto[props.chatDetail[props.index].userId - 1]?.name}
           </p>
-          <p>{props.chatDetail[props.index].content}</p>
-          <ul style={{ listStyle: 'none' }}>
+          <div style={{ flex: 1 }}>
+            <textarea
+              value={props.chatDetail[props.index].content}
+              onChange={(e) => {
+                // 댓글 내용 변경 핸들러
+                props.handleCommentChange(e.target.value);
+              }}
+              style={{ width: '100%', height: '80px', resize: 'none' }}
+              disabled
+            />
+          </div>
+          <ul style={{ listStyle: 'none', marginLeft: '10px' }}>
             <li>
-              <button
-                onClick={() => {
-                  props.deleteChat(
-                    props.chatDetail[props.index].id,
-                    props.chatDetail[props.index].targetId,
-                    props.storyDetails[0].chatCount
-                  );
-                }}
-              >
-                삭제
-              </button>
+              {props.allDevDto[props.chatDetail[props.index].userId - 1]
+                ?.name === props.resultDto[0].name ? (
+                <button
+                  onClick={() => {
+                    props.deleteChat(
+                      props.chatDetail[props.index].id,
+                      props.chatDetail[props.index].targetId,
+                      props.storyDetails[0].chatCount
+                    );
+                  }}
+                  className='delete-button'
+                >
+                  삭제
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    props.deleteChat(
+                      props.chatDetail[props.index].id,
+                      props.chatDetail[props.index].targetId,
+                      props.storyDetails[0].chatCount
+                    );
+                  }}
+                  disabled
+                  style={{ visibility: 'hidden' }}
+                >
+                  삭제
+                </button>
+              )}
             </li>
           </ul>
         </div>
@@ -406,6 +450,20 @@ function TabContent(props) {
 
               <button className='comment_btn'>등록</button>
             </div>
+
+            {props.chatDetail.map((comment, index) => (
+              <NewComment
+                index={index}
+                resultDto={props.resultDto}
+                comment={comment}
+                chatDetail={props.chatDetail}
+                id={props.id}
+                allDevDto={props.allDevDto}
+                deleteChat={props.deleteChat}
+                storyDetail={props.storyDetail}
+                storyDetails={props.storyDetails}
+              />
+            ))}
           </div>
         </div>
         {props.modal ? (

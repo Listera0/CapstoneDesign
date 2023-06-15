@@ -18,7 +18,7 @@ import FindDeveloper from './routes/FindDeveloper';
 import ViewDeveloper from './routes/ViewDeveloper';
 import Footer from './components/Footer';
 import Profile from './routes/Profile';
-import Serach from './routes/Serach';
+import Serach from './routes/Search';
 import Talk from './routes/Talk';
 import Card from 'react-bootstrap/Card';
 import Carousel from 'react-bootstrap/Carousel';
@@ -474,23 +474,23 @@ function StoryCard(props) {
               style={{
                 display: 'flex',
                 fontSize: '10px',
-                justifyContent: 'space-between',
+                justifyContent: 'end',
               }}
             >
-              <div style={{ fontSize: '15px' }}>
+              <div style={{ fontSize: '15px', marginRight: '7%' }}>
                 <FontAwesomeIcon icon={farEye} style={{ fontSize: '20px' }} />{' '}
                 {props.rankingStoryDto[props.i].viewCount}
               </div>
-              <div>
+              {/* <div>
                 <FontAwesomeIcon icon={farCommentDots} size='2x' />
-              </div>
+              </div> */}
               <div style={{ fontSize: '15px' }}>
                 <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />{' '}
                 {props.rankingStoryDto[props.i].likeCount}
               </div>
-              <div>
+              {/* <div>
                 <FontAwesomeIcon icon={farBookmark} size='2x' />
-              </div>
+              </div> */}
             </div>
           </Card.Body>
         </Card>
@@ -543,23 +543,23 @@ function ProjectCard(props) {
               style={{
                 display: 'flex',
                 fontSize: '10px',
-                justifyContent: 'space-between',
+                justifyContent: 'end',
               }}
             >
-              <div style={{ fontSize: '15px' }}>
+              <div style={{ fontSize: '15px', marginRight: '7%' }}>
                 <FontAwesomeIcon icon={farEye} style={{ fontSize: '20px' }} />{' '}
                 {props.rankingProjectDto[props.i].viewCount}
               </div>
-              <div>
+              {/* <div>
                 <FontAwesomeIcon icon={farCommentDots} size='2x' />
-              </div>
+              </div> */}
               <div style={{ fontSize: '15px' }}>
                 <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />{' '}
                 {props.rankingProjectDto[props.i].likeCount}
               </div>
-              <div>
+              {/* <div>
                 <FontAwesomeIcon icon={farBookmark} size='2x' />
-              </div>
+              </div> */}
             </div>
           </Card.Body>
         </Card>
@@ -712,10 +712,9 @@ function DeveloperCard(props) {
               </div>
               <div style={{ fontSize: '15px' }}>
                 <FontAwesomeIcon
-                  icon={faHeart}
+                  icon={farHeart}
                   style={{
                     fontSize: '20px',
-                    color: '#f1928e',
                   }}
                   onClick={() => {
                     props.likeInput(
@@ -730,9 +729,9 @@ function DeveloperCard(props) {
                 />{' '}
                 {props.rankingDevDto[props.i].likeCount}
               </div>
-              <div>
+              {/* <div>
                 <FontAwesomeIcon icon={farBookmark} size='2x' />
-              </div>
+              </div> */}
             </div>
           </Card.Body>
         </Card>
@@ -745,10 +744,11 @@ function NavBar(props) {
   if (props.isLogin == false) {
     return (
       <nav
-        className='navbar navbar-expand-lg bg-light '
+        className='navbar navbar-expand-lg  '
         style={{
           padding: '1% 5%',
           border: 'rgba(0,0,0,1)',
+          backgroundColor: 'white',
         }}
       >
         <div className='container-fluid'>
@@ -864,10 +864,11 @@ function NavBar(props) {
   } else {
     return (
       <nav
-        className='navbar navbar-expand-lg bg-light '
+        className='navbar navbar-expand-lg  '
         style={{
           padding: '1% 5%',
           border: 'rgba(0,0,0,1)',
+          backgroundColor: 'white',
         }}
       >
         <div className='container-fluid'>

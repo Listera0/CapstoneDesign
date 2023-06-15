@@ -112,7 +112,7 @@ function Login(props) {
             >
               Developer Plus 계정으로 로그인
             </button>
-            <button
+            {/* <button
               type='button'
               style={{
                 display: 'flex',
@@ -154,7 +154,7 @@ function Login(props) {
                   네이버계정으로 로그인
                 </div>
               </div>
-            </button>
+            </button> */}
             <div style={{}}>
               <button
                 onClick={() => {

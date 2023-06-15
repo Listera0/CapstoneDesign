@@ -12,7 +12,9 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import { useRef } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import { Viewer } from '@toast-ui/react-editor';
-
+import { ListGroup, Button } from 'react-bootstrap';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 const mkdStr = `
 # 1.프로젝트 시작동기
 
@@ -145,7 +147,24 @@ function Write() {
     const value = event.target.value;
     setCareerSelectValue(value);
   };
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
+  const handleStartDateChange = (selectedDate) => {
+    setStartDate(selectedDate);
+  };
+
+  const handleEndDateChange = (selectedDate) => {
+    setEndDate(selectedDate);
+  };
+  const formatDate = (date) => {
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+  };
+  console.log(careerSelectValue);
   return (
     <section className='bg-light' style={{ marginTop: '-6%' }}>
       <div className='container' style={{ paddingTop: '3%' }}>
@@ -212,6 +231,13 @@ function Write() {
             careerSelectValue={careerSelectValue}
             setCareerSelectValue={setCareerSelectValue}
             handleCareerSelectChange={handleCareerSelectChange}
+            startDate={startDate}
+            endDate={endDate}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            handleStartDateChange={handleStartDateChange}
+            handleEndDateChange={handleEndDateChange}
+            formatDate={formatDate}
             // upLoadimage={upLoadimage}
           ></MainTabContent>
         </div>
@@ -253,6 +279,10 @@ function MainTabContent(props) {
     setCountPeople(countPeople - 1);
   };
   const [countPeopleMap, setCountPeopleMap] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const handleSkillSelectChange = (selectedSkills) => {
+    setSelectedSkills(selectedSkills);
+  };
   if (props.maintab == 0) {
     return (
       <>
@@ -547,6 +577,64 @@ function MainTabContent(props) {
             </div>
           </div>
         </li>
+        <div>
+          <p
+            style={{
+              fontSize: '1.125rem',
+              textAlign: 'start',
+              fontWeight: '500',
+            }}
+          >
+            프로젝트기간
+          </p>
+
+          <p
+            style={{
+              marginBottom: '3%',
+              fontWeight: '400',
+              fontSize: '13px',
+              color: '#b1b1b1',
+              fontFamily: 'Pretendard',
+              fontStyle: 'normal',
+              lineHeight: '18px',
+              textAlign: 'start',
+            }}
+          >
+            ❗프로젝트기간을 설정해주세요
+          </p>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              marginBottom: '5%',
+            }}
+          >
+            <div style={{ marginRight: '10px' }}>
+              <label>시작일</label>
+              <DatePicker
+                selected={props.startDate}
+                onChange={props.handleStartDateChange}
+                dateFormat='yyyy-MM-dd(eee)'
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  border: '1px solid gray',
+                  borderRadius: '4px',
+                  width: '100%',
+                  height: '46px',
+                }}
+              />
+            </div>
+            <div>
+              <label>끝나는일</label>
+              <DatePicker
+                selected={props.endDate}
+                onChange={props.handleEndDateChange}
+                dateFormat='yyyy-MM-dd(eee)'
+              />
+            </div>
+          </div>
+        </div>
         <p
           style={{
             fontSize: '1.125rem',
@@ -616,7 +704,9 @@ function MainTabContent(props) {
           <SkillSelect
             skillSelectValue={props.skillSelectValue}
             setSkillSelectValue={props.setSkillSelectValue}
-            handleSkillSelectChange={props.handleSkillSelectChange}
+            onChange={handleSkillSelectChange}
+            selectedSkills={selectedSkills}
+            setSelectedSkills={setSelectedSkills}
           ></SkillSelect>
         </div>
         <a
@@ -643,10 +733,10 @@ function MainTabContent(props) {
               props.careerSelectValue,
               '0',
               countPeople,
-              '',
-              '',
+              props.startDate,
+              props.endDate,
               editorRef.current.getInstance().getMarkdown(),
-              props.skillSelectValue
+              selectedSkills.join(',')
             );
             props.navigate('/findDeveloper');
           }}
@@ -1016,48 +1106,51 @@ function RegionSelect(props) {
     </>
   );
 }
-function SkillSelect(props) {
-  const handleSearchInputChange = (event) => {
-    const value = event.target.value;
-    props.setSkillSelectValue(value);
-  };
 
+function SkillSelect(props) {
+  const handleSkillSelectChange = (event) => {
+    const value = event.target.value;
+    if (value !== '') {
+      const skills = [...props.selectedSkills, value];
+      props.setSelectedSkills(skills);
+      props.onChange(skills); // 선택된 기술을 부모 컴포넌트로 전달합니다.
+    }
+  };
   return (
     <>
-      <Form.Control
-        type='text'
-        placeholder='검색어를 입력하세요'
-        value={props.skillSelectValue}
-        onChange={handleSearchInputChange}
-      />
       <Form.Select
         aria-label='Default select example'
-        value={props.skillSelectValue}
-        onChange={props.handleSkillSelectChange}
+        onChange={handleSkillSelectChange}
+        value={props.selectedSkills}
       >
-        <option value=''>선택하세요</option>
-        <option value='python'>python</option>
+        <option value=''>Select an option</option>
         <option value='C'>C</option>
+        <option value='python'>Python</option>
         <option value='C++'>C++</option>
-        <option value='java'>java</option>
+        <option value='java'>Java</option>
         <option value='C#'>C#</option>
-        <option value='javaScript'>javaScript</option>
-        <option value='TypeScript'>TypeScript</option>
-        <option value='Assembly'>Assembly</option>
-        <option value='Swift'>Swift</option>
-        <option value='PHP'>PHP</option>
-        <option value='Go'>Go</option>
+        <option value='javascript'>JavaScript</option>
+        <option value='typescript'>TypeScript</option>
+        <option value='assembly'>Assembly</option>
+        <option value='swift'>Swift</option>
+        <option value='php'>PHP</option>
+        <option value='go'>Go</option>
         <option value='R'>R</option>
-        <option value='Ruby'>Ruby</option>
-        <option value='Rust'>Rust</option>
-        <option value='Kotlin'>Kotlin</option>
-        <option value='Vue'>Vue.js</option>
-        <option value='jQuery'>jQuery</option>
-        <option value='Nuxt.js'>Nuxt.js</option>
-        <option value='Next.js'>Next.js</option>
+        <option value='ruby'>Ruby</option>
+        <option value='rust'>Rust</option>
+        <option value='kotlin'>Kotlin</option>
+        <option value='vue'>Vue.js</option>
+        <option value='jquery'>jQuery</option>
+        <option value='nuxt'>Nuxt.js</option>
+        <option value='next'>Next.js</option>
       </Form.Select>
+      <ListGroup>
+        {props.selectedSkills.map((skill, index) => (
+          <ListGroup.Item key={index}>{skill}</ListGroup.Item>
+        ))}
+      </ListGroup>
+      <p>{}</p>
     </>
   );
 }
-
 export default Write;

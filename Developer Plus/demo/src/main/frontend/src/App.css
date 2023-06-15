@@ -879,3 +879,12 @@ body {
   vertical-align: baseline;
 }
 /* 댓글창*/
+.delete-button {
+  background-color: rgb(148, 179, 248);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}

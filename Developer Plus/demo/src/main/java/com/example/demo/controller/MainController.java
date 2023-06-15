@@ -29,7 +29,8 @@ public class MainController {
     LikeCountDao likeCountRepository;
     @Autowired
     ChatDao chatRepository;
-
+    @Autowired
+    SearchDao searchRepository;
 
     // 로그인 요청
     @RequestMapping(value="/api/requestLogin", method = RequestMethod.POST)
@@ -139,5 +140,29 @@ public class MainController {
     @RequestMapping(value="/api/viewInputStory", method = RequestMethod.POST)
     public String addViewCountStory(@RequestBody Map<String, String> request) {
         return storyRepository.addViewCount(request);
+    }
+    
+    // 유저 정보 변경 요청
+    @RequestMapping(value="/api/updateUser", method = RequestMethod.POST)
+    public String updateUser(@RequestBody Map<String, String> request) {
+        return devRepository.updateUser(request);
+    }
+
+    // 프로젝트 데이터 검색
+    @RequestMapping(value="/api/searchProjectData", method = RequestMethod.POST)
+    public List<ProjectDto> searchProjectData(@RequestBody Map<String, String> request) {
+        return searchRepository.searchProjectData(request);
+    }
+
+    // 스토리 데이터 검색
+    @RequestMapping(value="/api/searchStoryData", method = RequestMethod.POST)
+    public List<StoryDto> searchStoryData(@RequestBody Map<String, String> request) {
+        return searchRepository.searchStoryData(request);
+    }
+
+    // 유저 데이터 검색
+    @RequestMapping(value="/api/searchDevData", method = RequestMethod.POST)
+    public List<DeveloperDto> searchDevData(@RequestBody Map<String, String> request) {
+        return searchRepository.searchDevData(request);
     }
 }
