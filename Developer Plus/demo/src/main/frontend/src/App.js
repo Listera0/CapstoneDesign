@@ -103,21 +103,6 @@ function App() {
       .catch((error) => console.log(error));
   };
 
-  useEffect(() => {
-    if (sessionStorage.getItem('id') === null) {
-      // sessionStorage 에 name 라는 key 값으로 저장된 값이 없다면
-    } else {
-      // sessionStorage 에 name 라는 key 값으로 저장된 값이 있다면
-      // 로그인 상태 변경
-      setIsLogin(true);
-      getDto('Dev', sessionStorage.getItem('id'), '', '');
-      getLikeCount('developer', sessionStorage.getItem('id'));
-      // 아래 두개는 데이터베이스 완성시 추가
-      // getLikeCount("story", sessionStorage.getItem('id'));
-      // getLikeCount("project", sessionStorage.getItem('id'));
-    }
-  });
-
   const [session, setsession] = useState(sessionStorage.getItem('id'));
   const handleClick = () => {
     sessionStorage.removeItem('id');
@@ -197,7 +182,6 @@ function App() {
     }, []);
   }
 
-  const [likeBool, setLikeBool] = useState(false);
   const likeInput = (_location, _userId, _targetId) => {
     axios
       .post('/api/likeInput', {
@@ -205,13 +189,28 @@ function App() {
         userId: _userId,
         targetId: _targetId,
       })
-      .then((response) => setLikeBool(response.data))
+      .then()
       .catch((error) => console.log(error));
   };
   const showDataList = (list) => {
     console.log(list);
   };
   let [modal, setModal] = useState(true);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('id') === null) {
+      // sessionStorage 에 name 라는 key 값으로 저장된 값이 없다면
+    } else {
+      // sessionStorage 에 name 라는 key 값으로 저장된 값이 있다면
+      // 로그인 상태 변경
+      setIsLogin(true);
+      getDto('Dev', sessionStorage.getItem('id'), '', '');
+      getLikeCount('developer', sessionStorage.getItem('id'));
+      // 아래 두개는 데이터베이스 완성시 추가
+      getLikeCount('story', sessionStorage.getItem('id'));
+      getLikeCount('project', sessionStorage.getItem('id'));
+    }
+  }, []);
 
   return (
     <div className='App ' style={{ margin: '0' }}>
@@ -255,10 +254,15 @@ function App() {
                     return (
                       <StoryCard
                         i={i}
+                        story={story}
                         navigate={navigate}
                         rankingStoryDto={rankingStoryDto}
                         allStoryDto={allStoryDto}
                         viewInput={viewInput}
+                        storyLikeCountData={storyLikeCountData}
+                        likeInput={likeInput}
+                        resultDto={resultDto}
+                        isLogin={isLogin}
                       ></StoryCard>
                     );
                   })}
@@ -289,6 +293,10 @@ function App() {
                         rankingProjectDto={rankingProjectDto}
                         allProjectDto={allProjectDto}
                         viewInput={viewInput}
+                        projectLikeCountData={projectLikeCountData}
+                        likeInput={likeInput}
+                        resultDto={resultDto}
+                        isLogin={isLogin}
                       ></ProjectCard>
                     );
                   })}
@@ -311,14 +319,6 @@ function App() {
                   </div>
 
                   {rankingDevDto.map((a, i) => {
-                    let jobDetail =
-                      rankingDevDto[i].job != null
-                        ? rankingDevDto[i].job.split(',')
-                        : '';
-                    let careerDetail =
-                      rankingDevDto[i].career != null
-                        ? rankingDevDto[i].career.split(',')
-                        : '';
                     return (
                       <>
                         <DeveloperCard
@@ -327,12 +327,8 @@ function App() {
                           navigate={navigate}
                           rankingDevDto={rankingDevDto}
                           allDevDto={allDevDto}
-                          jobDetail={jobDetail}
-                          careerDetail={careerDetail}
                           likeInput={likeInput}
                           resultDto={resultDto}
-                          setLikeBool={setLikeBool}
-                          likeBool={likeBool}
                           devLikeCountData={devLikeCountData}
                           isLogin={isLogin}
                         ></DeveloperCard>
@@ -430,6 +426,34 @@ function App() {
 }
 
 function StoryCard(props) {
+  const [likeCountDetail, setLikeCountDetail] = useState('');
+  {
+    useEffect(() => {
+      let flag = false;
+      for (let k = 0; k < props.storyLikeCountData.length; k++) {
+        if (
+          props.storyLikeCountData[k].targetId ==
+          props.rankingStoryDto[props.i].id
+        ) {
+          setLikeCountDetail(props.storyLikeCountData[k].like);
+          flag = true;
+          break;
+        }
+      }
+      if (flag == false) {
+        setLikeCountDetail(false);
+      }
+    }, [props.storyLikeCountData, props.rankingStoryDto, props.i]);
+  }
+
+  const showLikeCount = () => {
+    likeCountDetail == true
+      ? props.rankingStoryDto[props.i].likeCount--
+      : props.rankingStoryDto[props.i].likeCount++;
+    likeCountDetail == true
+      ? setLikeCountDetail(false)
+      : setLikeCountDetail(true);
+  };
   return (
     <div
       className='col-4 '
@@ -485,7 +509,20 @@ function StoryCard(props) {
                 <FontAwesomeIcon icon={farCommentDots} size='2x' />
               </div> */}
               <div style={{ fontSize: '15px' }}>
-                <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />{' '}
+                <FontAwesomeIcon
+                  icon={farHeart}
+                  style={{ fontSize: '20px', cursor: 'pointer' }}
+                  onClick={() => {
+                    if (props.isLogin) {
+                      props.likeInput(
+                        'story',
+                        props.resultDto[0].id,
+                        props.rankingStoryDto[props.i].id
+                      );
+                      showLikeCount();
+                    }
+                  }}
+                />{' '}
                 {props.rankingStoryDto[props.i].likeCount}
               </div>
               {/* <div>
@@ -499,6 +536,35 @@ function StoryCard(props) {
   );
 }
 function ProjectCard(props) {
+  const [likeCountDetail, setLikeCountDetail] = useState('');
+  {
+    useEffect(() => {
+      let flag = false;
+      for (let k = 0; k < props.projectLikeCountData.length; k++) {
+        if (
+          props.projectLikeCountData[k].targetId ==
+          props.rankingProjectDto[props.i].id
+        ) {
+          setLikeCountDetail(props.projectLikeCountData[k].like);
+          flag = true;
+          break;
+        }
+      }
+      if (flag == false) {
+        setLikeCountDetail(false);
+      }
+    });
+  }
+
+  const showLikeCount = () => {
+    likeCountDetail == true
+      ? props.rankingProjectDto[props.i].likeCount--
+      : props.rankingProjectDto[props.i].likeCount++;
+    likeCountDetail == true
+      ? setLikeCountDetail(false)
+      : setLikeCountDetail(true);
+  };
+
   return (
     <div
       className='col-4 '
@@ -554,7 +620,20 @@ function ProjectCard(props) {
                 <FontAwesomeIcon icon={farCommentDots} size='2x' />
               </div> */}
               <div style={{ fontSize: '15px' }}>
-                <FontAwesomeIcon icon={farHeart} style={{ fontSize: '20px' }} />{' '}
+                <FontAwesomeIcon
+                  icon={farHeart}
+                  style={{ fontSize: '20px', cursor: 'pointer' }}
+                  onClick={() => {
+                    if (props.isLogin) {
+                      props.likeInput(
+                        'project',
+                        props.resultDto[0].id,
+                        props.rankingProjectDto[props.i].id
+                      );
+                      showLikeCount();
+                    }
+                  }}
+                />{' '}
                 {props.rankingProjectDto[props.i].likeCount}
               </div>
               {/* <div>
@@ -706,6 +785,9 @@ function DeveloperCard(props) {
                     cursor: 'pointer',
                     fontSize: '13px',
                   }}
+                  onClick={() => {
+                    window.open('https://open.kakao.com/o/gjmA85pf', '_blank');
+                  }}
                 >
                   대화하기
                 </span>
@@ -715,14 +797,15 @@ function DeveloperCard(props) {
                   icon={farHeart}
                   style={{
                     fontSize: '20px',
+                    cursor: 'pointer',
                   }}
                   onClick={() => {
-                    props.likeInput(
-                      'developer',
-                      props.resultDto[0].id,
-                      props.rankingDevDto[props.i].id
-                    );
                     if (props.isLogin) {
+                      props.likeInput(
+                        'developer',
+                        props.resultDto[0].id,
+                        props.rankingDevDto[props.i].id
+                      );
                       showLikeCount();
                     }
                   }}

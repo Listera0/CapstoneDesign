@@ -7,6 +7,7 @@ import { faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ListGroup, Button } from 'react-bootstrap';
+import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/react-editor';
 import { useParams } from 'react-router-dom';
 const mkdStr = `
@@ -288,6 +289,9 @@ function ProfileDetail() {
                         secondSelectValue={secondSelectValue}
                         setSecondSelectValue={setSecondSelectValue}
                         handleSecondSelectChange={handleSecondSelectChange}
+                        firstSelectValue={firstSelectValue}
+                        setFirstSelectValue={setFirstSelectValue}
+                        handleFirstSelectChange={handleFirstSelectChange}
                       />
                     </div>
                   </div>
@@ -471,20 +475,30 @@ function ProfileDetail() {
                 // urlInsta: _urlInsta,
                 // phone: _phone,
                 onClick={() => {
-                  console.log(document.getElementById('githubLink').value);
-                  updateUser(
-                    allDevDto[sessionStorage.getItem('id') - 1].id,
-                    selectedImageUrl,
-                    firstSelectValue,
-                    '',
-                    careerSelectValue,
-                    RegionSelectValue,
-                    selectedSkills.join(','),
-                    '',
-                    document.getElementById('githubLink').value,
-                    document.getElementById('velogLink').value,
-                    document.getElementById('phoneNumber').value
-                  );
+                  if (
+                    !selectedImageUrl ||
+                    !firstSelectValue ||
+                    !secondSelectValue ||
+                    !careerSelectValue ||
+                    !RegionSelectValue
+                  ) {
+                    alert('모든 칸은 필수입력입니다.');
+                    return;
+                  } else {
+                    updateUser(
+                      allDevDto[sessionStorage.getItem('id') - 1].id,
+                      selectedImageUrl,
+                      firstSelectValue,
+                      secondSelectValue,
+                      careerSelectValue,
+                      RegionSelectValue,
+                      selectedSkills.join(','),
+                      editorRef.current.getInstance().getMarkdown(),
+                      document.getElementById('githubLink').value,
+                      document.getElementById('velogLink').value,
+                      document.getElementById('phoneNumber').value
+                    );
+                  }
                   navigate('/');
                 }}
               >

@@ -49,21 +49,26 @@ public class LikeCountDao {
         switch (location) {
             case "developer":
                 likecount =  DPJdbcTemplate.query(query4, new DevRowMapper()).get(0).getLikeCount();
+                break;
             case "story":
-                likecount =  DPJdbcTemplate.query(query4, new DevRowMapper()).get(0).getLikeCount(); // 변경 요청
+                likecount =  DPJdbcTemplate.query(query4, new StoryRowMapper()).get(0).getLikeCount(); // 변경 요청
+                break;
             case "project":
-                likecount =  DPJdbcTemplate.query(query4, new DevRowMapper()).get(0).getLikeCount(); // 변경 요청
+                likecount =  DPJdbcTemplate.query(query4, new ProjectRowMapper()).get(0).getLikeCount(); // 변경 요청
+                break;
         }
 
         if(result.size() >= 1) { // 데이터 존재시
             if(result.get(0).isLike() == true) {
                 LKJdbcTemplate.update(query3, 0,  userId, targetId);
                 DPJdbcTemplate.update(query5, likecount - 1, targetId);
+                System.out.println("work1");
                 return false;
             } 
             else {
                 LKJdbcTemplate.update(query3, 1,  userId, targetId);
                 DPJdbcTemplate.update(query5, likecount + 1, targetId);
+                System.out.println("work2");
                 return true;
             }
         }
@@ -79,12 +84,5 @@ public class LikeCountDao {
         List<LikeCountDto> result = LKJdbcTemplate.query(query, new LikeCountRowMapper());
 
         return result;
-    }
-
-    public void test() {
-        String query = String.format("select * from developer");
-        List<DeveloperDto> result = LKJdbcTemplate.query(query, new DevRowMapper());
-
-        System.out.println(result);
     }
 }

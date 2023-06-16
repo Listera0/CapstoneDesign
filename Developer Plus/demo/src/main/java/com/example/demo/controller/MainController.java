@@ -31,18 +31,15 @@ public class MainController {
     ChatDao chatRepository;
     @Autowired
     SearchDao searchRepository;
+    @Autowired
+    AlertDao alertRepository;
 
     // 로그인 요청
     @RequestMapping(value="/api/requestLogin", method = RequestMethod.POST)
     public Map<String, String> requestLogin(@RequestBody Map<String, String> request) {
         return loginRepository.requestLogin(request.get("email"), request.get("password"));
     }
-
-    @RequestMapping(value="/test/", method = RequestMethod.POST)
-    public void test() {
-        likeCountRepository.test();
-    }
-
+    
     // 회원가입 요청
     @RequestMapping(value="/api/requestSignUp", method = RequestMethod.POST)
     public Map<String, String> requestSignUp(@RequestBody Map<String, String> request) {
@@ -164,5 +161,29 @@ public class MainController {
     @RequestMapping(value="/api/searchDevData", method = RequestMethod.POST)
     public List<DeveloperDto> searchDevData(@RequestBody Map<String, String> request) {
         return searchRepository.searchDevData(request);
+    }
+
+    // 유저 알림 가져오기  (reciver)
+    @RequestMapping(value="/api/getAlert", method = RequestMethod.POST)
+    public List<AlertDto> getAlert(@RequestBody Map<String, String> request) {
+        return alertRepository.getAlert(request);
+    }
+
+    // 유저 알림 추가  (reciver, sender, type, comment)
+    @RequestMapping(value="/api/setAlert", method = RequestMethod.POST)
+    public void setAlert(@RequestBody Map<String, String> request) {
+        alertRepository.setAlert(request);
+    }
+
+    // 유저 알림 삭제  (id)
+    @RequestMapping(value="/api/removeAlert", method = RequestMethod.POST)
+    public void removeAlert(@RequestBody Map<String, String> request) {
+        alertRepository.removeAlert(request);
+    }
+
+    // 프로젝트 nowJob 카운트 증가  (id)
+    @RequestMapping(value="/api/updateNowJob", method = RequestMethod.POST)
+    public String updateNowJob(@RequestBody Map<String, String> request) {
+        return projectRepository.updateNowJob(request);
     }
 }

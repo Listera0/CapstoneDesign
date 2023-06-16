@@ -38,13 +38,13 @@ public class ChatDao {
     JdbcTemplate DPJdbcTemplate;
 
     @Autowired
-    @Qualifier("CHTemplate")
-    JdbcTemplate CHJdbcTemplate;
+    @Qualifier("SBTemplate")
+    JdbcTemplate SBJdbcTemplate;
 
     public List<ChatDto> getChatHistory(String targetId) {
         String query1 = String.format("select * from chat where targetId=%s", targetId);
 
-        List<ChatDto> result = CHJdbcTemplate.query(query1, new ChatRowMapper());
+        List<ChatDto> result = SBJdbcTemplate.query(query1, new ChatRowMapper());
         return result;
     }
 
@@ -54,7 +54,7 @@ public class ChatDao {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
         DPJdbcTemplate.update(query2, Integer.parseInt( request.get("chatCount")) + 1);
-        CHJdbcTemplate.update(query1, request.get("userId"), request.get("targetId"), request.get("content"), LocalDate.now().format(formatter));
+        SBJdbcTemplate.update(query1, request.get("userId"), request.get("targetId"), request.get("content"), LocalDate.now().format(formatter));
     }
 
     public void deleteChat(Map<String, String> request) {
@@ -62,6 +62,6 @@ public class ChatDao {
         String query2 = String.format("update story set chatCount=? where id=%s", request.get("targetId"));
 
         DPJdbcTemplate.update(query2, Integer.parseInt( request.get("chatCount")) - 1);
-        CHJdbcTemplate.update(query1);
+        SBJdbcTemplate.update(query1);
     }
 }

@@ -81,6 +81,7 @@ function Write() {
     _imgURL,
     _region,
     _name,
+    _email,
     _job,
     _jobDetail,
     _career,
@@ -97,6 +98,7 @@ function Write() {
         imgURL: _imgURL,
         region: _region,
         name: _name,
+        email: _email,
         job: _job,
         jobDetail: _jobDetail,
         career: _career,
@@ -150,12 +152,16 @@ function Write() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
-  const handleStartDateChange = (selectedDate) => {
-    setStartDate(selectedDate);
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+    setEndDate(null); // 시작일이 변경되면 마감일을 초기화
   };
 
-  const handleEndDateChange = (selectedDate) => {
-    setEndDate(selectedDate);
+  const handleEndDateChange = (date) => {
+    if (startDate && date < startDate) {
+      return; // 시작일 이전의 날짜는 선택하지 못하도록 처리
+    }
+    setEndDate(date);
   };
   const formatDate = (date) => {
     return date.toLocaleDateString('ko-KR', {
@@ -248,14 +254,26 @@ function Write() {
 
 function MainTabContent(props) {
   const [imageUrlList] = useState([
-    process.env.PUBLIC_URL + '/c1.jpg',
-    process.env.PUBLIC_URL + '/c2.png',
-    process.env.PUBLIC_URL + '/c3.jpg',
-    process.env.PUBLIC_URL + '/main1.jpg',
-    process.env.PUBLIC_URL + '/main2.jpg',
-    process.env.PUBLIC_URL + '/main3.jpg',
-    process.env.PUBLIC_URL + '/main4.jpg',
-    process.env.PUBLIC_URL + '/main5.jpg',
+    process.env.PUBLIC_URL + '/001.png',
+    process.env.PUBLIC_URL + '/002.png',
+    process.env.PUBLIC_URL + '/003.png',
+    process.env.PUBLIC_URL + '/004.png',
+    process.env.PUBLIC_URL + '/005.png',
+    process.env.PUBLIC_URL + '/006.png',
+    process.env.PUBLIC_URL + '/007.png',
+    process.env.PUBLIC_URL + '/008.png',
+    process.env.PUBLIC_URL + '/009.png',
+    process.env.PUBLIC_URL + '/010.png',
+    process.env.PUBLIC_URL + '/011.png',
+    process.env.PUBLIC_URL + '/012.png',
+    process.env.PUBLIC_URL + '/013.png',
+    process.env.PUBLIC_URL + '/014.png',
+    process.env.PUBLIC_URL + '/015.png',
+    process.env.PUBLIC_URL + '/016.png',
+    process.env.PUBLIC_URL + '/017.png',
+    process.env.PUBLIC_URL + '/018.png',
+    process.env.PUBLIC_URL + '/019.png',
+    process.env.PUBLIC_URL + '/020.png',
     // 필요한 만큼 사진의 URL을 추가하세요.
   ]);
   const thumbnailStyle = {
@@ -265,7 +283,7 @@ function MainTabContent(props) {
   };
   const [selectedImageUrl, setSelectedImageUrl] = useState('');
   const [defaultImageUrl, setdefaultImageUrl] = useState(
-    `${process.env.PUBLIC_URL}/main1.jpg`
+    `${process.env.PUBLIC_URL}/c3.jpg`
   );
   const handleThumbnailClick = (imageUrl) => {
     setSelectedImageUrl(imageUrl);
@@ -336,8 +354,9 @@ function MainTabContent(props) {
                 marginRight: '1%',
                 padding: '25px 5px',
               }}
-              placeholder='3~20글자로 적어주세요'
-              maxLength={20}
+              required
+              placeholder='3~40글자로 적어주세요'
+              maxLength={40}
               minLength={3}
               id='projectTitle'
             ></input>
@@ -614,7 +633,7 @@ function MainTabContent(props) {
               <DatePicker
                 selected={props.startDate}
                 onChange={props.handleStartDateChange}
-                dateFormat='yyyy-MM-dd(eee)'
+                dateFormat='yy-MM-dd(eee)'
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -630,7 +649,7 @@ function MainTabContent(props) {
               <DatePicker
                 selected={props.endDate}
                 onChange={props.handleEndDateChange}
-                dateFormat='yyyy-MM-dd(eee)'
+                dateFormat='yy-MM-dd(eee)'
               />
             </div>
           </div>
@@ -722,22 +741,41 @@ function MainTabContent(props) {
             textAlign: 'center',
           }}
           onClick={() => {
-            // console.log(props.secondSelectValue + ',');
-            props.insertProject(
-              document.getElementById('projectTitle').value,
-              selectedImageUrl,
-              props.RegionSelectValue,
-              props.allDevDto[sessionStorage.getItem('id') - 1].name,
-              props.firstSelectValue,
-              props.secondSelectValue,
-              props.careerSelectValue,
-              '0',
-              countPeople,
-              props.startDate,
-              props.endDate,
-              editorRef.current.getInstance().getMarkdown(),
-              selectedSkills.join(',')
-            );
+            if (
+              !selectedImageUrl ||
+              !props.RegionSelectValue ||
+              !props.allDevDto[sessionStorage.getItem('id') - 1].name ||
+              !props.allDevDto[sessionStorage.getItem('id') - 1].email ||
+              !props.firstSelectValue ||
+              !props.secondSelectValue ||
+              !props.careerSelectValue ||
+              !countPeople ||
+              !props.startDate ||
+              !props.endDate ||
+              !editorRef.current.getInstance().getMarkdown() ||
+              !selectedSkills.join(',')
+            ) {
+              alert('모든 칸은 필수입력입니다.');
+              return;
+            } else {
+              // console.log(props.secondSelectValue + ',');
+              props.insertProject(
+                document.getElementById('projectTitle').value,
+                selectedImageUrl,
+                props.RegionSelectValue,
+                props.allDevDto[sessionStorage.getItem('id') - 1].name,
+                props.allDevDto[sessionStorage.getItem('id') - 1].email,
+                props.firstSelectValue,
+                props.secondSelectValue,
+                props.careerSelectValue,
+                '0',
+                countPeople,
+                props.startDate,
+                props.endDate,
+                editorRef.current.getInstance().getMarkdown(),
+                selectedSkills.join(',')
+              );
+            }
             props.navigate('/findDeveloper');
           }}
         >
@@ -785,8 +823,8 @@ function MainTabContent(props) {
                 padding: '25px 5px',
               }}
               id='title'
-              placeholder='3~20글자로 적어주세요'
-              maxLength={20}
+              placeholder='3~40글자로 적어주세요'
+              maxLength={40}
               minLength={3}
             ></input>
           </span>
@@ -886,7 +924,7 @@ function MainTabContent(props) {
           initialEditType='wysiwyg'
           useCommandShortcut={true}
         />
-        <div>
+        {/* <div>
           <p
             style={{
               fontSize: '1.125rem',
@@ -912,8 +950,8 @@ function MainTabContent(props) {
           >
             ❗검색태그는 5개까지 가능합니다.
           </p>
-        </div>
-        <div className='col-lg-12 mb-4 mb-sm-5' style={{ textAlign: 'start' }}>
+        </div> */}
+        {/* <div className='col-lg-12 mb-4 mb-sm-5' style={{ textAlign: 'start' }}>
           <span className='col-lg-8'>
             <input
               type='text'
@@ -932,7 +970,7 @@ function MainTabContent(props) {
               minLength={3}
             ></input>
           </span>
-        </div>
+        </div> */}
         <a
           style={{
             cursor: 'pointer',
@@ -946,13 +984,23 @@ function MainTabContent(props) {
             textAlign: 'center',
           }}
           onClick={() => {
-            props.insertStory(
-              document.getElementById('title').value,
-              selectedImageUrl,
-              props.allDevDto[sessionStorage.getItem('id') - 1].name,
-              editorRef.current.getInstance().getMarkdown(),
-              document.getElementById('hashTag').value
-            );
+            if (
+              !document.getElementById('title').value ||
+              !selectedImageUrl ||
+              !props.allDevDto[sessionStorage.getItem('id') - 1].name ||
+              !editorRef.current.getInstance().getMarkdown()
+            ) {
+              alert('모든 칸은 필수입력입니다.');
+              return;
+            } else {
+              props.insertStory(
+                document.getElementById('title').value,
+                selectedImageUrl,
+                props.allDevDto[sessionStorage.getItem('id') - 1].name,
+                editorRef.current.getInstance().getMarkdown(),
+                ''
+              );
+            }
             props.navigate('/Story');
           }}
         >
@@ -1083,6 +1131,7 @@ function RegionSelect(props) {
         aria-label='Default select example'
         value={props.RegionSelectValue}
         onChange={props.handleRegionSelectChange}
+        required
       >
         <option value='선택하세요'>선택하세요</option>
         <option value='서울'>서울</option>
@@ -1118,37 +1167,71 @@ function SkillSelect(props) {
   };
   return (
     <>
-      <Form.Select
-        aria-label='Default select example'
-        onChange={handleSkillSelectChange}
-        value={props.selectedSkills}
+      <div
+        style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}
       >
-        <option value=''>Select an option</option>
-        <option value='C'>C</option>
-        <option value='python'>Python</option>
-        <option value='C++'>C++</option>
-        <option value='java'>Java</option>
-        <option value='C#'>C#</option>
-        <option value='javascript'>JavaScript</option>
-        <option value='typescript'>TypeScript</option>
-        <option value='assembly'>Assembly</option>
-        <option value='swift'>Swift</option>
-        <option value='php'>PHP</option>
-        <option value='go'>Go</option>
-        <option value='R'>R</option>
-        <option value='ruby'>Ruby</option>
-        <option value='rust'>Rust</option>
-        <option value='kotlin'>Kotlin</option>
-        <option value='vue'>Vue.js</option>
-        <option value='jquery'>jQuery</option>
-        <option value='nuxt'>Nuxt.js</option>
-        <option value='next'>Next.js</option>
-      </Form.Select>
-      <ListGroup>
+        <Form.Select
+          aria-label='Default select example'
+          onChange={handleSkillSelectChange}
+          value={props.selectedSkills}
+          style={{ marginRight: '10px' }}
+        >
+          <option value=''>Select an option</option>
+          <option value='C'>C</option>
+          <option value='python'>Python</option>
+          <option value='C++'>C++</option>
+          <option value='java'>Java</option>
+          <option value='C#'>C#</option>
+          <option value='javascript'>JavaScript</option>
+          <option value='typescript'>TypeScript</option>
+          <option value='assembly'>Assembly</option>
+          <option value='swift'>Swift</option>
+          <option value='php'>PHP</option>
+          <option value='go'>Go</option>
+          <option value='R'>R</option>
+          <option value='ruby'>Ruby</option>
+          <option value='rust'>Rust</option>
+          <option value='kotlin'>Kotlin</option>
+          <option value='vue'>Vue.js</option>
+          <option value='jquery'>jQuery</option>
+          <option value='nuxt'>Nuxt.js</option>
+          <option value='next'>Next.js</option>
+        </Form.Select>
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          {props.selectedSkills.map((skill, index) => (
+            <span
+              key={index}
+              style={{
+                display: 'inline-block',
+                marginRight: '10px',
+                marginBottom: '10px',
+                padding: '5px 10px',
+                backgroundColor: '#f2f2f2',
+                borderRadius: '5px',
+              }}
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
+      </div>
+      {/* <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {props.selectedSkills.map((skill, index) => (
-          <ListGroup.Item key={index}>{skill}</ListGroup.Item>
+          <span
+            key={index}
+            style={{
+              display: 'inline-block',
+              marginRight: '10px',
+              marginBottom: '10px',
+              padding: '5px 10px',
+              backgroundColor: '#f2f2f2',
+              borderRadius: '5px',
+            }}
+          >
+            {skill}
+          </span>
         ))}
-      </ListGroup>
+      </div> */}
       <p>{}</p>
     </>
   );

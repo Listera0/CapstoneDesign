@@ -15,6 +15,31 @@ function FindDeveloperDetail(props) {
   // let projectDetail = props.allProjectDto.find(function (x) {
   //   return x.id == id;
   // });
+
+  const [resultDto, setResultDto] = useState(['']);
+  const getDto = (location, _id, _orderBy, _limit) => {
+    axios
+      .post('/api/get' + location + 'Data', {
+        id: _id,
+        orderBy: _orderBy,
+        limit: _limit,
+      })
+      .then((response) => setResultDto(response.data))
+
+      .catch((error) => console.log(error));
+  };
+
+  const [isLogin, setIsLogin] = useState(false); //로그인 관리
+  useEffect(() => {
+    if (sessionStorage.getItem('id') === null) {
+      // sessionStorage 에 name 라는 key 값으로 저장된 값이 없다면
+    } else {
+      // sessionStorage 에 name 라는 key 값으로 저장된 값이 있다면
+      // 로그인 상태 변경
+      setIsLogin(true);
+      getDto('Dev', sessionStorage.getItem('id'), '', '');
+    }
+  }, []);
   const [projectDetails, setProjectDetails] = useState(['']);
   {
     useEffect(() => {
@@ -28,7 +53,18 @@ function FindDeveloperDetail(props) {
         .catch((error) => console.log(error));
     }, []);
   }
-
+  const setAlert = (_reciver, _sender, _type, _sub1, _comment) => {
+    axios
+      .post('/api/setAlert', {
+        reciver: _reciver,
+        sender: _sender,
+        type: _type,
+        sub1: _sub1,
+        comment: _comment,
+      })
+      .then()
+      .catch((error) => console.log(error));
+  };
   let projectDetail = projectDetails[0];
 
   let [tab, setTab] = useState(0);
@@ -55,7 +91,8 @@ function FindDeveloperDetail(props) {
             maintab={maintab}
             setTab={setTab}
             projectDetail={projectDetail}
-
+            setAlert={setAlert}
+            resultDto={resultDto}
             // req2={req2}
             // setReq2={setReq2}
           ></MainTabContent>
@@ -85,6 +122,9 @@ function MainTabContent(props) {
         icons2={props.icons2}
         skillDetail={props.skillDetail}
         i={props.i}
+        setAlert={props.setAlert}
+        developerDetail={props.developerDetail}
+        resultDto={props.resultDto}
       />
     </>
   );
@@ -92,7 +132,7 @@ function MainTabContent(props) {
 function TabContent(props) {
   const editorRef = useRef();
   let markdown = props.projectDetail.content;
-  console.log(markdown);
+
   let skillDetail =
     props.projectDetail.skill != null
       ? props.projectDetail.skill.split(',')
@@ -153,7 +193,12 @@ function TabContent(props) {
               width: '80%',
             }}
           >
-            <Jobs projectDetail={props.projectDetail}></Jobs>
+            <Jobs
+              projectDetail={props.projectDetail}
+              setAlert={props.setAlert}
+              developerDetail={props.developerDetail}
+              resultDto={props.resultDto}
+            ></Jobs>
           </div>
           <hr style={{ width: '90%' }}></hr>
           <br></br>
@@ -266,7 +311,7 @@ function TabContent(props) {
 
         <div
           style={{
-            width: '20%',
+            width: '25%',
             marginRight: '5%',
             position: 'sticky',
             top: '0',
@@ -306,7 +351,26 @@ function TabContent(props) {
                 </div>
                 <hr></hr>
               </div>
-
+              <div
+                style={{
+                  textAlign: 'start',
+                  paddingTop: '5%',
+                  paddingLeft: '5%',
+                  fontWeight: '600',
+                }}
+              >
+                이메일
+                <p
+                  style={{
+                    textAlign: 'start',
+                    paddingTop: '5%',
+                    fontWeight: '600',
+                  }}
+                >
+                  {props.projectDetail.email}
+                </p>
+                <hr></hr>
+              </div>
               <div
                 style={{
                   textAlign: 'start',
@@ -341,9 +405,18 @@ function TabContent(props) {
                     textAlign: 'start',
                     paddingTop: '5%',
                     fontWeight: '600',
+                    fontSize: '15px',
                   }}
                 >
-                  {props.projectDetail.startDate}~{props.projectDetail.endDate}
+                  {props.projectDetail.startDate &&
+                    props.projectDetail.startDate
+                      .substring(2, 10)
+                      .replaceAll('-', '-')}
+                  ~
+                  {props.projectDetail.endDate &&
+                    props.projectDetail.endDate
+                      .substring(2, 10)
+                      .replaceAll('-', '-')}
                 </p>
                 <hr></hr>
               </div>
@@ -356,7 +429,7 @@ function TabContent(props) {
 
   function Jobs(props) {
     const [countNowJob, setCountNowJob] = useState(props.projectDetail.nowJob);
-    console.log(props.projectDetail.nowJob);
+    console.log(props.projectDetail);
 
     return (
       <div key={props.i} style={{}}>
@@ -426,19 +499,23 @@ function TabContent(props) {
               {' '}
             </div>
             <div style={{ textAlign: 'start' }}>
-              {props.projectDetail.requireJob === props.projectDetail.nowJob ? (
-                <button style={{}} disabled>
-                  마감
-                </button>
+              {props.projectDetail.requireJob == props.projectDetail.nowJob ? (
+                <button disabled>마감</button>
               ) : (
                 <button
                   onClick={() => {
-                    setCountNowJob(
-                      countNowJob === 0 ? countNowJob === 1 : countNowJob === 0
+                    console.log(props.projectDetail.email);
+                    props.setAlert(
+                      props.projectDetail.email, //
+                      props.resultDto[0].id,
+                      '',
+                      props.projectDetail.id,
+                      props.resultDto[0].name + '님이 지원하셨습니다.'
                     );
+                    alert('지원하였습니다.');
                   }}
                 >
-                  {countNowJob === 0 ? '취소' : '지원'}
+                  지원
                 </button>
               )}
             </div>

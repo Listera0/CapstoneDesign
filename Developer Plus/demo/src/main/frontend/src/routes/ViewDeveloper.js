@@ -20,32 +20,10 @@ let MobileDeveloper = styled.div`
   }
 `;
 function ViewDeveloper(props) {
-  const [allDevDto, setAllDevDto] = useState(['']);
-  {
-    useEffect(() => {
-      axios
-        .get('/api/getAllDevData')
-        .then((response) => setAllDevDto(response.data))
-        .catch((error) => console.log(error));
-    }, []);
-  }
-  useEffect(() => {
-    if (props.goodcount != 0 && props.goodcount < 3) {
-      props.changeGoodCount(props.goodCount + 1);
-    }
-  }, [props.goodCount]);
-  const [likeBool, setLikeBool] = useState(false);
-  const likeInput = (_location, _userId, _targetId) => {
-    axios
-      .post('/api/likeInput', {
-        location: _location,
-        userId: _userId,
-        targetId: _targetId,
-      })
-      .then((response) => setLikeBool(response.data))
-      .catch((error) => console.log(error));
-  };
-  const [filteredProjectDto, setFilteredProjectDto] = useState([]);
+  let navigate = useNavigate(); //페이지 이동
+  const [devLikeCountData, setDevLikeCountData] = useState(['']);
+
+  const [filteredDeveloperDto, setfilteredDeveloperDto] = useState([]);
   const [RegionSelectValue, setRegionSelectValue] = useState('');
   const handleRegionSelectChange = (event) => {
     const value = event.target.value;
@@ -64,16 +42,76 @@ function ViewDeveloper(props) {
   };
 
   useEffect(() => {
-    const filteredProjects = allDevDto.filter((project, index) => {
+    const filteredDevs = allDevDto.filter((dev, index) => {
       return (
-        (RegionSelectValue === '' || project.region === RegionSelectValue) &&
-        (firstSelectValue === '' || project.job === firstSelectValue) &&
-        (secondSelectValue === '' || project.jobDetail === secondSelectValue)
+        (RegionSelectValue === '' || dev.region === RegionSelectValue) &&
+        (firstSelectValue === '' || dev.job === firstSelectValue) &&
+        (secondSelectValue === '' || dev.jobDetail === secondSelectValue)
       );
     });
-    setFilteredProjectDto(filteredProjects);
+    setfilteredDeveloperDto(filteredDevs);
   }, [RegionSelectValue, firstSelectValue, secondSelectValue]);
-  console.log(allDevDto);
+  const [allDevDto, setAllDevDto] = useState([]);
+  {
+    useEffect(() => {
+      axios
+        .get('/api/getAllDevData')
+        .then((response) => {
+          setAllDevDto(response.data);
+          setfilteredDeveloperDto(response.data);
+        })
+        .catch((error) => console.log(error));
+    }, []);
+  }
+  const likeInput = (_location, _userId, _targetId) => {
+    axios
+      .post('/api/likeInput', {
+        location: _location,
+        userId: _userId,
+        targetId: _targetId,
+      })
+      .then()
+      .catch((error) => console.log(error));
+  };
+  const getLikeCount = (_location, _id) => {
+    axios
+      .post('/api/userLikeCount', {
+        location: _location,
+        userId: _id,
+      })
+      .then((response) => {
+        if (_location == 'developer') {
+          setDevLikeCountData(response.data);
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const [resultDto, setResultDto] = useState(['']);
+  const getDto = (location, _id, _orderBy, _limit) => {
+    axios
+      .post('/api/get' + location + 'Data', {
+        id: _id,
+        orderBy: _orderBy,
+        limit: _limit,
+      })
+      .then((response) => setResultDto(response.data))
+
+      .catch((error) => console.log(error));
+  };
+
+  const [isLogin, setIsLogin] = useState(false); //로그인 관리
+  useEffect(() => {
+    if (sessionStorage.getItem('id') === null) {
+      // sessionStorage 에 name 라는 key 값으로 저장된 값이 없다면
+    } else {
+      // sessionStorage 에 name 라는 key 값으로 저장된 값이 있다면
+      // 로그인 상태 변경
+      setIsLogin(true);
+      getDto('Dev', sessionStorage.getItem('id'), '', '');
+      getLikeCount('developer', sessionStorage.getItem('id'));
+    }
+  });
   return (
     <div className='container'>
       <h2
@@ -151,22 +189,17 @@ function ViewDeveloper(props) {
           paddingRight: '2%',
         }}
       >
-        {allDevDto.map((a, i) => {
-          let jobDetail =
-            allDevDto[i].job != null ? allDevDto[i].job.split(',') : '';
-          let careerDetail =
-            allDevDto[i].career != null ? allDevDto[i].career.split(',') : '';
+        {filteredDeveloperDto.map((dev) => {
           return (
             <DeveloperCard
-              developer={allDevDto[i].id}
-              i={i}
+              key={dev.id}
+              dev={dev}
               allDevDto={allDevDto}
-              goodCount={props.goodCount}
-              changeGoodCount={props.changeGoodCount}
-              navigate={props.navigate}
-              key={i}
-              jobDetail={jobDetail}
-              careerDetail={careerDetail}
+              navigate={navigate}
+              devLikeCountData={devLikeCountData}
+              likeInput={likeInput}
+              isLogin={isLogin}
+              resultDto={resultDto}
             ></DeveloperCard>
           );
         })}
@@ -176,10 +209,34 @@ function ViewDeveloper(props) {
 }
 
 function DeveloperCard(props) {
+  const { dev, navigate } = props;
   const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(
-    props.allDevDto[props.i].likeCount
-  );
+  const [likeCount, setLikeCount] = useState(props.dev.likeCount);
+
+  const [likeCountDetail, setLikeCountDetail] = useState('');
+  {
+    useEffect(() => {
+      let flag = false;
+      for (let k = 0; k < props.devLikeCountData.length; k++) {
+        if (props.devLikeCountData[k].targetId == props.dev.id) {
+          setLikeCountDetail(props.devLikeCountData[k].like);
+          flag = true;
+          break;
+        }
+      }
+      if (flag == false) {
+        setLikeCountDetail(false);
+      }
+    });
+  }
+
+  const showLikeCount = () => {
+    likeCountDetail == true ? props.dev.likeCount-- : props.dev.likeCount++;
+    likeCountDetail == true
+      ? setLikeCountDetail(false)
+      : setLikeCountDetail(true);
+  };
+
   return (
     <MobileDeveloper>
       <div className='d-flex justify-content-around ' style={{}}>
@@ -191,9 +248,7 @@ function DeveloperCard(props) {
               alignItems: 'center',
             }}
             onClick={() => {
-              props.navigate(
-                `/ViewDeveloperDetail/${props.allDevDto[props.i].id}`
-              );
+              props.navigate(`/ViewDeveloperDetail/${props.dev.id}`);
             }}
           >
             <img
@@ -203,14 +258,10 @@ function DeveloperCard(props) {
                 paddingLeft: '10%',
                 marginRight: '15%',
               }}
-              src={`${process.env.PUBLIC_URL}${
-                props.allDevDto[props.i].imgURL
-              }`}
+              src={`${process.env.PUBLIC_URL}${props.dev.imgURL}`}
             ></img>
             <Card.Text className='col-content' style={{ paddingTop: '3%' }}>
-              <span style={{ fontSize: '18px' }}>
-                {props.allDevDto[props.i].name}
-              </span>
+              <span style={{ fontSize: '18px' }}>{props.dev.name}</span>
             </Card.Text>
           </div>
 
@@ -226,9 +277,7 @@ function DeveloperCard(props) {
                 }}
               >
                 [직무]
-                <div style={{ paddingLeft: '5%' }}>
-                  {props.allDevDto[props.i].job}
-                </div>
+                <div style={{ paddingLeft: '5%' }}>{props.dev.job}</div>
               </div>
               <div
                 style={{
@@ -240,9 +289,7 @@ function DeveloperCard(props) {
                 }}
               >
                 [분야]
-                <div style={{ paddingLeft: '5%' }}>
-                  {props.allDevDto[props.i].jobDetail}
-                </div>
+                <div style={{ paddingLeft: '5%' }}>{props.dev.jobDetail}</div>
               </div>
               <div
                 style={{
@@ -254,9 +301,7 @@ function DeveloperCard(props) {
                 }}
               >
                 [경력]
-                <div style={{ paddingLeft: '5%' }}>
-                  {props.allDevDto[props.i].career}
-                </div>
+                <div style={{ paddingLeft: '5%' }}>{props.dev.career}</div>
               </div>
             </Card.Text>
             <Card.Text className='col-content'>
@@ -271,7 +316,7 @@ function DeveloperCard(props) {
               >
                 참여중인 프로젝트 &nbsp;
                 <div style={{ fontWeight: '700', color: 'rgb(148,179,248)' }}>
-                  {props.allDevDto[props.i].projectCount}&nbsp;
+                  {props.dev.projectCount}&nbsp;
                 </div>
                 개 있습니다.
               </div>
@@ -290,6 +335,9 @@ function DeveloperCard(props) {
                     cursor: 'pointer',
                     fontSize: '13px',
                   }}
+                  onClick={() => {
+                    window.open('https://open.kakao.com/o/gjmA85pf', '_blank');
+                  }}
                 >
                   대화하기
                 </span>
@@ -301,16 +349,17 @@ function DeveloperCard(props) {
                     fontSize: '20px',
                   }}
                   onClick={() => {
-                    setLiked(!liked);
-                    setLikeCount(liked ? likeCount - 1 : likeCount + 1);
                     props.likeInput(
                       'developer',
                       props.resultDto[0].id,
-                      props.allDevDto[props.i].id
+                      props.dev.id
                     );
+                    if (props.isLogin) {
+                      showLikeCount();
+                    }
                   }}
                 />{' '}
-                {likeCount}
+                {props.dev.likeCount}
               </div>
               {/* <div>
                 <FontAwesomeIcon icon={farBookmark} size='2x' />

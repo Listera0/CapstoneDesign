@@ -6,10 +6,13 @@ import { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import { icons2, jobs } from '../icons2.js';
 import { useNavigate } from 'react-router-dom';
+import { Viewer } from '@toast-ui/react-editor';
+import '@toast-ui/editor/dist/toastui-editor.css';
 import axios from 'axios';
 function Profile(props) {
   let { id } = useParams();
   let navigate = useNavigate(); //페이지 이동
+
   const [userDetail, setUserDetail] = useState(['']);
   {
     useEffect(() => {
@@ -19,10 +22,44 @@ function Profile(props) {
           orderBy: '',
           limit: '',
         })
-        .then((response) => setUserDetail(response.data))
+        .then((response) => {
+          setUserDetail(response.data);
+        })
         .catch((error) => console.log(error));
     }, []);
   }
+
+  const [alertList, setAlertList] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .post('/api/getAlert', {
+          reciver: id,
+        })
+        .then((response) => {
+          setAlertList(response.data);
+        })
+        .catch((error) => console.log(error));
+    }, []);
+  }
+
+  const removeAlert = (_id) => {
+    axios
+      .post('/api/removeAlert', {
+        id: _id,
+      })
+      .then()
+      .catch((error) => console.log(error));
+  };
+
+  const updateNowJob = (_id) => {
+    axios
+      .post('/api/updateNowJob', {
+        id: _id,
+      })
+      .then()
+      .catch((error) => console.log(error));
+  };
 
   let developerDetail = userDetail[0];
 
@@ -49,33 +86,7 @@ function Profile(props) {
           >
             마이페이지
           </h2>
-          <Nav
-            fill
-            variant='tabs'
-            defaultActiveKey='link0'
-            style={{ paddingTop: '5%' }}
-          >
-            <Nav.Item>
-              <Nav.Link
-                onClick={() => {
-                  setMainTab(0);
-                }}
-                eventKey='link0'
-              >
-                정보
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link
-                onClick={() => {
-                  setMainTab(1);
-                }}
-                eventKey='link1'
-              >
-                북마크
-              </Nav.Link>
-            </Nav.Item>
-          </Nav>
+
           <MainTabContent
             tab={tab}
             maintab={maintab}
@@ -85,6 +96,9 @@ function Profile(props) {
             careerDetail={careerDetail}
             skillDetail={skillDetail}
             navigate={navigate}
+            removeAlert={removeAlert}
+            updateNowJob={updateNowJob}
+            alertList={alertList}
           ></MainTabContent>
         </div>
       </div>
@@ -209,9 +223,12 @@ function MainTabContent(props) {
             skillDetail={props.skillDetail}
             jobDetail={props.jobDetail}
             careerDetail={props.careerDetail}
+            removeAlert={props.removeAlert}
+            updateNowJob={props.updateNowJob}
+            alertList={props.alertList}
           />
         </div>
-        {/* <div className='col-lg-4 mb-4 mb-sm-5'>
+        <div className='col-lg-4 mb-4 mb-sm-5' style={{ display: 'block' }}>
           <div className='card card-style1 border-0'>
             <div
               className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'
@@ -240,6 +257,12 @@ function MainTabContent(props) {
                       border: '1px solid rgb(222,222,222)',
                       backgroundColor: 'white',
                     }}
+                    onClick={() => {
+                      window.open(
+                        'https://open.kakao.com/o/gjmA85pf',
+                        '_blank'
+                      );
+                    }}
                   >
                     전체 톡방
                   </button>
@@ -250,6 +273,12 @@ function MainTabContent(props) {
                       marginBottom: '3%',
                       border: '1px solid rgb(222,222,222)',
                       backgroundColor: 'white',
+                    }}
+                    onClick={() => {
+                      window.open(
+                        'https://open.kakao.com/o/gjmA85pf',
+                        '_blank'
+                      );
                     }}
                   >
                     DP 프로젝트 톡방
@@ -262,6 +291,12 @@ function MainTabContent(props) {
                       border: '1px solid rgb(222,222,222)',
                       backgroundColor: 'white',
                     }}
+                    onClick={() => {
+                      window.open(
+                        'https://open.kakao.com/o/gjmA85pf',
+                        '_blank'
+                      );
+                    }}
                   >
                     에타 프로젝트
                   </button>
@@ -269,7 +304,85 @@ function MainTabContent(props) {
               </div>
             </div>
           </div>
-        </div> */}
+          <div className='card card-style1 border-0'>
+            <div
+              className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'
+              style={{
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <div className='row align-items-center'>
+                <p
+                  style={{
+                    textAlign: 'start',
+                    paddingTop: '5%',
+                    paddingLeft: '5%',
+                    fontWeight: '600',
+                  }}
+                >
+                  공지사항
+                </p>
+                {props.alertList.map((a, i) => {
+                  return (
+                    <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
+                      <button
+                        style={{
+                          width: '100%',
+                          height: '10vh',
+                          marginBottom: '3%',
+                          border: '1px solid rgb(222,222,222)',
+                          backgroundColor: 'white',
+                        }}
+                      >
+                        <div>{props.alertList[i].comment}</div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <button
+                            style={{
+                              marginRight: '5%',
+                              marginTop: '5%',
+                              border: '1px solid rgba(148,178,249,0.3)',
+                              backgroundColor: 'white',
+                              fontWeight: '700',
+                            }}
+                            onClick={() => {
+                              props.updateNowJob(props.alertList[i].sub1);
+                              props.removeAlert(props.alertList[i].id);
+
+                              alert('수락되었습니다.');
+                            }}
+                          >
+                            수락{' '}
+                          </button>
+                          <button
+                            style={{
+                              marginRight: '5%',
+                              marginTop: '5%',
+                              border: '1px solid rgba(148,178,249,0.3)',
+                              backgroundColor: 'white',
+                              fontWeight: '700',
+                            }}
+                            onClick={() => {
+                              props.removeAlert(props.alertList[i].id);
+                              alert('거절되었습니다.');
+                            }}
+                          >
+                            거절
+                          </button>
+                        </div>
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
       </>
     );
   }
@@ -400,17 +513,17 @@ function TabContent(props) {
               >
                 [소개]
               </span>
-              <p
+              <div
                 style={{
-                  textAlign: 'start',
                   fontSize: '15px',
                   marginTop: '2%',
+                  width: '80%',
                 }}
               >
                 <span style={{ fontWeight: '600', marginRight: '10%' }}>
-                  {props.developerDetail.introduce}
+                  <Viewer initialValue={props.developerDetail?.introduce} />{' '}
                 </span>{' '}
-              </p>
+              </div>
             </div>
             <div style={{ textAlign: 'start' }}>
               <span

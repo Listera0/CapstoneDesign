@@ -18,19 +18,19 @@ public class SearchDao {
 
     public List<DeveloperDto> searchDevData(Map<String, String> request)
     {
-        String query = String.format("select from developer where name like '%%s%'",request.get("key"));
+        String query = ("select * from developer where name like '%"+ request.get("key")+"%'");
         return DPJdbcTemplate.query(query, new DevRowMapper());
     }
 
     public List<ProjectDto> searchProjectData(Map<String, String> request)
     {
-        String query = String.format("select * from project where title like '%%s%'",request.get("key"));
+        String query = ("select * from project where title like '%"+ request.get("key")+"%'");
         return DPJdbcTemplate.query(query, new ProjectRowMapper());
     }
 
     public List<StoryDto> searchStoryData(Map<String, String> request)
     {
-        String query = String.format("select * from story where title like '%%s%'",request.get("key"));
+        String query = ("select * from story where title like '%"+ request.get("key")+"%'");
         return DPJdbcTemplate.query(query, new StoryRowMapper());
     }
 }

@@ -17,7 +17,8 @@ public class ProjectDto {
     private String imgURL;
     private String region;
     private String name;
-
+    private String email;
+    
     // 프론트 엔드 [초보] 1 / 10
     private String job;
     private String jobDetail;

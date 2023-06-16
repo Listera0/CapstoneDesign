@@ -34,14 +34,14 @@ public class MainConfig {
         return new JdbcTemplate(dataSource);
     }
 
-    @Bean(name = "CH")
-    @ConfigurationProperties(prefix = "spring.datasource.chat")
+    @Bean(name = "SB")
+    @ConfigurationProperties(prefix = "spring.datasource.sub")
     public DataSource CHDatasource(){
         return DataSourceBuilder.create().build();
     }
  
-    @Bean(name = "CHTemplate")
-    public JdbcTemplate CHJdbcTemplate(@Qualifier("CH") DataSource dataSource){
+    @Bean(name = "SBTemplate")
+    public JdbcTemplate CHJdbcTemplate(@Qualifier("SB") DataSource dataSource){
         return new JdbcTemplate(dataSource);
     }
 }

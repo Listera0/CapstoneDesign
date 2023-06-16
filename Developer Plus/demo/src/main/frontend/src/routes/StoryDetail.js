@@ -11,6 +11,8 @@ import Modal from 'react-bootstrap/Modal';
 import { useNavigate } from 'react-router-dom';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Viewer } from '@toast-ui/react-editor';
 function StoryDetail(props) {
   const navigate = useNavigate();
   let [modal, setModal] = useState(false);
@@ -154,6 +156,20 @@ function StoryDetail(props) {
                       style={{ textAlign: 'center' }}
                     ></img>
                   </div>
+
+                  <div
+                    style={{
+                      fontSize: '15px',
+                      marginTop: '2%',
+                      width: '100%',
+                    }}
+                  >
+                    <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                      {storyDetail.content && (
+                        <Viewer initialValue={storyDetail?.content} />
+                      )}
+                    </span>{' '}
+                  </div>
                   {/* <div className="col-lg-6 px-xl-10">
                     <div>
                       <h3 style={{ textAlign: "start" }}>{story.name}</h3>
@@ -169,35 +185,6 @@ function StoryDetail(props) {
                   </div> */}
                 </div>
               </div>
-            </div>
-          </div>
-          <div className='col-lg-12' style={{ padding: 0 }}>
-            <div className='col-lg-12'>
-              <div style={{ padding: '3%' }}>
-                <span style={{ textAlign: 'start' }}>
-                  <p
-                    style={{
-                      textAlign: 'start',
-                      fontSize: '15px',
-                      marginTop: '2%',
-                    }}
-                  >
-                    <span style={{ fontWeight: '600', marginRight: '10%' }}>
-                      {storyDetail.content}
-                    </span>
-                  </p>
-                </span>
-              </div>
-              <p
-                style={{
-                  paddingLeft: '3%',
-                  fontSize: '20px',
-                  textAlign: 'start',
-                }}
-              >
-                댓글
-              </p>
-              <br></br>
             </div>
           </div>
 
@@ -391,21 +378,6 @@ function TabContent(props) {
     return (
       <div className='col-lg-12' style={{ padding: 0 }}>
         <div className='col-lg-12'>
-          <div style={{ padding: '3%' }}>
-            <span style={{ textAlign: 'start' }}>
-              <p
-                style={{
-                  textAlign: 'start',
-                  fontSize: '15px',
-                  marginTop: '2%',
-                }}
-              >
-                <span style={{ fontWeight: '600', marginRight: '10%' }}>
-                  {props.storyDetail.content}
-                </span>
-              </p>
-            </span>
-          </div>
           <p
             style={{ paddingLeft: '3%', fontSize: '20px', textAlign: 'start' }}
           >

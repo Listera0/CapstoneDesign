@@ -26,6 +26,7 @@ class ProjectRowMapper implements RowMapper<ProjectDto> {
         dto.setImgURL(rs.getString("imgURL"));
         dto.setRegion(rs.getString("region"));
         dto.setName(rs.getString("name"));
+        dto.setEmail(rs.getString("email"));
         dto.setJob(rs.getString("job"));
         dto.setJobDetail(rs.getString("jobDetail"));
         dto.setCareer(rs.getString("career"));
@@ -71,11 +72,11 @@ public class ProjectDao {
     }
     public String insertToDatabase(Map<String, String> request)
     {
-        String query = "insert into project (title, imgURL, region, name, job, jobDetail,career, nowJob, requireJob, startDate, endDate, content, skill) " +
-                                     "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+        String query = "insert into project (title, imgURL, region, name,email, job, jobDetail,career, nowJob, requireJob, startDate, endDate, content, skill) " +
+                                     "values (?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?,?)";
         try
         {
-            DPJdbcTemplate.update(query,    request.get("title"), request.get("imgURL"), request.get("region"), request.get("name"), 
+            DPJdbcTemplate.update(query,    request.get("title"), request.get("imgURL"), request.get("region"), request.get("name"),request.get("email"), 
                                             request.get("job"),request.get("jobDetail") ,request.get("career"), request.get("nowJob"), request.get("requireJob"), 
                                             request.get("startDate"), request.get("endDate"), request.get("content"), request.get("skill"));
         }
@@ -89,6 +90,21 @@ public class ProjectDao {
         String query = String.format("update project set viewCount = ? where id = %s", request.get("id"));
         try {
             DPJdbcTemplate.update(query, Integer.parseInt(request.get("viewCount")) + 1);
+            return "success";
+        }
+        catch(DataAccessException e) {
+            return "error";
+        }
+    }
+    
+    public String updateNowJob (Map<String, String> request) {
+        String query1 = String.format("select * from project where id = %s", request.get("id"));
+        String query2 = String.format("update project set nowJob = ? where id = %s", request.get("id"));
+
+        List<ProjectDto> tempData = DPJdbcTemplate.query(query1, new ProjectRowMapper());
+
+        try {
+            DPJdbcTemplate.update(query2, Integer.parseInt(tempData.get(0).getNowJob()) + 1);
             return "success";
         }
         catch(DataAccessException e) {
