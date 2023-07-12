@@ -443,6 +443,21 @@ button span {
   height: auto;
   object-fit: cover;
 }
+.profile__thumbnail {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #f3f3f4;
+  background-color: #eee;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+.profile__thumbnail > img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
 .content {
   font-size: 12px;
   font-weight: 400;

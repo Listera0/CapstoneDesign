@@ -1,291 +1,563 @@
-function Talk() {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookmark } from '@fortawesome/free-solid-svg-icons';
+import { useParams } from 'react-router-dom';
+import { Nav } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import Table from 'react-bootstrap/Table';
+import { icons2, jobs } from '../icons2.js';
+import { useNavigate } from 'react-router-dom';
+import { Viewer } from '@toast-ui/react-editor';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import axios from 'axios';
+function Profile(props) {
+  let { id } = useParams();
+  let navigate = useNavigate(); //페이지 이동
+
+  const [userDetail, setUserDetail] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .post('/api/getDevData', {
+          id: id,
+          orderBy: '',
+          limit: '',
+        })
+        .then((response) => {
+          setUserDetail(response.data);
+        })
+        .catch((error) => console.log(error));
+    }, []);
+  }
+
+  const [alertList, setAlertList] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .post('/api/getAlert', {
+          reciver: id,
+        })
+        .then((response) => {
+          setAlertList(response.data);
+        })
+        .catch((error) => console.log(error));
+    }, []);
+  }
+
+  const removeAlert = (_id) => {
+    axios
+      .post('/api/removeAlert', {
+        id: _id,
+      })
+      .then()
+      .catch((error) => console.log(error));
+  };
+
+  const updateNowJob = (_id) => {
+    axios
+      .post('/api/updateNowJob', {
+        id: _id,
+      })
+      .then()
+      .catch((error) => console.log(error));
+  };
+
+  let developerDetail = userDetail[0];
+
+  let [tab, setTab] = useState(0);
+  let [maintab, setMainTab] = useState(0);
   return (
-    <div className='container'>
-      <div
-        className='grid text-center'
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginRight: '1%',
-        }}
-      >
-        <div
-          className='g-col-6 g-col-md-4'
-          style={{
-            border: '1px solid rgb(222,222,222)',
-            width: '50%',
-            backgroundColor: 'white',
-            borderRadius: '5px',
-          }}
-        >
-          <p style={{ fontSize: '24px' }}>공지목록</p>
-          <div>
+    <section className='bg-light' style={{ marginTop: '-6%' }}>
+      <div className='container' style={{ paddingTop: '3%' }}>
+        <div className='row'>
+          <h2
+            style={{
+              textAlign: 'start',
+              paddingTop: '5%',
+              paddingLeft: '5%',
+              fontWeight: '600',
+            }}
+          >
+            마이톡방
+          </h2>
+
+          <MainTabContent
+            tab={tab}
+            maintab={maintab}
+            setTab={setTab}
+            developerDetail={developerDetail}
+            navigate={navigate}
+            removeAlert={removeAlert}
+            updateNowJob={updateNowJob}
+            alertList={alertList}
+          ></MainTabContent>
+        </div>
+      </div>
+    </section>
+  );
+}
+function MainTabContent(props) {
+  if (props.maintab == 0) {
+    return (
+      <>
+        <div className='col-lg-6 mb-4 mb-sm-5'>
+          <div className='card card-style1 border-0'>
             <div
+              className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'
               style={{
-                marginBottom: '1%',
-                border: '1px solid rgb(222,222,222)',
+                justifyContent: 'space-between',
                 alignItems: 'center',
               }}
             >
-              <a href='#' style={{ textDecoration: 'none' }}>
-                <div
+              <div className='row align-items-center'>
+                <p
                   style={{
-                    textAlign: 'left',
+                    textAlign: 'start',
+                    paddingTop: '5%',
                     paddingLeft: '5%',
-                    paddingRight: '5%',
-                    display: 'flex',
-
-                    color: 'black',
+                    fontWeight: '600',
                   }}
                 >
-                  <p
-                    style={{
-                      paddingLeft: '3%',
-                      fontWeight: '600',
-                    }}
-                  >
-                    김일환님이 신규 가입하셨습니다
-                    <p style={{ paddingTop: '5%', fontWeight: '100' }}>
-                      본 직무는 웹프론트엔드이며 수준은 초심자입니다. 😊{' '}
-                    </p>
-                  </p>
-                </div>
-              </a>
-            </div>
-            <div
-              style={{
-                marginBottom: '1%',
-                border: '1px solid rgb(222,222,222)',
-                alignItems: 'center',
-              }}
-            >
-              <a href='#' style={{ textDecoration: 'none' }}>
-                <div
-                  style={{
-                    textAlign: 'left',
-                    paddingLeft: '5%',
-                    paddingRight: '5%',
-                    display: 'flex',
+                  공지목록
+                </p>
+                {props.alertList.map((a, i) => {
+                  console.log(props.alertList[i]);
+                  return (
+                    <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
+                      <div
+                        style={{
+                          textAlign: 'center',
+                          width: '100%',
+                          height: '10vh',
+                          marginBottom: '3%',
+                          border: '1px solid rgb(222,222,222)',
+                          backgroundColor: 'white',
+                        }}
+                      >
+                        <div
+                          onClick={() => {
+                            props.navigate(
+                              `/ViewDeveloperDetail/${props.alertList[i].sender}`
+                            );
+                          }}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          {props.alertList[i].comment}
+                        </div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <button
+                            style={{
+                              marginRight: '5%',
+                              marginTop: '5%',
+                              border: '1px solid rgba(148,178,249,0.3)',
+                              backgroundColor: 'white',
+                              fontWeight: '700',
+                            }}
+                            onClick={() => {
+                              props.updateNowJob(props.alertList[i].sub1);
+                              props.removeAlert(props.alertList[i].id);
 
-                    color: 'black',
-                  }}
-                >
-                  <p
-                    style={{
-                      paddingLeft: '3%',
-                      fontWeight: '600',
-                    }}
-                  >
-                    5/1 (월)은 회의는 6/12(월)로 변경되어 진행예상됩니다 !
-                    <p style={{ paddingTop: '5%', fontWeight: '100' }}>
-                      회의때 필요한 자료나 정보 있으면 말해주세요 !!
-                    </p>
-                  </p>
-                </div>
-              </a>
-            </div>
-            <div
-              style={{
-                marginBottom: '1%',
-                border: '1px solid rgb(222,222,222)',
-                alignItems: 'center',
-              }}
-            >
-              <a href='#' style={{ textDecoration: 'none' }}>
-                <div
-                  style={{
-                    textAlign: 'left',
-                    paddingLeft: '5%',
-                    paddingRight: '5%',
-                    display: 'flex',
-
-                    color: 'black',
-                  }}
-                >
-                  <p
-                    style={{
-                      paddingLeft: '3%',
-                      fontWeight: '600',
-                    }}
-                  >
-                    유승민님이 신규 가입하셨습니다
-                    <p style={{ paddingTop: '5%', fontWeight: '100' }}>
-                      본 직무는 DB/빅데이터/DS이며 수준은 초보입니다. 😊
-                    </p>
-                  </p>
-                </div>
-              </a>
+                              alert('수락되었습니다.');
+                            }}
+                          >
+                            수락{' '}
+                          </button>
+                          <button
+                            style={{
+                              marginRight: '5%',
+                              marginTop: '5%',
+                              border: '1px solid rgba(148,178,249,0.3)',
+                              backgroundColor: 'white',
+                              fontWeight: '700',
+                            }}
+                            onClick={() => {
+                              props.removeAlert(props.alertList[i].id);
+                              alert('거절되었습니다.');
+                            }}
+                          >
+                            거절
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
-        <div
-          className='g-col-6 g-col-md-4 '
-          style={{
-            border: '1px solid rgb(222,222,222)',
-            width: '50%',
-
-            backgroundColor: 'white',
-            borderRadius: '5px',
-          }}
-        >
-          <img
-            src={process.env.PUBLIC_URL + '/main.jpg'}
-            style={{
-              width: '100%',
-              height: '200px',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          ></img>
-          <div style={{ display: 'flex' }}>
+        <div className='col-lg-6 mb-4 mb-sm-5' style={{ display: 'block' }}>
+          <div className='card card-style1 border-0'>
             <div
-              className='g-col-6 g-col-md-4 '
+              className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'
               style={{
-                border: '1px solid rgb(222,222,222)',
-                width: '70%',
-                backgroundColor: '#abc1d1',
-                borderRadius: '5px',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
-              <header className='alt-header'>
-                <div className='alt-header__column'>
-                  <h1
-                    className='alt-header__title'
-                    style={{ fontSize: '22px' }}
-                  >
-                    <p>캡스톤 디자인</p>
-                  </h1>
-                </div>
+              <div className='row align-items-center' style={{}}>
                 <div
-                  className='alt-header__column'
-                  style={{ padding: '0' }}
-                ></div>
-              </header>
-              <main className='main-screen main-chat'>
-                <div className='chat__timestamp'>2023년, 2월 17일, 금요일</div>
-                <div className='message-row'>
-                  <img src='https://avatars.githubusercontent.com/u/103355252?s=96&v=4'></img>
-                  <div className='message-row__content'>
-                    <span
-                      className='message__author'
-                      style={{ paddingRight: '65%' }}
-                    >
-                      용호
-                    </span>
-                    <div className='message__info'>
-                      <span className='message__bubble'>Hi!</span>
-                      <span className='message__time'>21:27</span>
+                  style={{
+                    textAlign: 'start',
+                    paddingTop: '5%',
+                    paddingLeft: '5%',
+                    fontWeight: '600',
+                  }}
+                >
+                  모임
+                </div>
+
+                <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
+                  <div
+                    className='col-12'
+                    style={{
+                      display: 'flex',
+                      padding: '15px 15px',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => {
+                      props.navigate('/TalkDetail');
+                    }}
+                  >
+                    <div className='profile__thumbnail'>
+                      <img
+                        src={
+                          process.env.PUBLIC_URL + props.developerDetail.imgURL
+                        }
+                        width='50%'
+                        style={{ paddingTop: '3%', paddingBottom: '3%' }}
+                      ></img>
+                    </div>
+                    <div className='txtWrap'>
+                      <div className='title'>전체톡방</div>
+                      <div className='content'>ds</div>
                     </div>
                   </div>
-                </div>
-                <div
-                  className='message-row message-row--own'
-                  style={{ marginRight: '3%' }}
-                >
-                  <div className='message__info'>
-                    <span
-                      className='message__bubble'
-                      style={{
-                        backgroundColor: 'white',
-                        padding: '13px',
-                        fontSize: '15px',
-                        borderRadius: '15px',
-                        borderTopRightRadius: '0px',
-                      }}
-                    >
-                      하이
-                    </span>
-                    <span className='message__time'>21:27</span>
-                  </div>
-                </div>
-              </main>
-              <form className='reply'>
-                <div className='reply__column'>
-                  <i className='fas fa-plus fa-lg'></i>
-                </div>
-                <div className='reply__column'>
-                  <input
-                    type='text'
-                    placeholder='Write a message'
+                  <div
+                    className='col-12'
                     style={{
-                      marginBottom: '3%',
-                      border: '1px solid rgb(222,222,222)',
-                      backgroundColor: 'white',
-                      outline: 'none',
-                      marginRight: '1%',
-                      borderRadius: '5px',
+                      display: 'flex',
+                      padding: '15px 15px',
+                      cursor: 'pointer',
                     }}
-                  ></input>
-
-                  <button
-                    style={{
-                      marginBottom: '3%',
-                      border: '1px solid rgb(222,222,222)',
-                      backgroundColor: 'white',
-                    }}
+                    onClick={() => {}}
                   >
-                    보내기
-                  </button>
-                </div>
-              </form>
-            </div>
-            <div
-              className='g-col-6 g-col-md-4 '
-              style={{
-                border: '1px solid rgb(222,222,222)',
-                width: '30%',
-                backgroundColor: 'white',
-                borderRadius: '5px',
-                display: 'inline-block',
-              }}
-            >
-              <div>
-                <div>
-                  {' '}
-                  <button style={{ width: '100%', marginBottom: '10%' }}>
-                    ?
-                  </button>
-                </div>
-
-                <div>
-                  {' '}
-                  <button style={{ width: '100%', marginBottom: '10%' }}>
-                    공지보기
-                  </button>
-                </div>
-
-                <div>
-                  {' '}
-                  <button
-                    style={{
-                      width: '100%',
-                      marginBottom: '10%',
-                    }}
-                  >
-                    캘린더
-                  </button>
-                </div>
-                <div>
-                  <div>
-                    {' '}
-                    <button style={{ width: '100%', marginBottom: '10%' }}>
-                      뒤로가기
-                    </button>
+                    <div className='profile__thumbnail'>
+                      <img
+                        src={
+                          process.env.PUBLIC_URL + props.developerDetail.imgURL
+                        }
+                        width='50%'
+                        style={{ paddingTop: '3%', paddingBottom: '3%' }}
+                      ></img>
+                    </div>
+                    <div className='txtWrap'>
+                      <div className='title'>전체톡방</div>
+                      <div className='content'>ds</div>
+                    </div>
                   </div>
-
-                  <div>
-                    {' '}
-                    <button style={{ width: '100%', marginBottom: '10%' }}>
-                      톡방보기
-                    </button>
+                  <div
+                    className='col-12'
+                    style={{
+                      display: 'flex',
+                      padding: '15px 15px',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => {}}
+                  >
+                    <div className='profile__thumbnail'>
+                      <img
+                        src={
+                          process.env.PUBLIC_URL + props.developerDetail.imgURL
+                        }
+                        width='50%'
+                        style={{ paddingTop: '3%', paddingBottom: '3%' }}
+                      ></img>
+                    </div>
+                    <div className='txtWrap'>
+                      <div className='title'>dp톡방</div>
+                      <div className='content'>ds</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </>
+    );
+  }
+  if (props.maintab == 1) {
+    return (
+      <ul class='nav nav-pills nav-justified'>
+        <li class='nav-item'>
+          <a class='nav-link active' aria-current='page' href='#'>
+            Active
+          </a>
+        </li>
+        <li class='nav-item'>
+          <a class='nav-link' href='#'>
+            Much longer nav link
+          </a>
+        </li>
+        <li class='nav-item'>
+          <a class='nav-link' href='#'>
+            Link
+          </a>
+        </li>
+      </ul>
+    );
+  }
+}
+function TabContent(props) {
+  if (props.tab == 0) {
+    return (
+      <div className='col-lg-12 mb-4 mb-sm-5'>
+        <div>
+          <span
+            className='section-title text-primary mb-3 mb-sm-4'
+            style={{ marginTop: '3%' }}
+          >
+            Profile
+          </span>
+          <div style={{ padding: '3%' }}>
+            <div style={{ textAlign: 'start' }}>
+              <span
+                className='display-26 text-secondary me-2 font-weight-600'
+                style={{
+                  textAlign: 'start',
+                  fontSize: '18px',
+                  marginBottom: '10%',
+                }}
+              >
+                [주 능력]
+              </span>
+              <div
+                style={{
+                  textAlign: 'start',
+                  display: 'flex',
+                  justifyContent: 'start',
+                  marginTop: '3%',
+                }}
+              >
+                <span
+                  style={{
+                    fontWeight: '600',
+                    marginRight: '10%',
+                  }}
+                >
+                  직무
+                </span>{' '}
+                <p>{props.developerDetail.job}</p>
+              </div>
+              <div
+                style={{
+                  textAlign: 'start',
+                  display: 'flex',
+                  justifyContent: 'start',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  분야
+                </span>
+                <p>{props.developerDetail.jobDetail}</p>
+              </div>
+              <div
+                style={{
+                  textAlign: 'start',
+                  display: 'flex',
+                  justifyContent: 'start',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  경력
+                </span>{' '}
+                <p>{props.developerDetail.career}</p>
+              </div>
+              <div
+                style={{
+                  textAlign: 'start',
+                  display: 'flex',
+                  justifyContent: 'start',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  지역
+                </span>{' '}
+                <p>{props.developerDetail.region}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (props.tab == 1) {
+    return (
+      <div className='col-lg-12 mb-4 mb-sm-5'>
+        <div>
+          <span
+            className='section-title text-primary mb-3 mb-sm-4'
+            style={{ marginTop: '3%' }}
+          >
+            About Me
+          </span>
+          <div style={{ padding: '3%' }}>
+            <div style={{ textAlign: 'start' }}>
+              <span
+                className='display-26 text-secondary me-2 font-weight-600'
+                style={{
+                  textAlign: 'start',
+                  fontSize: '18px',
+                  marginBottom: '10%',
+                }}
+              >
+                [소개]
+              </span>
+              <div
+                style={{
+                  fontSize: '15px',
+                  marginTop: '2%',
+                  width: '80%',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  <Viewer initialValue={props.developerDetail?.introduce} />{' '}
+                </span>{' '}
+              </div>
+            </div>
+            <div style={{ textAlign: 'start' }}>
+              <span
+                className='display-26 text-secondary me-2 font-weight-600'
+                style={{
+                  textAlign: 'start',
+                  fontSize: '18px',
+                  marginBottom: '10%',
+                }}
+              >
+                [링크]
+              </span>
+              <p
+                style={{
+                  textAlign: 'start',
+                  fontSize: '15px',
+                  marginTop: '2%',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  <FontAwesomeIcon icon={['fab', 'github']} size='2x' />
+                </span>{' '}
+                <span
+                  onClick={() => {
+                    window.open(props.developerDetail.urlGithub);
+                  }}
+                  style={{ cursor: 'pointer', fontWeight: '600' }}
+                >
+                  깃허브
+                </span>
+              </p>
+            </div>
+            <p
+              style={{
+                textAlign: 'start',
+                fontSize: '15px',
+                marginTop: '2%',
+              }}
+            >
+              <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                <FontAwesomeIcon icon={['fab', 'instagram']} size='2x' />
+              </span>{' '}
+              <span
+                onClick={() => {
+                  window.open(props.developerDetail.urlInsta);
+                }}
+                style={{ cursor: 'pointer', fontWeight: '600' }}
+              >
+                인스타그램
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (props.tab == 2) {
+    return (
+      <div className='col-lg-12 mb-4 mb-sm-5'>
+        <div>
+          <div className='mb-4 mb-sm-5'>
+            <span
+              className='section-title text-primary mb-3 mb-sm-4'
+              style={{ marginTop: '3%' }}
+            >
+              Skill
+            </span>
+          </div>
+          <div style={{ padding: '3%' }}>
+            <div style={{ textAlign: 'start' }}>
+              <span
+                className='display-26 text-secondary me-2 font-weight-600'
+                style={{
+                  textAlign: 'start',
+                  fontSize: '18px',
+                  marginBottom: '10%',
+                }}
+              >
+                [스킬]
+              </span>
+              <p
+                style={{
+                  textAlign: 'start',
+                  fontSize: '15px',
+                  marginTop: '2%',
+                }}
+              >
+                <span style={{ fontWeight: '600', marginRight: '10%' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      marginTop: '5%',
+                      marginLeft: '10%',
+                      marginRight: '10%',
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    {props.skillDetail.map((ele, i) => {
+                      return (
+                        <Icons
+                          key={i}
+                          icons2={icons2}
+                          i={i}
+                          ele={ele}
+                          developerDetail={props.developerDetail}
+                          skillDetail={props.skillDetail}
+                        />
+                      );
+                    })}
+                  </div>
+                </span>{' '}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+function Icons(props) {
+  return (
+    <div key={props.i} style={{}}>
+      <div style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+        <p style={{ paddingLeft: '1%' }}>{props.icons2[props.ele]}</p>
+        <p style={{ textAlign: 'center' }}>{props.skillDetail[props.i]}</p>
       </div>
     </div>
   );
 }
-export default Talk;
+export default Profile;

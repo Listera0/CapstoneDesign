@@ -237,69 +237,107 @@ function MainTabContent(props) {
                 alignItems: 'center',
               }}
             >
-              <div className='row align-items-center'>
-                <p
-                  style={{
-                    textAlign: 'start',
-                    paddingTop: '5%',
-                    paddingLeft: '5%',
-                    fontWeight: '600',
-                  }}
+              <div className='row align-items-center' style={{}}>
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
-                  모임
-                </p>
+                  <div
+                    style={{
+                      textAlign: 'start',
+                      paddingTop: '5%',
+                      paddingLeft: '5%',
+                      fontWeight: '600',
+                    }}
+                  >
+                    모임
+                  </div>
+                  <div
+                    onClick={() => {
+                      props.navigate(`/talk/${props.developerDetail.id}`);
+                    }}
+                    style={{
+                      textAlign: 'start',
+                      paddingTop: '5%',
+                      paddingLeft: '5%',
+                      fontWeight: '400',
+                      color: 'gray',
+                      fontSize: '10px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    전체보기 &gt;&gt;
+                  </div>
+                </div>
                 <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
-                  <button
+                  <div
+                    className='col-12'
                     style={{
-                      width: '100%',
-                      height: '10vh',
-                      marginBottom: '3%',
-                      border: '1px solid rgb(222,222,222)',
-                      backgroundColor: 'white',
+                      display: 'flex',
+                      padding: '15px 15px',
+                      cursor: 'pointer',
                     }}
-                    onClick={() => {
-                      window.open(
-                        'https://open.kakao.com/o/gjmA85pf',
-                        '_blank'
-                      );
-                    }}
+                    onClick={() => {}}
                   >
-                    전체 톡방
-                  </button>
-                  <button
+                    <div className='profile__thumbnail'>
+                      <img
+                        src={
+                          process.env.PUBLIC_URL + props.developerDetail.imgURL
+                        }
+                        width='50%'
+                        style={{ paddingTop: '3%', paddingBottom: '3%' }}
+                      ></img>
+                    </div>
+                    <div className='txtWrap'>
+                      <div className='title'>전체톡방</div>
+                      <div className='content'>ds</div>
+                    </div>
+                  </div>
+                  <div
+                    className='col-12'
                     style={{
-                      width: '100%',
-                      height: '10vh',
-                      marginBottom: '3%',
-                      border: '1px solid rgb(222,222,222)',
-                      backgroundColor: 'white',
+                      display: 'flex',
+                      padding: '15px 15px',
+                      cursor: 'pointer',
                     }}
-                    onClick={() => {
-                      window.open(
-                        'https://open.kakao.com/o/gjmA85pf',
-                        '_blank'
-                      );
-                    }}
+                    onClick={() => {}}
                   >
-                    DP 프로젝트 톡방
-                  </button>
-                  <button
+                    <div className='profile__thumbnail'>
+                      <img
+                        src={
+                          process.env.PUBLIC_URL + props.developerDetail.imgURL
+                        }
+                        width='50%'
+                        style={{ paddingTop: '3%', paddingBottom: '3%' }}
+                      ></img>
+                    </div>
+                    <div className='txtWrap'>
+                      <div className='title'>전체톡방</div>
+                      <div className='content'>ds</div>
+                    </div>
+                  </div>
+                  <div
+                    className='col-12'
                     style={{
-                      width: '100%',
-                      height: '10vh',
-                      marginBottom: '3%',
-                      border: '1px solid rgb(222,222,222)',
-                      backgroundColor: 'white',
+                      display: 'flex',
+                      padding: '15px 15px',
+                      cursor: 'pointer',
                     }}
-                    onClick={() => {
-                      window.open(
-                        'https://open.kakao.com/o/gjmA85pf',
-                        '_blank'
-                      );
-                    }}
+                    onClick={() => {}}
                   >
-                    에타 프로젝트
-                  </button>
+                    <div className='profile__thumbnail'>
+                      <img
+                        src={
+                          process.env.PUBLIC_URL + props.developerDetail.imgURL
+                        }
+                        width='50%'
+                        style={{ paddingTop: '3%', paddingBottom: '3%' }}
+                      ></img>
+                    </div>
+                    <div className='txtWrap'>
+                      <div className='title'>dp톡방</div>
+                      <div className='content'>ds</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -324,10 +362,12 @@ function MainTabContent(props) {
                   공지사항
                 </p>
                 {props.alertList.map((a, i) => {
+                  console.log(props.alertList[i]);
                   return (
                     <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
-                      <button
+                      <div
                         style={{
+                          textAlign: 'center',
                           width: '100%',
                           height: '10vh',
                           marginBottom: '3%',
@@ -335,7 +375,16 @@ function MainTabContent(props) {
                           backgroundColor: 'white',
                         }}
                       >
-                        <div>{props.alertList[i].comment}</div>
+                        <div
+                          onClick={() => {
+                            props.navigate(
+                              `/ViewDeveloperDetail/${props.alertList[i].sender}`
+                            );
+                          }}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          {props.alertList[i].comment}
+                        </div>
                         <div
                           style={{
                             display: 'flex',
@@ -375,7 +424,7 @@ function MainTabContent(props) {
                             거절
                           </button>
                         </div>
-                      </button>
+                      </div>
                     </div>
                   );
                 })}

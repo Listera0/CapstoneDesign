@@ -19,6 +19,7 @@ import ViewDeveloper from './routes/ViewDeveloper';
 import Footer from './components/Footer';
 import Profile from './routes/Profile';
 import Serach from './routes/Search';
+import TalkDetail from './routes/TalkDetail';
 import Talk from './routes/Talk';
 import Card from 'react-bootstrap/Card';
 import Carousel from 'react-bootstrap/Carousel';
@@ -414,11 +415,15 @@ function App() {
           element={<Serach allDevDto={allDevDto} />}
         ></Route>
         <Route path='/login' element={<Login navigate={navigate} />}></Route>
-        <Route path='/talk' element={<Talk />}></Route>
+        <Route
+          path='/talk/:id'
+          element={<Talk developer={developer} setDeveloper={setDeveloper} />}
+        ></Route>
         <Route path='/SignUp' element={<SignUp />}></Route>
         <Route path='/write' element={<Write />}></Route>
         <Route path='/KakaoLogin' element={<KakaoLogin />}></Route>
         <Route path='/profileDetail' element={<ProfileDetail />}></Route>
+        <Route path='/talkDetail' element={<TalkDetail />}></Route>
       </Routes>
       <Footer navigate={navigate}></Footer>
     </div>

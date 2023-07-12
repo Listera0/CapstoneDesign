@@ -27,6 +27,7 @@ function Login(props) {
       .then((response) => {
         if (response.data['result'] == 'true') {
           sessionStorage.setItem('id', response.data['id']);
+          
           props.navigate('/');
         } else {
           alert(response.data['message']);
