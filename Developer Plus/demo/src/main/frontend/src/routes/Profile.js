@@ -276,7 +276,9 @@ function MainTabContent(props) {
                       padding: '15px 15px',
                       cursor: 'pointer',
                     }}
-                    onClick={() => {}}
+                    onClick={() => {
+                      props.navigate(`/talkDetail/${props.developerDetail.id}`);
+                    }}
                   >
                     <div className='profile__thumbnail'>
                       <img
@@ -299,7 +301,9 @@ function MainTabContent(props) {
                       padding: '15px 15px',
                       cursor: 'pointer',
                     }}
-                    onClick={() => {}}
+                    onClick={() => {
+                      props.navigate(`/talkDetail/${props.developerDetail.id}`);
+                    }}
                   >
                     <div className='profile__thumbnail'>
                       <img
@@ -322,7 +326,9 @@ function MainTabContent(props) {
                       padding: '15px 15px',
                       cursor: 'pointer',
                     }}
-                    onClick={() => {}}
+                    onClick={() => {
+                      props.navigate(`/talkDetail/${props.developerDetail.id}`);
+                    }}
                   >
                     <div className='profile__thumbnail'>
                       <img

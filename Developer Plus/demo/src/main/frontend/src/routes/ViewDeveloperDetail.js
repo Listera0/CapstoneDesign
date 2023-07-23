@@ -114,20 +114,21 @@ function ViewDeveloperDetail(props) {
                         <span>👍</span>
                         {developerDetail.likeCount}
                       </div>
-                      <div className='col-6' style={{ fontSize: '15px' }}>
-                        <button
-                          style={{
-                            padding: '8px 12px',
-                            border: '1px solid rgb(222,222,222)',
-                            backgroundColor: 'white',
-                            fontWeight: '600',
-                            borderRadius: '5px',
-                          }}
-                        >
-                          대화하기{' '}
-                        </button>
-                      </div>
+                      
                     </div> */}
+                    <div className='col-6' style={{ fontSize: '15px' }}>
+                      <button
+                        style={{
+                          padding: '8px 12px',
+                          border: '1px solid rgb(222,222,222)',
+                          backgroundColor: 'white',
+                          fontWeight: '600',
+                          borderRadius: '5px',
+                        }}
+                      >
+                        대화하기{' '}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -423,7 +423,12 @@ function App() {
         <Route path='/write' element={<Write />}></Route>
         <Route path='/KakaoLogin' element={<KakaoLogin />}></Route>
         <Route path='/profileDetail' element={<ProfileDetail />}></Route>
-        <Route path='/talkDetail' element={<TalkDetail />}></Route>
+        <Route
+          path='/talkDetail/:id'
+          element={
+            <TalkDetail developer={developer} setDeveloper={setDeveloper} />
+          }
+        ></Route>
       </Routes>
       <Footer navigate={navigate}></Footer>
     </div>

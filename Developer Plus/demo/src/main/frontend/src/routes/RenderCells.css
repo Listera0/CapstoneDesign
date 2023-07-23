@@ -1,0 +1,43 @@
+.body {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.days {
+  justify-content: space-between;
+  border: none;
+  width: 100%;
+  margin-left: 0;
+  height: 20vh;
+}
+.cell:hover {
+  background-color: rgb(228, 225, 225);
+  cursor: pointer;
+}
+.selected:hover {
+  background-color: rgb(246, 230, 230);
+}
+.cell {
+  /* border: 1px solid rgb(0, 0, 0, 1); */
+  border-width: 2px;
+}
+
+.disabled {
+  border-color: gray;
+}
+.disabled > span {
+  color: rgb(156, 148, 148);
+}
+.selected > span {
+  color: rgb(148, 178, 249);
+  font-weight: 700;
+  margin-top: 15%;
+}
+.selected {
+  border-color: rgb(148, 179, 249);
+}
+.backColor {
+  background-color: rgba(0, 0, 0, 0.9);
+  opacity: 1;
+}

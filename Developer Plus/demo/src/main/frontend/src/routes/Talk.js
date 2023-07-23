@@ -99,98 +99,7 @@ function MainTabContent(props) {
   if (props.maintab == 0) {
     return (
       <>
-        <div className='col-lg-6 mb-4 mb-sm-5'>
-          <div className='card card-style1 border-0'>
-            <div
-              className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'
-              style={{
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <div className='row align-items-center'>
-                <p
-                  style={{
-                    textAlign: 'start',
-                    paddingTop: '5%',
-                    paddingLeft: '5%',
-                    fontWeight: '600',
-                  }}
-                >
-                  공지목록
-                </p>
-                {props.alertList.map((a, i) => {
-                  console.log(props.alertList[i]);
-                  return (
-                    <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
-                      <div
-                        style={{
-                          textAlign: 'center',
-                          width: '100%',
-                          height: '10vh',
-                          marginBottom: '3%',
-                          border: '1px solid rgb(222,222,222)',
-                          backgroundColor: 'white',
-                        }}
-                      >
-                        <div
-                          onClick={() => {
-                            props.navigate(
-                              `/ViewDeveloperDetail/${props.alertList[i].sender}`
-                            );
-                          }}
-                          style={{ cursor: 'pointer' }}
-                        >
-                          {props.alertList[i].comment}
-                        </div>
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <button
-                            style={{
-                              marginRight: '5%',
-                              marginTop: '5%',
-                              border: '1px solid rgba(148,178,249,0.3)',
-                              backgroundColor: 'white',
-                              fontWeight: '700',
-                            }}
-                            onClick={() => {
-                              props.updateNowJob(props.alertList[i].sub1);
-                              props.removeAlert(props.alertList[i].id);
-
-                              alert('수락되었습니다.');
-                            }}
-                          >
-                            수락{' '}
-                          </button>
-                          <button
-                            style={{
-                              marginRight: '5%',
-                              marginTop: '5%',
-                              border: '1px solid rgba(148,178,249,0.3)',
-                              backgroundColor: 'white',
-                              fontWeight: '700',
-                            }}
-                            onClick={() => {
-                              props.removeAlert(props.alertList[i].id);
-                              alert('거절되었습니다.');
-                            }}
-                          >
-                            거절
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='col-lg-6 mb-4 mb-sm-5' style={{ display: 'block' }}>
+        <div className='col-lg-12 mb-4 mb-sm-5' style={{ display: 'block' }}>
           <div className='card card-style1 border-0'>
             <div
               className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'
@@ -220,7 +129,7 @@ function MainTabContent(props) {
                       cursor: 'pointer',
                     }}
                     onClick={() => {
-                      props.navigate('/TalkDetail');
+                      props.navigate(`/TalkDetail/${props.developerDetail.id}`);
                     }}
                   >
                     <div className='profile__thumbnail'>

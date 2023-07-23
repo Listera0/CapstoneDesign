@@ -1,0 +1,83 @@
+.calendar__Container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.calendar__header {
+  width: 100%;
+  height: 10vh;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.calendar__month {
+  float: left;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 700;
+  vertical-align: bottom;
+  width: 100%;
+}
+.calendar__year {
+  font-size: 15px;
+  margin-left: 5%;
+  text-align: center;
+}
+.calendar__yymm {
+  width: 30%;
+}
+.col {
+  margin-right: 2%;
+  text-align: start;
+  border-radius: 5px;
+  margin: 10px;
+  font-size: 15px;
+  font-weight: 400;
+}
+.claendar__date {
+}
+.calendar__day {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0;
+
+  color: rgb(148, 178, 249);
+}
+.col.cell.valid :hover {
+  transform: scale(1.01);
+  border: rgb(0, 0, 0);
+}
+.col.cell.selected {
+  transform: scale(1.02);
+  border: 1px soild rgb(0, 0, 0);
+  color: white;
+  font-weight: 600;
+}
+.button__div {
+  margin-right: 5%;
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+.calendar__left {
+  margin: 0px 10px;
+
+  border: none;
+  background-color: #fff;
+  font-weight: 700;
+}
+.calendar__right {
+  margin: 0px 10px;
+
+  border: none;
+  background-color: #fff;
+  font-weight: 700;
+}
+.calendar__left > span {
+  text-align: right;
+}
+.calendar__right > span {
+  text-align: right;
+}
