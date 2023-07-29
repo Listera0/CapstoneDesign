@@ -12,7 +12,14 @@ import axios from 'axios';
 function Profile(props) {
   let { id } = useParams();
   let navigate = useNavigate(); //페이지 이동
-
+  const [talkList, setTalkList] = useState(['']);
+  {
+    useEffect(() => {
+      axios.post('/api/getChatInfo', { limit: '3' }).then((response) => {
+        setTalkList(response.data);
+      });
+    });
+  }
   const [userDetail, setUserDetail] = useState(['']);
   {
     useEffect(() => {
@@ -28,7 +35,20 @@ function Profile(props) {
         .catch((error) => console.log(error));
     }, []);
   }
-
+  const [projectDetails, setProjectDetails] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .post('/api/getProjectData', {
+          id: id,
+          orderBy: '',
+          limit: '',
+        })
+        .then((response) => setProjectDetails(response.data))
+        .catch((error) => console.log(error));
+    }, []);
+  }
+  let projectDetail = projectDetails[0];
   const [alertList, setAlertList] = useState(['']);
   {
     useEffect(() => {
@@ -42,7 +62,14 @@ function Profile(props) {
         .catch((error) => console.log(error));
     }, []);
   }
-
+  const addMemberToChat = (_memberId, _projectId) => {
+    axios
+      .post('/api/addMemberToChat', {
+        memberId: _memberId,
+        projectId: _projectId,
+      })
+      .then();
+  };
   const removeAlert = (_id) => {
     axios
       .post('/api/removeAlert', {
@@ -92,6 +119,7 @@ function Profile(props) {
             maintab={maintab}
             setTab={setTab}
             developerDetail={developerDetail}
+            projectDetail={projectDetail}
             jobDetail={jobDetail}
             careerDetail={careerDetail}
             skillDetail={skillDetail}
@@ -99,6 +127,9 @@ function Profile(props) {
             removeAlert={removeAlert}
             updateNowJob={updateNowJob}
             alertList={alertList}
+            talkList={talkList}
+            setTalkList={setTalkList}
+            addMemberToChat={addMemberToChat}
           ></MainTabContent>
         </div>
       </div>
@@ -226,6 +257,7 @@ function MainTabContent(props) {
             removeAlert={props.removeAlert}
             updateNowJob={props.updateNowJob}
             alertList={props.alertList}
+            addMemberToChat={props.addMemberToChat}
           />
         </div>
         <div className='col-lg-4 mb-4 mb-sm-5' style={{ display: 'block' }}>
@@ -268,83 +300,41 @@ function MainTabContent(props) {
                     전체보기 &gt;&gt;
                   </div>
                 </div>
-                <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
-                  <div
-                    className='col-12'
-                    style={{
-                      display: 'flex',
-                      padding: '15px 15px',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => {
-                      props.navigate(`/talkDetail/${props.developerDetail.id}`);
-                    }}
-                  >
-                    <div className='profile__thumbnail'>
-                      <img
-                        src={
-                          process.env.PUBLIC_URL + props.developerDetail.imgURL
-                        }
-                        width='50%'
-                        style={{ paddingTop: '3%', paddingBottom: '3%' }}
-                      ></img>
+                {props.talkList.map((a, i) => {
+                  return (
+                    <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
+                      <div
+                        className='col-12'
+                        style={{
+                          display: 'flex',
+                          padding: '15px 15px',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => {
+                          props.navigate(`/talkDetail/${props.talkList[i].id}`);
+                        }}
+                      >
+                        <div className='profile__project__thumbnail'>
+                          <img
+                            src={
+                              process.env.PUBLIC_URL + props.talkList[i].imgURL
+                            }
+                            width='100%'
+                            style={{ paddingTop: '3%', paddingBottom: '3%' }}
+                          ></img>
+                        </div>
+                        <div className='txtWrap'>
+                          <div className='title'>
+                            {props.talkList[i].title}톡방
+                          </div>
+                          <div className='content'>
+                            {props.talkList[i].memberId}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className='txtWrap'>
-                      <div className='title'>전체톡방</div>
-                      <div className='content'>ds</div>
-                    </div>
-                  </div>
-                  <div
-                    className='col-12'
-                    style={{
-                      display: 'flex',
-                      padding: '15px 15px',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => {
-                      props.navigate(`/talkDetail/${props.developerDetail.id}`);
-                    }}
-                  >
-                    <div className='profile__thumbnail'>
-                      <img
-                        src={
-                          process.env.PUBLIC_URL + props.developerDetail.imgURL
-                        }
-                        width='50%'
-                        style={{ paddingTop: '3%', paddingBottom: '3%' }}
-                      ></img>
-                    </div>
-                    <div className='txtWrap'>
-                      <div className='title'>전체톡방</div>
-                      <div className='content'>ds</div>
-                    </div>
-                  </div>
-                  <div
-                    className='col-12'
-                    style={{
-                      display: 'flex',
-                      padding: '15px 15px',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => {
-                      props.navigate(`/talkDetail/${props.developerDetail.id}`);
-                    }}
-                  >
-                    <div className='profile__thumbnail'>
-                      <img
-                        src={
-                          process.env.PUBLIC_URL + props.developerDetail.imgURL
-                        }
-                        width='50%'
-                        style={{ paddingTop: '3%', paddingBottom: '3%' }}
-                      ></img>
-                    </div>
-                    <div className='txtWrap'>
-                      <div className='title'>dp톡방</div>
-                      <div className='content'>ds</div>
-                    </div>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -408,6 +398,10 @@ function MainTabContent(props) {
                             onClick={() => {
                               props.updateNowJob(props.alertList[i].sub1);
                               props.removeAlert(props.alertList[i].id);
+                              props.addMemberToChat(
+                                props.alertList[i].sender,
+                                props.alertList[i].sub1
+                              );
 
                               alert('수락되었습니다.');
                             }}
@@ -707,6 +701,49 @@ function Icons(props) {
         <p style={{ paddingLeft: '1%' }}>{props.icons2[props.ele]}</p>
         <p style={{ textAlign: 'center' }}>{props.skillDetail[props.i]}</p>
       </div>
+    </div>
+  );
+}
+
+function ProjectCard(props) {
+  const [likeCountDetail, setLikeCountDetail] = useState('');
+  {
+    useEffect(() => {
+      let flag = false;
+      for (let k = 0; k < props.projectLikeCountData.length; k++) {
+        if (
+          props.projectLikeCountData[k].targetId ==
+          props.rankingProjectDto[props.i].id
+        ) {
+          setLikeCountDetail(props.projectLikeCountData[k].like);
+          flag = true;
+          break;
+        }
+      }
+      if (flag == false) {
+        setLikeCountDetail(false);
+      }
+    });
+  }
+
+  const showLikeCount = () => {
+    likeCountDetail == true
+      ? props.rankingProjectDto[props.i].likeCount--
+      : props.rankingProjectDto[props.i].likeCount++;
+    likeCountDetail == true
+      ? setLikeCountDetail(false)
+      : setLikeCountDetail(true);
+  };
+
+  return (
+    <div
+      className='col-4 '
+      style={{
+        padding: '1%',
+        width: '33%',
+      }}
+    >
+      <div className='d-flex justify-content-around '></div>
     </div>
   );
 }

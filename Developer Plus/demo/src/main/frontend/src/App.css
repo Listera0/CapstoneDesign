@@ -469,6 +469,21 @@ button span {
   margin-right: 20px;
   flex-shrink: 0;
 }
+.profile__project__thumbnail {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #f3f3f4;
+  background-color: #eee;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+.profile__project__thumbnail > img {
+  width: 150%;
+  height: 100%;
+  object-fit: cover;
+}
 .profile__thumbnail > img {
   width: 100%;
   height: auto;

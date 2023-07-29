@@ -407,7 +407,13 @@ function App() {
         <Route
           path='/profile/:id'
           element={
-            <Profile developer={developer} setDeveloper={setDeveloper} />
+            <Profile
+              developer={developer}
+              setDeveloper={setDeveloper}
+              project={project}
+              allProjectDto={allProjectDto}
+              navigate={navigate}
+            />
           }
         ></Route>
         <Route

@@ -48,7 +48,7 @@ public class AlertDao {
 
     public void setAlert (Map<String, String> request) {
         String query1 = String.format("select * from developer where email='%s'", request.get("reciver"));
-        String query2 = "insert into alert (reciver, sender, type,sub1, comment) values (?, ?, ?, ?,?)";
+        String query2 = "insert into alert (reciver, sender, type, sub1, comment) values (?, ?, ?, ?,?)";
 
         List<DeveloperDto> Temp = DPJdbcTemplate.query(query1, new DevRowMapper());
 

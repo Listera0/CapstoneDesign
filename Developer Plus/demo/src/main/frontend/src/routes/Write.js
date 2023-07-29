@@ -90,7 +90,8 @@ function Write() {
     _startDate,
     _endDate,
     _content,
-    _skill
+    _skill,
+    _id
   ) => {
     axios
       .post('/api/insertProject', {
@@ -108,6 +109,14 @@ function Write() {
         endDate: _endDate,
         content: _content,
         skill: _skill,
+      })
+      .then((response) => console.log(response.data))
+      .catch((error) => console.log(error));
+      axios
+      .post('/api/createChat', {
+        title: _title,
+        id:_id,
+        imgURL:_imgURL
       })
       .then((response) => console.log(response.data))
       .catch((error) => console.log(error));
@@ -773,7 +782,8 @@ function MainTabContent(props) {
                 props.startDate,
                 props.endDate,
                 editorRef.current.getInstance().getMarkdown(),
-                selectedSkills.join(',')
+                selectedSkills.join(','),
+                props.allDevDto[sessionStorage.getItem('id') - 1].id
               );
             }
             props.navigate('/findDeveloper');

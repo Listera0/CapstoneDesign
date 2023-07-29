@@ -28,11 +28,17 @@ public class MainController {
     @Autowired
     LikeCountDao likeCountRepository;
     @Autowired
-    ChatDao chatRepository;
+    CommentDao commentRepository;
     @Autowired
     SearchDao searchRepository;
     @Autowired
     AlertDao alertRepository;
+    @Autowired
+    ChatInfoDao chatInfoRepository;
+    @Autowired
+    ChatAlertDao chatAlertRepository;
+    @Autowired
+    ChatDao chatRepository;
 
     // 로그인 요청
     @RequestMapping(value="/api/requestLogin", method = RequestMethod.POST)
@@ -77,19 +83,19 @@ public class MainController {
     // 스토리에 댓글 입력
     @RequestMapping(value="/api/insertChat", method = RequestMethod.POST)
     public void insertChat(@RequestBody Map<String, String> request) {
-        chatRepository.insertChat(request);
+        commentRepository.insertChat(request);
     }
 
     // 스토리 댓글 삭제
     @RequestMapping(value="/api/deleteChat", method = RequestMethod.POST)
     public void deleteChat(@RequestBody Map<String, String> request) {
-        chatRepository.deleteChat(request);
+        commentRepository.deleteChat(request);
     }
 
     // 대상 스토리의 댓글 전부 가져오기
     @RequestMapping(value="/api/getChatHistory", method = RequestMethod.POST)
-    public List<ChatDto> getChatHistory(@RequestBody Map<String, String> request) {
-        return chatRepository.getChatHistory(request.get("targetId"));
+    public List<CommentDto> getChatHistory(@RequestBody Map<String, String> request) {
+        return commentRepository.getChatHistory(request.get("targetId"));
     }
 
     // 모든 Developer 데이터 가져오기
@@ -185,5 +191,53 @@ public class MainController {
     @RequestMapping(value="/api/updateNowJob", method = RequestMethod.POST)
     public String updateNowJob(@RequestBody Map<String, String> request) {
         return projectRepository.updateNowJob(request);
+    }
+
+
+
+    
+
+    // 채팅방 생성하기 (title) (글 작성 하면 이거 한번 실행해도 될듯)
+    @RequestMapping(value="/api/createChat", method = RequestMethod.POST)
+    public void createChat(@RequestBody Map<String, String> request) {
+        chatInfoRepository.createChat(request);
+    }
+
+    // 공지 작성 구문 추가
+    @RequestMapping(value="/api/insertChatAlert", method = RequestMethod.POST)
+    public void insertChatAlert(@RequestBody Map<String, String> request) {
+        chatAlertRepository.insertChatAlert(request);
+    }
+
+    // 채팅 입력 (id, userId, content)
+    @RequestMapping(value="/api/insertCommentChat", method = RequestMethod.POST)
+    public void insertCommentChat(@RequestBody Map<String, String> request) {
+        chatRepository.insertChat(request);
+    }
+
+    // 멤버 추가하는 구문(수락하면 자동 가입으로 해도 될듯)
+    // 개발자 데이터베이스에 참여한 카톡방 ID 추가해야할듯
+    @RequestMapping(value="/api/addMemberToChat", method = RequestMethod.POST)
+    public void addMemberToChat(@RequestBody Map<String, String> request) {
+        chatInfoRepository.addMemberToChat(request);
+    }
+
+
+    // 채팅방 정보 받아오는 구문
+    @RequestMapping(value="/api/getChatInfo", method = RequestMethod.POST)
+    public List<ChatInfoDto> getChatInfo(@RequestBody Map<String, String> request) {
+        return chatInfoRepository.getChatInfo(request);
+    }
+
+    // 공지 받아오는 구문
+    @RequestMapping(value="/api/getChatAlert", method = RequestMethod.POST)
+    public List<ChatAlertDto> getChatAlert(@RequestBody Map<String, String> request) {
+        return chatAlertRepository.getChatAlert(request);
+    }
+
+    // 구간을 정해 채팅 10개씩 받아오기 (id)
+    @RequestMapping(value="/api/getCommentChatHistory", method = RequestMethod.POST)
+    public List<ChatDto> getCommentChatHistory(@RequestBody Map<String, String> request) {
+        return chatRepository.getChatHistory(request);
     }
 }

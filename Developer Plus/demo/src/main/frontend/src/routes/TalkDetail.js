@@ -223,25 +223,38 @@ function TalkDetail(props) {
             >
               공지 작성
             </h2>
-            <form>
-              <div style={{ margin: '10% 5%', padding: '100px 10px' }}>
-                <div style={{ display: 'flex', marginBottom: '3%' }}>
-                  <span>날짜</span>
-                  <input type='text' style={{ width: '70%' }}></input>
-                </div>
-                <div style={{ display: 'flex', marginBottom: '3%' }}>
-                  <span>중요도</span>
-                  <input type='text' style={{ width: '70%' }}></input>
-                </div>
-                <div style={{ display: 'flex', marginBottom: '3%' }}>
-                  <span>내용</span>
-                  <textarea></textarea>
-                </div>
-                <div>
-                  <button>등록하기</button>
-                </div>
+            <div
+              className='comment_object'
+              style={{ backgroundColor: '#f7f7f7' }}
+            >
+              <div className='comment_user'>
+                <div></div>
               </div>
-            </form>
+              <form>
+                <div
+                  className='comment_input'
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <p style={{ fontSize: '15px' }}>날짜</p>
+                  <textarea
+                    rows='4'
+                    id='comment_box'
+                    placeholder='날짜를 입력해주세요.'
+                  ></textarea>
+                  <button
+                    type='submit'
+                    className='comment_btn'
+                    onClick={() => {}}
+                  >
+                    등록
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         ) : (
           <div></div>

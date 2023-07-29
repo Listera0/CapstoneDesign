@@ -22,10 +22,10 @@ class ChatRowMapper implements RowMapper<ChatDto> {
     public ChatDto mapRow(ResultSet rs, int rowNum) throws SQLException {
         ChatDto dto = new ChatDto();
         dto.setId(rs.getInt("id"));
-        dto.setUserId(rs.getInt("userId"));
-        dto.setTargetId(rs.getInt("targetId"));
-        dto.setContent(rs.getString("content"));
+        dto.setTargetChat(rs.getInt("targetChat"));
+        dto.setWriter(rs.getInt("writer"));
         dto.setDate(rs.getString("date"));
+	    dto.setComment(rs.getString("date"));
 
         return dto;
     }
@@ -38,30 +38,29 @@ public class ChatDao {
     JdbcTemplate DPJdbcTemplate;
 
     @Autowired
-    @Qualifier("SBTemplate")
-    JdbcTemplate SBJdbcTemplate;
+    @Qualifier("CTTemplate")
+    JdbcTemplate CTJdbcTemplate;
 
-    public List<ChatDto> getChatHistory(String targetId) {
-        String query1 = String.format("select * from chat where targetId=%s", targetId);
-
-        List<ChatDto> result = SBJdbcTemplate.query(query1, new ChatRowMapper());
-        return result;
-    }
-
+    // 채팅 입력 (id, userId, content)
     public void insertChat(Map<String, String> request) {
-        String query1 = "insert into chat (userId, targetId, content, date) values (?, ?, ?, ?)";
-        String query2 = String.format("update story set chatCount=? where id=%s", request.get("targetId"));
+        String query1 = String.format("insert into chat%s (userId, content, date) values (?, ?, ?)", request.get("id"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
-        DPJdbcTemplate.update(query2, Integer.parseInt( request.get("chatCount")) + 1);
-        SBJdbcTemplate.update(query1, request.get("userId"), request.get("targetId"), request.get("content"), LocalDate.now().format(formatter));
+        CTJdbcTemplate.update(query1, request.get("userId"), request.get("content"), LocalDate.now().format(formatter));
     }
 
-    public void deleteChat(Map<String, String> request) {
-        String query1 = String.format("delete from chat where id='%s'", request.get("id"));
-        String query2 = String.format("update story set chatCount=? where id=%s", request.get("targetId"));
+    // 구간을 정해 채팅 10개씩 받아오기 (id)
+    public List<ChatDto> getChatHistory(Map<String, String> request) {
+        int section = Integer.parseInt(request.get("section"));
 
-        DPJdbcTemplate.update(query2, Integer.parseInt( request.get("chatCount")) - 1);
-        SBJdbcTemplate.update(query1);
+        String query1 = String.format("select * from chat%s order by date desc limit %d", request.get("id"), section);
+
+        List<ChatDto> result = CTJdbcTemplate.query(query1, new ChatRowMapper());
+        return result;
     }
 }
+
+
+
+
+

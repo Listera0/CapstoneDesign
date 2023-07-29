@@ -12,7 +12,14 @@ import axios from 'axios';
 function Profile(props) {
   let { id } = useParams();
   let navigate = useNavigate(); //페이지 이동
-
+  const [talkList, setTalkList] = useState(['']);
+  {
+    useEffect(() => {
+      axios.post('/api/getChatInfo', { limit: '100' }).then((response) => {
+        setTalkList(response.data);
+      });
+    });
+  }
   const [userDetail, setUserDetail] = useState(['']);
   {
     useEffect(() => {
@@ -89,6 +96,8 @@ function Profile(props) {
             removeAlert={removeAlert}
             updateNowJob={updateNowJob}
             alertList={alertList}
+            talkList={talkList}
+            setTalkList={setTalkList}
           ></MainTabContent>
         </div>
       </div>
@@ -121,77 +130,44 @@ function MainTabContent(props) {
                 </div>
 
                 <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
-                  <div
-                    className='col-12'
-                    style={{
-                      display: 'flex',
-                      padding: '15px 15px',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => {
-                      props.navigate(`/TalkDetail/${props.developerDetail.id}`);
-                    }}
-                  >
-                    <div className='profile__thumbnail'>
-                      <img
-                        src={
-                          process.env.PUBLIC_URL + props.developerDetail.imgURL
-                        }
-                        width='50%'
-                        style={{ paddingTop: '3%', paddingBottom: '3%' }}
-                      ></img>
-                    </div>
-                    <div className='txtWrap'>
-                      <div className='title'>전체톡방</div>
-                      <div className='content'>ds</div>
-                    </div>
-                  </div>
-                  <div
-                    className='col-12'
-                    style={{
-                      display: 'flex',
-                      padding: '15px 15px',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => {}}
-                  >
-                    <div className='profile__thumbnail'>
-                      <img
-                        src={
-                          process.env.PUBLIC_URL + props.developerDetail.imgURL
-                        }
-                        width='50%'
-                        style={{ paddingTop: '3%', paddingBottom: '3%' }}
-                      ></img>
-                    </div>
-                    <div className='txtWrap'>
-                      <div className='title'>전체톡방</div>
-                      <div className='content'>ds</div>
-                    </div>
-                  </div>
-                  <div
-                    className='col-12'
-                    style={{
-                      display: 'flex',
-                      padding: '15px 15px',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => {}}
-                  >
-                    <div className='profile__thumbnail'>
-                      <img
-                        src={
-                          process.env.PUBLIC_URL + props.developerDetail.imgURL
-                        }
-                        width='50%'
-                        style={{ paddingTop: '3%', paddingBottom: '3%' }}
-                      ></img>
-                    </div>
-                    <div className='txtWrap'>
-                      <div className='title'>dp톡방</div>
-                      <div className='content'>ds</div>
-                    </div>
-                  </div>
+                  {props.talkList.map((a, i) => {
+                    return (
+                      <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
+                        <div
+                          className='col-12'
+                          style={{
+                            display: 'flex',
+                            padding: '15px 15px',
+                            cursor: 'pointer',
+                          }}
+                          onClick={() => {
+                            props.navigate(
+                              `/talkDetail/${props.talkList[i].id}`
+                            );
+                          }}
+                        >
+                          <div className='profile__project__thumbnail'>
+                            <img
+                              src={
+                                process.env.PUBLIC_URL +
+                                props.talkList[i].imgURL
+                              }
+                              width='100%'
+                              style={{ paddingTop: '3%', paddingBottom: '3%' }}
+                            ></img>
+                          </div>
+                          <div className='txtWrap'>
+                            <div className='title'>
+                              {props.talkList[i].title}톡방
+                            </div>
+                            <div className='content'>
+                              {props.talkList[i].id}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>

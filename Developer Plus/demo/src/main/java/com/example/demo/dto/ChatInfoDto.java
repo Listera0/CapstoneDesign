@@ -8,12 +8,12 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatDto {
+public class ChatInfoDto {
 
     // 데이터 베이스 구조
     private int id;
-    private int targetChat;
-    private int writer;
-    private String date;
-    private String comment;
+    private int projectId;
+    private String title;
+    private String memberId;
+    private String imgURL;
 }
