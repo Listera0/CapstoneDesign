@@ -19,12 +19,15 @@ body {
   margin-bottom: 20px;
   overflow-y: scroll;
   height: 400px;
+
+  align-items: flex-end;
 }
 .Mychat-message {
-  float: right;
   background-color: yellow;
-
+  box-sizing: border-box;
   border-radius: 10px;
+  box-sizing: border-box;
+  display: -ms-inline-grid;
 }
 .chat-message {
   background-color: #fff;
@@ -66,7 +69,7 @@ body {
 
 .assistant {
   color: blue;
-  text-align: start;
+  text-align: end;
   padding: 10px;
   border-radius: 10px;
   margin-bottom: 10px;

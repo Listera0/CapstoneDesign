@@ -112,11 +112,11 @@ function Write() {
       })
       .then((response) => console.log(response.data))
       .catch((error) => console.log(error));
-      axios
+    axios
       .post('/api/createChat', {
         title: _title,
-        id:_id,
-        imgURL:_imgURL
+        id: _id,
+        imgURL: _imgURL,
       })
       .then((response) => console.log(response.data))
       .catch((error) => console.log(error));

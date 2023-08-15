@@ -11,13 +11,16 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import axios from 'axios';
 function Profile(props) {
   let { id } = useParams();
+  let { ids } = useParams();
   let navigate = useNavigate(); //페이지 이동
   const [talkList, setTalkList] = useState(['']);
   {
     useEffect(() => {
-      axios.post('/api/getChatInfo', { limit: '3' }).then((response) => {
-        setTalkList(response.data);
-      });
+      axios
+        .post('/api/getChatInfo', { id: '', limit: '3' })
+        .then((response) => {
+          setTalkList(response.data);
+        });
     });
   }
   const [userDetail, setUserDetail] = useState(['']);
@@ -92,6 +95,7 @@ function Profile(props) {
 
   let skillDetail =
     developerDetail.skill != null ? developerDetail.skill.split(',') : '';
+
   let jobDetail =
     developerDetail.job != null ? developerDetail.job.split(',') : '';
 
@@ -300,7 +304,15 @@ function MainTabContent(props) {
                     전체보기 &gt;&gt;
                   </div>
                 </div>
+
                 {props.talkList.map((a, i) => {
+                  let talkDetail =
+                    props.talkList[i].memberId != null
+                      ? props.talkList[i].memberId
+                          .split(',')
+                          .map((id) => parseInt(id))
+                      : '';
+
                   return (
                     <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
                       <div
@@ -314,23 +326,31 @@ function MainTabContent(props) {
                           props.navigate(`/talkDetail/${props.talkList[i].id}`);
                         }}
                       >
-                        <div className='profile__project__thumbnail'>
-                          <img
-                            src={
-                              process.env.PUBLIC_URL + props.talkList[i].imgURL
-                            }
-                            width='100%'
-                            style={{ paddingTop: '3%', paddingBottom: '3%' }}
-                          ></img>
-                        </div>
-                        <div className='txtWrap'>
-                          <div className='title'>
-                            {props.talkList[i].title}톡방
-                          </div>
-                          <div className='content'>
-                            {props.talkList[i].memberId}
-                          </div>
-                        </div>
+                        {talkDetail.includes(props.developerDetail.id) ? (
+                          <>
+                            <div className='profile__project__thumbnail'>
+                              <img
+                                src={
+                                  process.env.PUBLIC_URL +
+                                  props.talkList[i].imgURL
+                                }
+                                width='100%'
+                                style={{
+                                  paddingTop: '3%',
+                                  paddingBottom: '3%',
+                                }}
+                              ></img>
+                            </div>
+                            <div className='txtWrap'>
+                              <div className='title'>
+                                {props.talkList[i].title}톡방
+                              </div>
+                              <div className='content'>
+                                {props.talkList[i].memberId}
+                              </div>
+                            </div>
+                          </>
+                        ) : null}
                       </div>
                     </div>
                   );

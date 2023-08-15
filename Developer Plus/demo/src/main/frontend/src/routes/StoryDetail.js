@@ -20,6 +20,14 @@ function StoryDetail(props) {
   let [tab, setTab] = useState(0);
   let { id } = useParams(); // 유저가 URL파라미터에 입력한거 가져오려면 useParams()
   const [storyDetails, setStoryDetails] = useState(['']);
+  const addMemberToChat = (_memberId, _projectId) => {
+    axios
+      .post('/api/addMemberToChat', {
+        memberId: _memberId,
+        projectId: _projectId,
+      })
+      .then();
+  };
   const [allDevDto, setAllDevDto] = useState(['']);
   {
     useEffect(() => {

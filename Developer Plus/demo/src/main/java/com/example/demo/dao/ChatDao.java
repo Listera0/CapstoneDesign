@@ -22,10 +22,9 @@ class ChatRowMapper implements RowMapper<ChatDto> {
     public ChatDto mapRow(ResultSet rs, int rowNum) throws SQLException {
         ChatDto dto = new ChatDto();
         dto.setId(rs.getInt("id"));
-        dto.setTargetChat(rs.getInt("targetChat"));
-        dto.setWriter(rs.getInt("writer"));
+        dto.setUserId(rs.getInt("userId"));
         dto.setDate(rs.getString("date"));
-	    dto.setComment(rs.getString("date"));
+	    dto.setComment(rs.getString("comment"));
 
         return dto;
     }
@@ -43,13 +42,13 @@ public class ChatDao {
 
     // 채팅 입력 (id, userId, content)
     public void insertChat(Map<String, String> request) {
-        String query1 = String.format("insert into chat%s (userId, content, date) values (?, ?, ?)", request.get("id"));
+        String query1 = String.format("insert into chat%s (userId, date, comment) values (?, ?, ?)", request.get("id"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
-        CTJdbcTemplate.update(query1, request.get("userId"), request.get("content"), LocalDate.now().format(formatter));
+        CTJdbcTemplate.update(query1, request.get("userId"), LocalDate.now().format(formatter), request.get("content"));
     }
 
-    // 구간을 정해 채팅 10개씩 받아오기 (id)
+    // 구간을 정해 채팅 10개씩 받아오기 (id, section)
     public List<ChatDto> getChatHistory(Map<String, String> request) {
         int section = Integer.parseInt(request.get("section"));
 

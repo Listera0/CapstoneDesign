@@ -40,9 +40,6 @@ public class ChatInfoDao {
     JdbcTemplate CTJdbcTemplate;
 
     public void createChat(Map<String, String> request) {
-        String query1 = "select * from chatInfo";
-        int chatCount = CTJdbcTemplate.query(query1, new ChatInfoRowMapper()).size();
-
         String query4 = "select * from project order by id desc limit 1";
         List<ProjectDto> tempProject = DPJdbcTemplate.query(query4, new ProjectRowMapper());
         int tempId = tempProject.get(0).getId();
@@ -50,7 +47,11 @@ public class ChatInfoDao {
         String query3 = String.format("insert into chatInfo (projectId, title, memberId, imgURL) values (%s, '%s', '%s', '%s')", tempId, request.get("title"), request.get("id"), request.get("imgURL"));
 	    CTJdbcTemplate.update(query3);
 
-        String query2 = String.format("create table chat.chat%d (`id` INT NOT NULL AUTO_INCREMENT,`targetChat` INT NULL,`writer` INT NULL,`date` VARCHAR(45) NULL,`comment` VARCHAR(100) NULL,PRIMARY KEY (`id`))", chatCount);
+        String query1 = "select * from chatInfo order by id desc limit 1";
+        List<ChatInfoDto> tempChatInfo = CTJdbcTemplate.query(query1, new ChatInfoRowMapper());
+        int nextId = tempChatInfo.get(0).getId();
+
+        String query2 = String.format("create table chat.chat%d (`id` INT NOT NULL AUTO_INCREMENT, `userId` INT NULL,`date` VARCHAR(45) NULL,`comment` VARCHAR(100) NULL,PRIMARY KEY (`id`))", nextId);
         CTJdbcTemplate.update(query2);
     }
 
@@ -76,7 +77,18 @@ public class ChatInfoDao {
     }
 
     public List<ChatInfoDto> getChatInfo(Map<String, String> request) {
-        String query1 = String.format("select * from chatInfo order by id desc limit %s", request.get("limit"));
+        String query1 = "select * from chatInfo";
+
+        if(request.get("id") != "") {
+            query1 += " where id = " + request.get("id");
+        }
+
+        query1 += " order by id desc";
+
+        if(request.get("limit") != "") {
+            query1 += " limit " + request.get("limit");
+        }
+
 	    List<ChatInfoDto> result = CTJdbcTemplate.query(query1, new ChatInfoRowMapper());
 
 	    return result;

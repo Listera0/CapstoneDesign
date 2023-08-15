@@ -12,8 +12,7 @@ public class ChatDto {
 
     // 데이터 베이스 구조
     private int id;
-    private int targetChat;
-    private int writer;
+    private int userId;
     private String date;
     private String comment;
 }

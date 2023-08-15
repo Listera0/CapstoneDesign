@@ -108,6 +108,7 @@ function App() {
   const handleClick = () => {
     sessionStorage.removeItem('id');
     setsession(null);
+    navigate('/');
     window.location.reload();
   };
 
@@ -211,7 +212,7 @@ function App() {
       getLikeCount('story', sessionStorage.getItem('id'));
       getLikeCount('project', sessionStorage.getItem('id'));
     }
-  }, []);
+  });
 
   return (
     <div className='App ' style={{ margin: '0' }}>

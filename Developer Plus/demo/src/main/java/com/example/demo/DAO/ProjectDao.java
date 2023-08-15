@@ -63,7 +63,6 @@ public class ProjectDao {
         if(limit != "")
             query += " limit " + limit;
 
-        System.out.println(query);
 
         return DPJdbcTemplate.query(query, new ProjectRowMapper());
     }

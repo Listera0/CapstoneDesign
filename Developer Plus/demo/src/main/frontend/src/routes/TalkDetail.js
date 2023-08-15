@@ -12,13 +12,45 @@ function TalkDetail(props) {
   // let developerDetail = props.allDevDto.find(function (x) {
   //   return x.id == id;
   // });
+  //4
+  const [allDevDto, setAllDevDto] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .get('/api/getAllDevData')
+        .then((response) => setAllDevDto(response.data))
+        .catch((error) => console.log(error));
+    }, []);
+  }
+  const [talkList, setTalkList] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .post('/api/getChatInfo', {
+          id: id,
+          limit: '',
+        })
+        .then((response) => {
+          setTalkList(response.data);
+        });
+    });
+  }
+
+  //(id, userId, content)
+  const insertCommentChat = (_content) => {
+    axios.post('/api/insertCommentChat', {
+      id: id,
+      userId: sessionStorage.getItem('id'),
+      content: _content,
+    });
+  };
 
   const [userDetail, setUserDetail] = useState(['']);
   {
     useEffect(() => {
       axios
         .post('/api/getDevData', {
-          id: id,
+          id: sessionStorage.getItem('id'), //sessionss.id
           orderBy: '',
           limit: '',
         })
@@ -27,6 +59,35 @@ function TalkDetail(props) {
     }, []);
   }
 
+  const [chatHistory, setChatHistory] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .post('/api/getCommentChatHistory', {
+          id: id,
+          section: '5',
+        })
+        .then((response) => setChatHistory(response.data))
+        .catch((error) => console.log(error));
+    }, []);
+  }
+
+  const [projectDetails, setProjectDetails] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .post('/api/getProjectData', {
+          id: id,
+          orderBy: '',
+          limit: '',
+        })
+        .then((response) => setProjectDetails(response.data))
+        .catch((error) => console.log(error));
+    }, []);
+  }
+  let projectDetail = projectDetails[0];
+  //id, section
+  // /api/getCommentChatHistory
   let developerDetail = userDetail[0];
   const [notification, setNotification] = useState(false);
   const [calendar, setCalendar] = useState(true);
@@ -70,27 +131,104 @@ function TalkDetail(props) {
               borderRadius: '5px',
             }}
           >
-            <div
-              style={{
-                display: 'flex',
-                padding: '15px 15px',
-                cursor: 'pointer',
-              }}
-              onClick={() => {}}
-            >
-              <div className='showTalk__thumbnail'>
-                <img
-                  src={process.env.PUBLIC_URL + developerDetail.imgURL}
-                  width='100%'
-                  style={{ paddingTop: '3%', paddingBottom: '3%' }}
-                ></img>
-              </div>
-              <div className='txtWrap'>
-                <div className='title'>{developerDetail.name}</div>
-                <div className='content'>{developerDetail.job}</div>
-                <div className='content'>{developerDetail.jobDetail}</div>
-              </div>
-            </div>
+            {talkList.map((a, i) => {
+              let talkDetail =
+                talkList[0].memberId != null
+                  ? talkList[0].memberId.split(',').map((id) => parseInt(id))
+                  : '';
+              console.log(talkDetail[0]);
+              console.log(developerDetail.id);
+              const memberIdArray = talkList[0].memberId
+                .split(',')
+                .map((id) => parseInt(id));
+              return (
+                <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
+                  <h2
+                    style={{
+                      marginTop: '5%',
+                      fontSize: '20px',
+                      fontWeight: '700',
+                    }}
+                  >
+                    멤버 정보
+                  </h2>
+                  {talkDetail.includes(developerDetail.id) ? (
+                    <>
+                      <h3
+                        style={{
+                          fontSize: '18px',
+                          textAlign: 'start',
+                          fontWeight: '700',
+                        }}
+                      >
+                        리더 정보
+                      </h3>
+                      <div style={{ display: 'flex' }}>
+                        <div className='profile__thumbnail'>
+                          <img
+                            src={
+                              process.env.PUBLIC_URL +
+                              allDevDto[talkDetail[0] - 1].imgURL
+                            }
+                            width='30%'
+                            style={{ paddingTop: '3%', paddingBottom: '3%' }}
+                          ></img>
+                        </div>
+                        <div className='txtWrap'>
+                          <div className='title'>
+                            {allDevDto[talkDetail[0] - 1].name}
+                          </div>
+                          <div className='chat-message'>
+                            <p className='assistant'>
+                              {allDevDto[talkDetail[0] - 1].jobDetail}{' '}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <h3
+                        style={{
+                          fontSize: '18px',
+                          textAlign: 'start',
+                          fontWeight: '700',
+                          marginTop: '5%',
+                        }}
+                      >
+                        멤버 정보
+                      </h3>
+                      {memberIdArray.forEach((value, index) => {
+                        // ... JSX 내에서 value 값을 사용할 수 있도록 변수를 할당
+                        const memberName = allDevDto[value].name;
+                        const memberImg = allDevDto[value].imgURL;
+                        const memberJobDetail = allDevDto[value].jobDetail;
+                        console.log(memberName);
+                        return (
+                          <div style={{ display: 'flex' }}>
+                            <div className='profile__thumbnail'>
+                              <img
+                                src={process.env.PUBLIC_URL + memberImg}
+                                width='30%'
+                                style={{
+                                  paddingTop: '3%',
+                                  paddingBottom: '3%',
+                                }}
+                              ></img>
+                            </div>
+                            <div className='txtWrap'>
+                              <div className='title'>{memberName}</div>
+                              <div className='chat-message'>
+                                <p className='assistant'>{memberJobDetail} </p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <div>ds</div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         ) : (
           <div></div>
@@ -382,35 +520,56 @@ function TalkDetail(props) {
 
             <div className='chat-container'>
               <div className='chat-box'>
-                <h2 style={{ fontWeight: '300' }}>{developerDetail.name}</h2>
-                <div
-                  style={{
-                    display: 'flex',
-                    padding: '15px 15px',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <div className='profile__thumbnail'>
-                    <img
-                      src={process.env.PUBLIC_URL + developerDetail.imgURL}
-                      width='30%'
-                      style={{ paddingTop: '3%', paddingBottom: '3%' }}
-                    ></img>
-                  </div>
-                  <div className='txtWrap'>
-                    <div className='title'>{developerDetail.name}</div>
-                    <div className='chat-message'>
-                      <p className='assistant'>하이!</p>
-                    </div>
-                  </div>
-                </div>
-                <div className='Mychat-message'>
-                  <p className='assistant'>안녕하세요하이!하이!안녕하세요</p>
-                </div>
+                <h2 style={{ fontWeight: '300' }}>{talkList[0].title}톡방</h2>
+
+                {chatHistory.map((a, i) => {
+                  return (
+                    <>
+                      {developerDetail.id == chatHistory[i].userId ? (
+                        <div className='Mychat-message'>
+                          <p className='assistant'>{chatHistory[i].comment}</p>
+                        </div>
+                      ) : (
+                        <div style={{ display: 'flex' }}>
+                          <div className='profile__thumbnail'>
+                            <img
+                              src={
+                                process.env.PUBLIC_URL +
+                                allDevDto[chatHistory[i].userId - 1].imgURL
+                              }
+                              width='30%'
+                              style={{ paddingTop: '3%', paddingBottom: '3%' }}
+                            ></img>
+                          </div>
+                          <div className='txtWrap'>
+                            <div className='title'>
+                              {allDevDto[chatHistory[i].userId - 1].name}
+                            </div>
+                            <div className='chat-message'>
+                              <p className='assistant'>하이!</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  );
+                })}
               </div>
               <div className='chat-input'>
-                <input type='text' placeholder='Type your message here...' />
-                <button>Send</button>
+                <input
+                  id='chat__content'
+                  type='text'
+                  placeholder='Type your message here...'
+                />
+                <button
+                  onClick={() => {
+                    insertCommentChat(
+                      document.getElementById('chat__content').value
+                    );
+                  }}
+                >
+                  Send
+                </button>
               </div>
             </div>
           </div>

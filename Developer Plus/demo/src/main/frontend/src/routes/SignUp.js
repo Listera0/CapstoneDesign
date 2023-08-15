@@ -174,7 +174,7 @@ function SignUp(props) {
                       <input
                         id='email'
                         type='email'
-                        value={_has == 'true' ? _email : null}
+                        value={_has == 'true' ? _email : undefined}
                         style={{
                           width: '70%',
                           height: '5vh',

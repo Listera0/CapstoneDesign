@@ -12,14 +12,18 @@ import axios from 'axios';
 function Profile(props) {
   let { id } = useParams();
   let navigate = useNavigate(); //페이지 이동
+
   const [talkList, setTalkList] = useState(['']);
   {
     useEffect(() => {
-      axios.post('/api/getChatInfo', { limit: '100' }).then((response) => {
-        setTalkList(response.data);
-      });
+      axios
+        .post('/api/getChatInfo', { id: '', limit: '100' })
+        .then((response) => {
+          setTalkList(response.data);
+        });
     });
   }
+
   const [userDetail, setUserDetail] = useState(['']);
   {
     useEffect(() => {
@@ -72,6 +76,7 @@ function Profile(props) {
 
   let [tab, setTab] = useState(0);
   let [maintab, setMainTab] = useState(0);
+  console.log(talkList[0]);
   return (
     <section className='bg-light' style={{ marginTop: '-6%' }}>
       <div className='container' style={{ paddingTop: '3%' }}>
@@ -131,6 +136,12 @@ function MainTabContent(props) {
 
                 <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
                   {props.talkList.map((a, i) => {
+                    let talkDetail =
+                      props.talkList[i].memberId != null
+                        ? props.talkList[i].memberId
+                            .split(',')
+                            .map((id) => parseInt(id))
+                        : '';
                     return (
                       <div style={{ paddingLeft: '3%', paddingRight: '3%' }}>
                         <div
@@ -146,24 +157,31 @@ function MainTabContent(props) {
                             );
                           }}
                         >
-                          <div className='profile__project__thumbnail'>
-                            <img
-                              src={
-                                process.env.PUBLIC_URL +
-                                props.talkList[i].imgURL
-                              }
-                              width='100%'
-                              style={{ paddingTop: '3%', paddingBottom: '3%' }}
-                            ></img>
-                          </div>
-                          <div className='txtWrap'>
-                            <div className='title'>
-                              {props.talkList[i].title}톡방
-                            </div>
-                            <div className='content'>
-                              {props.talkList[i].id}
-                            </div>
-                          </div>
+                          {talkDetail.includes(props.developerDetail.id) ? (
+                            <>
+                              <div className='profile__project__thumbnail'>
+                                <img
+                                  src={
+                                    process.env.PUBLIC_URL +
+                                    props.talkList[i].imgURL
+                                  }
+                                  width='100%'
+                                  style={{
+                                    paddingTop: '3%',
+                                    paddingBottom: '3%',
+                                  }}
+                                ></img>
+                              </div>
+                              <div className='txtWrap'>
+                                <div className='title'>
+                                  {props.talkList[i].title}톡방
+                                </div>
+                                <div className='content'>
+                                  {props.talkList[i].memberId}
+                                </div>
+                              </div>
+                            </>
+                          ) : null}
                         </div>
                       </div>
                     );
