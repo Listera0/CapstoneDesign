@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark } from '@fortawesome/free-solid-svg-icons';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
 import axios from 'axios';
 import { jobs, icons2 } from '../icons2';
@@ -130,6 +131,12 @@ function MainTabContent(props) {
   );
 }
 function TabContent(props) {
+  const navigate = useNavigate();
+  const deleteFromDatabase = () => {
+    axios.post('/api/deleteFromDatabase', {
+      id: props.projectDetail.id,
+    });
+  };
   const editorRef = useRef();
   let markdown = props.projectDetail.content;
 
@@ -420,6 +427,29 @@ function TabContent(props) {
                 </p>
                 <hr></hr>
               </div>
+              {props.projectDetail.name == props.resultDto[0].name ? (
+                <div>
+                  <button
+                    onClick={() => {
+                      deleteFromDatabase();
+                      navigate('/findDeveloper');
+                    }}
+                    style={{
+                      border: 'none',
+                      padding: '5px 15px',
+                      color: 'white',
+                      background: 'rgba(0,0,0,0.65)',
+                      borderRadius: '5px',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    삭제
+                  </button>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>
@@ -500,9 +530,22 @@ function TabContent(props) {
             </div>
             <div style={{ textAlign: 'start' }}>
               {props.projectDetail.requireJob == props.projectDetail.nowJob ? (
-                <button disabled>마감</button>
-              ) : (
                 <button
+                  disabled
+                  style={{
+                    border: 'none',
+                    padding: '5px 15px',
+                    color: 'white',
+                    background: 'rgba(0,0,0,0.65)',
+                    borderRadius: '5px',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                  }}
+                >
+                  마감
+                </button>
+              ) : (
+                <span
                   onClick={() => {
                     console.log(props.projectDetail.email);
                     props.setAlert(
@@ -514,9 +557,18 @@ function TabContent(props) {
                     );
                     alert('지원하였습니다.');
                   }}
+                  style={{
+                    border: 'none',
+                    padding: '5px 15px',
+                    color: 'white',
+                    background: 'rgba(0,0,0,0.65)',
+                    borderRadius: '5px',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                  }}
                 >
                   지원
-                </button>
+                </span>
               )}
             </div>
           </div>

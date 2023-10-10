@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.dto.*;
@@ -81,5 +82,16 @@ public class DeveloperDao {
 
 
         return "";
+    }
+    
+    public String addViewCount(Map<String, String> request) {
+        String query = String.format("update story set viewCount = ? where id = %s", request.get("id"));
+        try {
+            DPJdbcTemplate.update(query, Integer.parseInt(request.get("viewCount")) + 1);
+            return "success";
+        }
+        catch(DataAccessException e) {
+            return "error";
+        }
     }
 }

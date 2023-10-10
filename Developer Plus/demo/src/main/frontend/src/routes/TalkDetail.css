@@ -23,6 +23,7 @@ body {
   align-items: flex-end;
 }
 .Mychat-message {
+  margin-left: 30%;
   background-color: yellow;
   box-sizing: border-box;
   border-radius: 10px;

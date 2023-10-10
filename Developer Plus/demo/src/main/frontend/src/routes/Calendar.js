@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons';
 import { faLongArrowAltRight } from '@fortawesome/free-solid-svg-icons';
 
-function Calendar() {
+function Calendar(props) {
   let [modal, setModal] = useState(false);
 
   const [currentDate, setCurrentMonth] = useState(new Date());
@@ -78,6 +78,8 @@ function Calendar() {
       </div>
       <div className='calendar__day row'>{day} </div>
       <RenderCells
+        allAlert={props.allAlert}
+        setAllAlert={props.setAllAlert}
         currentDate={currentDate}
         selectedDate={selectedDate}
         onDateClick={onDateClick}

@@ -13,6 +13,20 @@ function TalkDetail(props) {
   //   return x.id == id;
   // });
   //4
+  ///api/getChatAlert
+
+  const [allAlert, setAllAlertDto] = useState(['']);
+  {
+    useEffect(() => {
+      axios
+        .post('/api/getChatAlert', {
+          targetChat: id,
+        })
+        .then((response) => setAllAlertDto(response.data))
+        .catch((error) => console.log(error));
+    }, []);
+  }
+
   const [allDevDto, setAllDevDto] = useState(['']);
   {
     useEffect(() => {
@@ -22,6 +36,7 @@ function TalkDetail(props) {
         .catch((error) => console.log(error));
     }, []);
   }
+
   const [talkList, setTalkList] = useState(['']);
   {
     useEffect(() => {
@@ -35,14 +50,28 @@ function TalkDetail(props) {
         });
     });
   }
+  // targetChat | writer | date | comment
+  const insertChatAlert = (_date, _comment) => {
+    axios
+      .post('/api/insertChatAlert', {
+        targetChat: id,
+        writer: sessionStorage.getItem('id'),
+        date: _date,
+        comment: _comment,
+      })
+      .then(console.log(document.getElementById('comment_date').value))
 
+      .catch((error) => console.log(error));
+  };
   //(id, userId, content)
   const insertCommentChat = (_content) => {
-    axios.post('/api/insertCommentChat', {
-      id: id,
-      userId: sessionStorage.getItem('id'),
-      content: _content,
-    });
+    axios
+      .post('/api/insertCommentChat', {
+        id: id,
+        userId: sessionStorage.getItem('id'),
+        content: _content,
+      })
+      .then(console.log('active'));
   };
 
   const [userDetail, setUserDetail] = useState(['']);
@@ -58,6 +87,7 @@ function TalkDetail(props) {
         .catch((error) => console.log(error));
     }, []);
   }
+  const [sectionCount, setSectionCount] = useState(5);
 
   const [chatHistory, setChatHistory] = useState(['']);
   {
@@ -65,11 +95,13 @@ function TalkDetail(props) {
       axios
         .post('/api/getCommentChatHistory', {
           id: id,
-          section: '5',
+          section: sectionCount,
         })
-        .then((response) => setChatHistory(response.data))
+        .then((response) => {
+          setChatHistory(response.data);
+        })
         .catch((error) => console.log(error));
-    }, []);
+    });
   }
 
   const [projectDetails, setProjectDetails] = useState(['']);
@@ -94,6 +126,7 @@ function TalkDetail(props) {
   const [showTalk, setShowTalk] = useState(false);
   const [writeNotification, setWriteNotification] = useState(false);
   const navigate = useNavigate();
+
   return (
     <div className='container'>
       <div
@@ -116,7 +149,10 @@ function TalkDetail(props) {
               borderRadius: '5px',
             }}
           >
-            <Calendar></Calendar>
+            <Calendar
+              setAllAlertDto={setAllAlertDto}
+              allAlert={allAlert}
+            ></Calendar>
           </div>
         ) : (
           <div></div>
@@ -185,23 +221,31 @@ function TalkDetail(props) {
                           </div>
                         </div>
                       </div>
-                      <h3
-                        style={{
-                          fontSize: '18px',
-                          textAlign: 'start',
-                          fontWeight: '700',
-                          marginTop: '5%',
-                        }}
-                      >
-                        멤버 정보
-                      </h3>
-                      {memberIdArray.forEach((value, index) => {
-                        // ... JSX 내에서 value 값을 사용할 수 있도록 변수를 할당
-                        const memberName = allDevDto[value].name;
-                        const memberImg = allDevDto[value].imgURL;
-                        const memberJobDetail = allDevDto[value].jobDetail;
-                        console.log(memberName);
-                        return (
+                    </>
+                  ) : (
+                    <div>ds</div>
+                  )}
+                  <h3
+                    style={{
+                      fontSize: '18px',
+                      textAlign: 'start',
+                      fontWeight: '700',
+                      marginTop: '5%',
+                    }}
+                  >
+                    멤버 정보
+                  </h3>
+
+                  {memberIdArray.map((value, index) => {
+                    // ... JSX 내에서 value 값을 사용할 수 있도록 변수를 할당
+                    const memberName = allDevDto[value - 1].name;
+                    const memberImg = allDevDto[value - 1].imgURL;
+                    const memberJobDetail = allDevDto[value - 1].jobDetail;
+                    console.log(memberName);
+
+                    return (
+                      <>
+                        {memberName != allDevDto[talkDetail[0] - 1].name ? (
                           <div style={{ display: 'flex' }}>
                             <div className='profile__thumbnail'>
                               <img
@@ -214,18 +258,18 @@ function TalkDetail(props) {
                               ></img>
                             </div>
                             <div className='txtWrap'>
-                              <div className='title'>{memberName}</div>
+                              <div className='title'>
+                                {allDevDto[value - 1].name}
+                              </div>
                               <div className='chat-message'>
                                 <p className='assistant'>{memberJobDetail} </p>
                               </div>
                             </div>
                           </div>
-                        );
-                      })}
-                    </>
-                  ) : (
-                    <div>ds</div>
-                  )}
+                        ) : null}
+                      </>
+                    );
+                  })}
                 </div>
               );
             })}
@@ -244,104 +288,47 @@ function TalkDetail(props) {
             }}
           >
             <p style={{ fontSize: '24px' }}>공지목록</p>
-            <div>
-              <div
-                style={{
-                  marginBottom: '1%',
-                  border: '1px solid rgb(222,222,222)',
-                  alignItems: 'center',
-                }}
-              >
-                <a href='#' style={{ textDecoration: 'none' }}>
-                  <div
-                    style={{
-                      textAlign: 'left',
-                      paddingLeft: '5%',
-                      paddingRight: '5%',
-                      display: 'flex',
-
-                      color: 'black',
-                    }}
-                  >
-                    <p
+            {allAlert.map((a, i) => {
+              console.log(allAlert[i]);
+              if (allAlert[i] != null) {
+                return (
+                  <>
+                    <div
                       style={{
-                        paddingLeft: '3%',
-                        fontWeight: '600',
+                        marginBottom: '1%',
+                        border: '1px solid rgb(222,222,222)',
+                        alignItems: 'center',
                       }}
                     >
-                      김일환님이 신규 가입하셨습니다
-                      <p style={{ paddingTop: '5%', fontWeight: '100' }}>
-                        본 직무는 웹프론트엔드이며 수준은 초심자입니다. 😊{' '}
-                      </p>
-                    </p>
-                  </div>
-                </a>
-              </div>
-              <div
-                style={{
-                  marginBottom: '1%',
-                  border: '1px solid rgb(222,222,222)',
-                  alignItems: 'center',
-                }}
-              >
-                <a href='#' style={{ textDecoration: 'none' }}>
-                  <div
-                    style={{
-                      textAlign: 'left',
-                      paddingLeft: '5%',
-                      paddingRight: '5%',
-                      display: 'flex',
+                      <a href='#' style={{ textDecoration: 'none' }}>
+                        <div
+                          style={{
+                            textAlign: 'left',
+                            paddingLeft: '5%',
+                            paddingRight: '5%',
+                            display: 'flex',
 
-                      color: 'black',
-                    }}
-                  >
-                    <p
-                      style={{
-                        paddingLeft: '3%',
-                        fontWeight: '600',
-                      }}
-                    >
-                      5/1 (월)은 회의는 6/12(월)로 변경되어 진행예상됩니다 !
-                      <p style={{ paddingTop: '5%', fontWeight: '100' }}>
-                        회의때 필요한 자료나 정보 있으면 말해주세요 !!
-                      </p>
-                    </p>
-                  </div>
-                </a>
-              </div>
-              <div
-                style={{
-                  marginBottom: '1%',
-                  border: '1px solid rgb(222,222,222)',
-                  alignItems: 'center',
-                }}
-              >
-                <a href='#' style={{ textDecoration: 'none' }}>
-                  <div
-                    style={{
-                      textAlign: 'left',
-                      paddingLeft: '5%',
-                      paddingRight: '5%',
-                      display: 'flex',
-
-                      color: 'black',
-                    }}
-                  >
-                    <p
-                      style={{
-                        paddingLeft: '3%',
-                        fontWeight: '600',
-                      }}
-                    >
-                      유승민님이 신규 가입하셨습니다
-                      <p style={{ paddingTop: '5%', fontWeight: '100' }}>
-                        본 직무는 DB/빅데이터/DS이며 수준은 초보입니다. 😊
-                      </p>
-                    </p>
-                  </div>
-                </a>
-              </div>
-            </div>
+                            color: 'black',
+                          }}
+                        >
+                          <p
+                            style={{
+                              paddingLeft: '3%',
+                              fontWeight: '600',
+                            }}
+                          >
+                            {allAlert[i].date}
+                            <p style={{ paddingTop: '5%', fontWeight: '100' }}>
+                              {allAlert[i].comment}
+                            </p>
+                          </p>
+                        </div>
+                      </a>
+                    </div>
+                  </>
+                );
+              }
+            })}
           </div>
         ) : (
           <div></div>
@@ -368,30 +355,70 @@ function TalkDetail(props) {
               <div className='comment_user'>
                 <div></div>
               </div>
-              <form>
-                <div
-                  className='comment_input'
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
-                >
-                  <p style={{ fontSize: '15px' }}>날짜</p>
-                  <textarea
-                    rows='4'
-                    id='comment_box'
-                    placeholder='날짜를 입력해주세요.'
-                  ></textarea>
-                  <button
-                    type='submit'
-                    className='comment_btn'
-                    onClick={() => {}}
-                  >
-                    등록
-                  </button>
+
+              <div
+                className='comment_input'
+                style={{
+                  display: 'flex',
+
+                  alignItems: 'center',
+                }}
+              >
+                <p style={{ fontSize: '15px', marginRight: '10%' }}>날짜</p>
+                <textarea
+                  rows='4'
+                  id='comment_date'
+                  maxLength={12}
+                  placeholder='ex) 2023-08-24 목 형식대로 적어주세요'
+                ></textarea>
+              </div>
+              <div style={{ display: 'flex', marginTop: '5%' }}>
+                <div style={{ marginRight: '10%' }}>
+                  <span>중요도</span>
                 </div>
-              </form>
+
+                <div style={{ marginLeft: '5%' }}>
+                  <input type='checkbox'></input>
+                  <span>중요</span>
+                </div>
+                <div style={{ marginLeft: '5%' }}>
+                  <input type='checkbox'></input>
+                  <span>평범</span>
+                </div>
+                <div style={{ marginLeft: '5%' }}>
+                  <input type='checkbox'></input>
+                  <span>낮음</span>
+                </div>
+              </div>
+              <div
+                className='comment_input'
+                style={{
+                  display: 'flex',
+                  marginTop: '5%',
+                  alignItems: 'center',
+                }}
+              >
+                <div style={{ marginRight: '10%' }}>
+                  <span>내용 </span>
+                </div>
+
+                <textarea
+                  rows='4'
+                  id='comment_content'
+                  placeholder='내용을 입력해주세요.'
+                ></textarea>
+              </div>
+              <button
+                className='comment_btn'
+                onClick={() => {
+                  insertChatAlert(
+                    document.getElementById('comment_date').value,
+                    document.getElementById('comment_content').value
+                  );
+                }}
+              >
+                등록
+              </button>
             </div>
           </div>
         ) : (
@@ -520,8 +547,17 @@ function TalkDetail(props) {
 
             <div className='chat-container'>
               <div className='chat-box'>
-                <h2 style={{ fontWeight: '300' }}>{talkList[0].title}톡방</h2>
-
+                <h2 style={{ fontWeight: '300', fontSize: '20px' }}>
+                  {talkList[0].title}톡방
+                </h2>
+                {/* <button
+                  onClick={() => {
+                    setSectionCount(sectionCount + 5);
+                    console.log(sectionCount);
+                  }}
+                >
+                  더보기
+                </button> */}
                 {chatHistory.map((a, i) => {
                   return (
                     <>
@@ -538,7 +574,10 @@ function TalkDetail(props) {
                                 allDevDto[chatHistory[i].userId - 1].imgURL
                               }
                               width='30%'
-                              style={{ paddingTop: '3%', paddingBottom: '3%' }}
+                              style={{
+                                paddingTop: '3%',
+                                paddingBottom: '3%',
+                              }}
                             ></img>
                           </div>
                           <div className='txtWrap'>
@@ -546,7 +585,9 @@ function TalkDetail(props) {
                               {allDevDto[chatHistory[i].userId - 1].name}
                             </div>
                             <div className='chat-message'>
-                              <p className='assistant'>하이!</p>
+                              <p className='assistant'>
+                                {chatHistory[i].comment}
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -594,13 +635,13 @@ function CarouselCard() {
         variant='dark'
       >
         <Carousel.Item>
-          <p style={{ alignItems: 'center' }}>하이</p>
+          <p style={{ alignItems: 'center' }}></p>
         </Carousel.Item>
         <Carousel.Item>
-          <p style={{ alignItems: 'center' }}>하이하이하이하이하이</p>
+          <p style={{ alignItems: 'center' }}></p>
         </Carousel.Item>
         <Carousel.Item>
-          <p style={{ alignItems: 'center' }}>하이하이하이하이ddd하이</p>
+          <p style={{ alignItems: 'center' }}></p>
         </Carousel.Item>
       </Carousel>
     </div>

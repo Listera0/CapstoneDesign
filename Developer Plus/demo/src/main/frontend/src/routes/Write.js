@@ -109,17 +109,18 @@ function Write() {
         endDate: _endDate,
         content: _content,
         skill: _skill,
-      })
-      .then((response) => console.log(response.data))
-      .catch((error) => console.log(error));
-    axios
-      .post('/api/createChat', {
-        title: _title,
         id: _id,
-        imgURL: _imgURL,
       })
       .then((response) => console.log(response.data))
       .catch((error) => console.log(error));
+    // axios
+    //   .post('/api/createChat', {
+    //     title: _title,
+    //     id: _id,
+    //     imgURL: _imgURL,
+    //   })
+    //   .then((response) => console.log(response.data))
+    //   .catch((error) => console.log(error));
   };
   const [allDevDto, setAllDevDto] = useState(['']);
   {
@@ -1020,7 +1021,7 @@ function MainTabContent(props) {
     );
   }
 }
-function PlusButton(props) {}
+
 function SelectBasicExample(props) {
   return (
     <>

@@ -69,11 +69,13 @@ public class ChatInfoDao {
                 break;
             }
         }
-
 	    String member = result.get(targetIndex).getMemberId() + "," + request.get("memberId");
+        System.out.println(member);
+        System.out.println(targetId);
 
         String query2 = String.format("update chatInfo set memberId = '%s' where id = %s", member, targetId);
 	    CTJdbcTemplate.update(query2);
+        System.out.println("added member");
     }
 
     public List<ChatInfoDto> getChatInfo(Map<String, String> request) {

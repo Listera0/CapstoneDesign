@@ -41,6 +41,10 @@ public class StoryDao {
     @Qualifier("DPTemplate")
     JdbcTemplate DPJdbcTemplate;
 
+    @Autowired
+    @Qualifier("SBTemplate")
+    JdbcTemplate SBJdbcTemplate;
+
     public List<StoryDto> getData(String id, String orderBy, String limit)
     {
         String query = "select * from story";
@@ -75,6 +79,20 @@ public class StoryDao {
         }
         return "Success Insert";
     }
+
+    public void updateDatabase(Map<String, String> request) {
+        String query = String.format("update story set title = '%s', imgURL = '%s', content = '%s' where id = %s",
+                                    request.get("title"), request.get("imgURL"), request.get("content"), request.get("id"));
+        DPJdbcTemplate.update(query);
+    }
+
+    public void deleteStoryDatabase(Map<String,String> request){
+        String query1 =String.format("delete from story where id = %s", request.get("id"));
+        String query2 = String.format("delete from sub.chat where targetId = %s", request.get("id"));
+        DPJdbcTemplate.update(query1);
+        SBJdbcTemplate.update(query2);
+    }
+
     public String addViewCount(Map<String, String> request) {
         String query = String.format("update story set viewCount = ? where id = %s", request.get("id"));
         try {

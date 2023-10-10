@@ -14,6 +14,7 @@ import FindDeveloperDetail from './routes/FindDeveloperDetail';
 import SignUp from './routes/SignUp';
 import Story from './routes/Story';
 import Write from './routes/Write';
+import FixStory from './routes/FixStory';
 import FindDeveloper from './routes/FindDeveloper';
 import ViewDeveloper from './routes/ViewDeveloper';
 import Footer from './components/Footer';
@@ -436,6 +437,8 @@ function App() {
             <TalkDetail developer={developer} setDeveloper={setDeveloper} />
           }
         ></Route>
+        <Route path='/FixStory/:id' element={<FixStory />}></Route>
+        {/* <Route path='/Main' element={<Main />}></Route> */}
       </Routes>
       <Footer navigate={navigate}></Footer>
     </div>

@@ -11,6 +11,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.dto.*;
+import com.example.demo.dao.*;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -50,6 +51,11 @@ public class ProjectDao {
     @Qualifier("DPTemplate")
     JdbcTemplate DPJdbcTemplate;
 
+    
+    @Autowired
+    @Qualifier("CTTemplate")
+    JdbcTemplate CTJdbcTemplate;
+
     public List<ProjectDto> getData(String id, String orderBy, String limit)
     {
         String query = "select * from project";
@@ -67,13 +73,26 @@ public class ProjectDao {
         return DPJdbcTemplate.query(query, new ProjectRowMapper());
     }
 
+
+
+    public void deleteFromDatabase(Map<String, String> request) {
+        String query1 = String.format("delete from project where id = %s", request.get("id"));
+        String query2 = String.format("delete from chatInfo where projectId = %s", request.get("id"));
+        String query3 = String.format("drop table chat.chat%s", request.get("id"));
+
+        DPJdbcTemplate.update(query1);
+        CTJdbcTemplate.update(query2);
+        CTJdbcTemplate.update(query3);
+    }
+
     public List<ProjectDto> getDataAll()
     {
         return DPJdbcTemplate.query("select * from project", new ProjectRowMapper());
     }
+    
     public String insertToDatabase(Map<String, String> request)
     {
-        String query = "insert into project (title, imgURL, region, name,email, job, jobDetail,career, nowJob, requireJob, startDate, endDate, content, skill) " +
+        String query = "insert into project (title, imgURL, region, name, email, job, jobDetail,career, nowJob, requireJob, startDate, endDate, content, skill) " +
                                      "values (?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?,?)";
         try
         {
@@ -85,8 +104,20 @@ public class ProjectDao {
         {
             return "Failed Insert";
         }
+
+        String query4 = "select * from project order by id desc limit 1";
+        List<ProjectDto> tempProject = DPJdbcTemplate.query(query4, new ProjectRowMapper());
+        int tempId = tempProject.get(0).getId();
+
+        String query3 = String.format("insert into chatInfo (projectId, title, memberId, imgURL) values (%s, '%s', '%s', '%s')", tempId, request.get("title"), request.get("id"), request.get("imgURL"));
+	    CTJdbcTemplate.update(query3);
+
+        String query2 = String.format("create table chat.chat%d (`id` INT NOT NULL AUTO_INCREMENT, `userId` INT NULL,`date` VARCHAR(45) NULL,`comment` VARCHAR(100) NULL,PRIMARY KEY (`id`))", tempId);
+        CTJdbcTemplate.update(query2);
+
         return "Success Insert";
     }
+
     public String addViewCount(Map<String, String> request) {
         String query = String.format("update project set viewCount = ? where id = %s", request.get("id"));
         try {

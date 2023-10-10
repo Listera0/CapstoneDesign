@@ -346,7 +346,7 @@ function MainTabContent(props) {
                                 {props.talkList[i].title}톡방
                               </div>
                               <div className='content'>
-                                {props.talkList[i].memberId}
+                                {talkDetail.length}명
                               </div>
                             </div>
                           </>

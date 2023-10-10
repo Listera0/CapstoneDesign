@@ -240,4 +240,22 @@ public class MainController {
     public List<ChatDto> getCommentChatHistory(@RequestBody Map<String, String> request) {
         return chatRepository.getChatHistory(request);
     }
+
+    // 프로젝트 삭제
+    @RequestMapping(value="/api/deleteFromDatabase", method = RequestMethod.POST)
+    public void deleteFromDatabase(@RequestBody Map<String, String> request) {
+        projectRepository.deleteFromDatabase(request);
+    }
+
+    // 스토리 삭제
+    @RequestMapping(value="/api/deleteStoryDatabase", method = RequestMethod.POST)
+    public void deleteStoryDatabase(@RequestBody Map<String, String> request) {
+        storyRepository.deleteStoryDatabase(request);
+    }
+
+    // 스토리 수정
+    @RequestMapping(value="/api/updateDatabase", method = RequestMethod.POST)
+    public void updateDatabase(@RequestBody Map<String, String> request) {
+        storyRepository.updateDatabase(request);
+    }
 }

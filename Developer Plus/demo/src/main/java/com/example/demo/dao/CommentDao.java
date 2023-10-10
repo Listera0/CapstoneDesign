@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.dto.*;
 
-class ChatRowMapper implements RowMapper<CommentDto> {
+class CommentRowMapper implements RowMapper<CommentDto> {
     @Override
     @Nullable
     public CommentDto mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -44,7 +44,7 @@ public class CommentDao {
     public List<CommentDto> getChatHistory(String targetId) {
         String query1 = String.format("select * from chat where targetId=%s", targetId);
 
-        List<CommentDto> result = SBJdbcTemplate.query(query1, new ChatRowMapper());
+        List<CommentDto> result = SBJdbcTemplate.query(query1, new CommentRowMapper());
         return result;
     }
 

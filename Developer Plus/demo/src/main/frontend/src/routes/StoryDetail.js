@@ -28,6 +28,7 @@ function StoryDetail(props) {
       })
       .then();
   };
+
   const [allDevDto, setAllDevDto] = useState(['']);
   {
     useEffect(() => {
@@ -35,7 +36,6 @@ function StoryDetail(props) {
         .get('/api/getAllDevData')
         .then((response) => {
           setAllDevDto(response.data);
-          console.log(response.data);
         })
         .catch((error) => console.log(error));
     }, []);
@@ -53,7 +53,7 @@ function StoryDetail(props) {
         .catch((error) => console.log(error));
     }, []);
   }
-  console.log(userDetail);
+
   let developerDetail = userDetail[1];
   const [chatDetail, setChatDetail] = useState(['']);
   {
@@ -78,7 +78,6 @@ function StoryDetail(props) {
       })
       .then((response) => {
         setChatDetail(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -133,7 +132,11 @@ function StoryDetail(props) {
       getDto('Dev', sessionStorage.getItem('id'), '', '');
     }
   }, []);
-
+  const deleteStoryDatabase = () => {
+    axios.post('/api/deleteStoryDatabase', {
+      id: storyDetail.id,
+    });
+  };
   return (
     <section className='bg-light'>
       <div className='container' style={{ marginTop: '-3%' }}>
@@ -151,9 +154,56 @@ function StoryDetail(props) {
             </h2>
             <div class='grid text-center'>
               <div class='g-col-6'>{storyDetail.name}</div>
-              <div class='g-col-6'>{storyDetail.date}</div>
             </div>
-
+            <div>
+              {storyDetail.name == resultDto[0].name ? (
+                <div
+                  style={{
+                    textAlign: 'center',
+                    marginBottom: '2%',
+                    fontWeight: '600',
+                    marginLeft: '1%',
+                    marginTop: '1%',
+                  }}
+                >
+                  {' '}
+                  <span
+                    onClick={() => {
+                      deleteStoryDatabase();
+                      navigate('/story');
+                    }}
+                    style={{
+                      border: 'none',
+                      padding: '5px 15px',
+                      color: 'white',
+                      background: 'rgba(0,0,0,0.65)',
+                      borderRadius: '5px',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    삭제
+                  </span>
+                  <span
+                    onClick={() => {
+                      navigate(`/FixStory/${storyDetail.id}`);
+                    }}
+                    style={{
+                      border: 'none',
+                      padding: '5px 15px',
+                      color: 'white',
+                      background: 'rgba(0,0,0,0.65)',
+                      borderRadius: '5px',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                      marginLeft: '1%',
+                    }}
+                  >
+                    수정
+                  </span>
+                </div>
+              ) : null}
+            </div>
             <div className='card card-style1 border-0'>
               <div className='card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7'>
                 <div className='row align-items-center'>
@@ -251,8 +301,7 @@ function TabContent(props) {
     setFeedComment(updatedComments);
     setComment('');
   };
-  console.log(props.developerDetail);
-  console.log(props.resultDto[0].name);
+
   if (props.isLogin == true)
     return (
       <div className='comment_object' style={{ backgroundColor: '#f7f7f7' }}>

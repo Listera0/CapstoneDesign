@@ -37,7 +37,7 @@
 .selected {
   border-color: rgb(148, 179, 249);
 }
-.backColor {
-  background-color: rgba(0, 0, 0, 0.9);
-  opacity: 1;
-}
+/* .backColor {
+  background-color: rgba(0, 0, 0, 0.2);
+  opacity: 0.5;
+} */
