@@ -1,0 +1,5 @@
+DeveloperPlus 계정생성 비밀번호는 password로 
+
+MySql_Data 폴더 내 각각의 테이블 생성 (developerplus, likecount, sub, chat)
+
+Mysql 들어가서 Import 클릭 폴더 전체 선택후 스키마 + 데이터 선택후 import
