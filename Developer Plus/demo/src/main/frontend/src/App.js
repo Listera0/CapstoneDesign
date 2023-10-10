@@ -573,7 +573,7 @@ function ProjectCard(props) {
       if (flag == false) {
         setLikeCountDetail(false);
       }
-    });
+    }, [props.projectLikeCountData, props.rankingProjectDto, props.i]);
   }
 
   const showLikeCount = () => {
@@ -683,7 +683,7 @@ function DeveloperCard(props) {
       if (flag == false) {
         setLikeCountDetail(false);
       }
-    });
+    }, [props.devLikeCountData, props.rankingDevDto, props.i]);
   }
 
   const showLikeCount = () => {

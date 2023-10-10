@@ -28,7 +28,8 @@ function Login(props) {
         if (response.data['result'] == 'true') {
           sessionStorage.setItem('id', response.data['id']);
           
-          props.navigate('/');
+          // props.navigate('/');
+          window.location.replace('/');
         } else {
           alert(response.data['message']);
         }

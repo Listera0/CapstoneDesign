@@ -30,7 +30,7 @@ class StoryRowMapper implements RowMapper<StoryDto> {
         dto.setHashTag(rs.getString("hashTag"));
         dto.setViewCount(rs.getInt("viewCount"));
         dto.setLikeCount(rs.getInt("likeCount"));
-        dto.setLikeCount(rs.getInt("chatCount"));
+        dto.setChatCount(rs.getInt("chatCount"));
         return dto;
     }
 }

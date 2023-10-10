@@ -87,7 +87,11 @@ function Serach() {
   if (nowState == 0) {
     return (
       <div className='App'>
-        <div className='col-lg-12 mb-4 mb-sm-5'>
+        <div className='col-lg-12 mb-4 mb-sm-5'
+          style={{
+            marginTop:'2%'
+          }}
+        >
           <span className='col-lg-6'>
             <input
               type='text'
@@ -149,7 +153,11 @@ function Serach() {
   if (nowState == 1) {
     return (
       <div className='App'>
-        <div className='col-lg-12 mb-4 mb-sm-5'>
+        <div className='col-lg-12 mb-4 mb-sm-5'
+          style={{
+            marginTop:'2%'
+          }}
+        >
           <span className='col-lg-6'>
             <input
               type='text'

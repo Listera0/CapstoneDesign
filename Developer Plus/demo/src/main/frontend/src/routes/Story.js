@@ -34,6 +34,7 @@ function Story(props) {
           paddingBottom: '2%',
           paddingLeft: '2%',
           paddingRight: '2%',
+          marginTop:'2%'
         }}
       >
         {allStoryDto.map((a, i) => {
