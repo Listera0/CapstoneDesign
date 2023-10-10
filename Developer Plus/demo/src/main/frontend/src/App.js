@@ -213,7 +213,7 @@ function App() {
       getLikeCount('story', sessionStorage.getItem('id'));
       getLikeCount('project', sessionStorage.getItem('id'));
     }
-  });
+  }, []);
 
   return (
     <div className='App ' style={{ margin: '0' }}>

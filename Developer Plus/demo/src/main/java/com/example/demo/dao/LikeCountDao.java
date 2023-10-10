@@ -3,6 +3,7 @@ package com.example.demo.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -79,8 +80,8 @@ public class LikeCountDao {
         }
     }
 
-    public List<LikeCountDto> userLikeCount(String location, String userId) {
-        String query = String.format("select * from likecount_%s where userId = %d", location, Integer.parseInt(userId));
+    public List<LikeCountDto> userLikeCount(Map<String, String> request) {
+        String query = String.format("select * from likecount_%s where userId = %s", request.get("location"), request.get("userId"));
         List<LikeCountDto> result = LKJdbcTemplate.query(query, new LikeCountRowMapper());
 
         return result;

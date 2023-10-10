@@ -71,7 +71,7 @@ public class MainController {
     // 유저의 좋아요 기록 가져오기
     @RequestMapping(value="/api/userLikeCount", method = RequestMethod.POST)
     public List<LikeCountDto> userLikeCount(@RequestBody Map<String, String> request) {
-        return likeCountRepository.userLikeCount(request.get("location"), request.get("userId"));
+        return likeCountRepository.userLikeCount(request);
     }
 
     // 좋아요 버튼 기능
