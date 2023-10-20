@@ -48,7 +48,7 @@ function TalkDetail(props) {
         .then((response) => {
           setTalkList(response.data);
         });
-    });
+    }, []);
   }
   // targetChat | writer | date | comment
   const insertChatAlert = (_date, _comment) => {

@@ -163,7 +163,7 @@ function SignInModal({
               </p>
               {allAlert.map((a, i) => {
                 return allAlert[i].date === formattedDate ? (
-                  <span key={i}>{allAlert[i].comment}</span>
+                  <span style={{marginLeft: '5%'}} key={i}>{allAlert[i].comment}</span>
                 ) : null;
               })}
             </div>
